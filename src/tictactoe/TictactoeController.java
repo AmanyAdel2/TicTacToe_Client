@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -45,18 +47,29 @@ public class TictactoeController implements Initializable {
     }    
 
     @FXML
-    void goLevel(MouseEvent event) throws IOException {
-        Stage stage = (Stage) combtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/level/Level.fxml"));
-        stage.setScene(new Scene(root));
+    void goLevel(MouseEvent event) {
+        try {
+            Stage stage = (Stage) combtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/level/Level.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            
+            System.out.println("errrrorrr");
+            Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
     @FXML
-    private void gonline(MouseEvent event) throws IOException {
-        Stage stage = (Stage) onbtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
-        stage.setScene(new Scene(root));
+    private void gonline(MouseEvent event) {
+        try {
+            Stage stage = (Stage) onbtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            System.out.println("errrrorrr");
+            Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
