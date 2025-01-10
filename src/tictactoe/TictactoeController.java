@@ -63,7 +63,7 @@ public class TictactoeController implements Initializable {
     @FXML
     private void golocalgame(MouseEvent event) throws IOException {
         Stage stage = (Stage) locbtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/game/Game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/playersName/PlayersName.fxml"));
         stage.setScene(new Scene(root));
     }
     
