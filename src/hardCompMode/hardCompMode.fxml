@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="639.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hardCompMode.HardCompModeController">
+       <stylesheets>
+        <URL value="@hardgame.css" />
+    </stylesheets>
+   <children>
+      <ImageView fitHeight="689.0" fitWidth="713.0" layoutX="-24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../background.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="23.0" fitWidth="99.0" layoutX="31.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../welcome.gif" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="150.0" layoutY="109.0" prefHeight="286.0" prefWidth="358.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="129.33331298828125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.33331298828125" minWidth="10.0" prefWidth="129.33331298828125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.33331298828125" minWidth="10.0" prefWidth="99.66668701171875" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="138.33331298828125" minHeight="10.0" prefHeight="115.66665649414062" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="120.33334350585938" minHeight="10.0" prefHeight="80.33334350585938" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="button00" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="0" GridPane.rowIndex="0">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button01" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button10" layoutX="130.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="0" GridPane.rowIndex="1">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button20" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="0" GridPane.rowIndex="2">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button02" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="120.0" style="-fx-background-color: beige;" GridPane.columnIndex="2" GridPane.rowIndex="0">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button11" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button12" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button22" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="135.0" style="-fx-background-color: beige;" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="button21" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="96.0" prefWidth="123.0" style="-fx-background-color: beige;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+      <Button fx:id="backBtn" layoutX="540.0" layoutY="22.0" mnemonicParsing="false" onAction="#goBack" prefHeight="31.0" prefWidth="75.0" text="Back" />
+      <Button fx:id="resetBtn" layoutX="294.0" layoutY="500.0" mnemonicParsing="false" onAction="#resetGame" text="Play Again" />
+   </children>
+</AnchorPane>
