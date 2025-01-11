@@ -56,12 +56,16 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame"  prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
+            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
          </children>
       </GridPane>
+      <Button fx:id="backBtn" layoutX="45.0" layoutY="399.0" mnemonicParsing="false" onAction="#goBackToMain" text="BACK" style="-fx-background-color: YELLOW;" >                
+            <font>
+                 <Font name="System Bold" size="14.0" />
+            </font></Button>
    </children>
 </AnchorPane>

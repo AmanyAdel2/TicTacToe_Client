@@ -33,6 +33,8 @@ public class LevelController implements Initializable {
     private Button medbtn;
     @FXML
     private Button hardBtn;
+    @FXML
+    private Button backBtn;
 
     /**
      * Initializes the controller class.
@@ -65,6 +67,29 @@ public class LevelController implements Initializable {
             
             //Set a title for the window
             stage.setTitle("Hard Mode");
+            
+            // Show the updated stage
+            stage.show();
+        } catch (IOException ex) {
+            
+            System.out.println("errrrorrr");
+            Logger.getLogger(LevelController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    @FXML
+    private void goBackToMain(ActionEvent event){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) backBtn.getScene().getWindow();
+            
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            
+            //Set a title for the window
+            stage.setTitle("Main Page");
             
             // Show the updated stage
             stage.show();

@@ -84,7 +84,15 @@
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="backBtn" layoutX="540.0" layoutY="22.0" mnemonicParsing="false" onAction="#goBack" prefHeight="31.0" prefWidth="75.0" text="Back" />
-      <Button fx:id="resetBtn" layoutX="294.0" layoutY="500.0" mnemonicParsing="false" onAction="#resetGame" text="Play Again" />
+      <Button fx:id="backBtn" layoutX="540.0" layoutY="22.0" mnemonicParsing="false" onAction="#goBack" prefHeight="31.0" prefWidth="75.0" text="Back"  style="-fx-background-color: YELLOW;" >
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+      </Button>
+      <Button fx:id="resetBtn" layoutX="294.0" layoutY="500.0" mnemonicParsing="false" onAction="#resetGame" text="Play Again"  style="-fx-background-color: YELLOW;">
+           <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+      </Button>
    </children>
 </AnchorPane>
