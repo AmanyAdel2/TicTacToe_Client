@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/ITI/curriculum/Java/TicTacToe/TicTacToeClient/TicTacToe_Client/src/hardCompMode/HardCompModeController.java</file>
-            <file>file:/E:/ITI/curriculum/Java/TicTacToe/TicTacToeClient/TicTacToe_Client/src/hardCompMode/hardCompMode.fxml</file>
-            <file>file:/E:/ITI/curriculum/Java/TicTacToe/TicTacToeClient/TicTacToe_Client/src/login/LoginController.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/tictactoe/TictactoeController.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/tictactoe/TicTacToe.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/game/GameController.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/level/LevelController.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/login/LoginController.java</file>
+            <file>file:/C:/Users/Al%20Badr/Documents/NetBeansProjects/TicTacToe_Client/src/register/RegiserController.java</file>
         </group>
     </open-files>
 </project-private>

@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -54,10 +56,18 @@ public class LoginController implements Initializable {
 
     @FXML
     private void goReg(MouseEvent event) throws IOException {
-//        Stage stage = (Stage) regbtn.getScene().getWindow();
-//        Parent root = FXMLLoader.load(getClass().getResource("/register/Regiser.fxml"));
-//        stage.setScene(new Scene(root));
-        String username = usertxt.getText().trim();
+     
+        try {
+            Stage stage = (Stage) regbtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/register/Register.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            System.out.println("errrrorrr");
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    
+       /* String username = usertxt.getText().trim();
         String password = passtxt.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -74,7 +84,7 @@ public class LoginController implements Initializable {
         // Send JSON to the server
         playerSocket.sendJSON(map);
 
-        System.out.println("Registration request sent for user: " + username);
+        System.out.println("Registration request sent for user: " + username);*/
         
         
     }
