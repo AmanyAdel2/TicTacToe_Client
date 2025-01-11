@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,9 +13,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="463.0" prefWidth="419.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="register.RegiserController">
+<AnchorPane id="AnchorPane" prefHeight="463.0" prefWidth="419.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="register.RegiserController">
     <stylesheets>
-        <URL value="@regiser.css" />
+        <URL value="@register.css" />
     </stylesheets>
    <children>
       <ImageView fitHeight="562.0" fitWidth="470.0" layoutX="-41.0" pickOnBounds="true" preserveRatio="true">
@@ -22,7 +23,7 @@
             <Image url="@../background.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="30.0" fitWidth="183.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="30.0" fitWidth="183.0" layoutX="47.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../welcome.gif" />
          </image>
@@ -34,6 +35,7 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -43,26 +45,33 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="14.0" prefHeight="47.0" prefWidth="105.0" text="PASSWORD" textFill="#f0fb21" GridPane.rowIndex="1">
+            <Label layoutX="10.0" layoutY="14.0" prefHeight="47.0" prefWidth="105.0" text="PASSWORD" textFill="#f0fb21" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="69.0" prefHeight="47.0" prefWidth="105.0" text="CONFIRM" textFill="#f0fb21" GridPane.rowIndex="2">
+            <Label layoutX="10.0" layoutY="69.0" prefHeight="47.0" prefWidth="105.0" text="CONFIRM" textFill="#f0fb21" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
             <TextField fx:id="userNametxt" GridPane.columnIndex="1" />
-            <TextField fx:id="passtxt" layoutX="147.0" layoutY="25.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="conftxt" layoutX="147.0" layoutY="80.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="105.0" text="Email" textFill="#f0fb21" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="emailtxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <PasswordField fx:id="passtxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <PasswordField fx:id="conftxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <Label layoutX="77.0" layoutY="102.0" text="REGISTERTION" textFill="#f6f20d">
+      <Label layoutX="57.0" layoutY="103.0" text="REGISTERTION" textFill="#f6f20d">
          <font>
             <Font name="System Bold" size="34.0" />
          </font>
       </Label>
-      <Button fx:id="regBtn" layoutX="145.0" layoutY="377.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: YELLOW;" text="REGISTER" />
+      <Button fx:id="regBtn" layoutX="145.0" layoutY="377.0" mnemonicParsing="false" onAction="#onReg" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: YELLOW;" text="REGISTER" />
+      <Button fx:id="backBtn" layoutX="4.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="40.0" style="-fx-background-color: YELLOW;" text="&lt;&lt;" />
    </children>
 </AnchorPane>

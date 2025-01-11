@@ -83,8 +83,11 @@ public class PlayerSocket {
        }
     
     public void sendJSON(Map<String, String> fields) {
+        
         JSONObject data = new JSONObject();
+       
         data.putAll(fields);
+        System.out.println(data.get("username").toString());
         this.ps.println(data.toJSONString());
     }
     

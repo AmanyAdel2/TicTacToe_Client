@@ -65,28 +65,7 @@ public class LoginController implements Initializable {
             System.out.println("errrrorrr");
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    
-       /* String username = usertxt.getText().trim();
-        String password = passtxt.getText().trim();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            System.out.println("Please fill out all fields.");
-            return;
-        }
-        
-        // Prepare the JSON message
-        Map<String, String> map = new HashMap<>();
-        map.put("type", "register");
-        map.put("username", username);
-        map.put("password", password);
-
-        // Send JSON to the server
-        playerSocket.sendJSON(map);
-
-        System.out.println("Registration request sent for user: " + username);*/
-        
-        
+     
     }
     
 }
