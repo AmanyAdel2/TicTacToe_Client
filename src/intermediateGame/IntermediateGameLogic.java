@@ -5,13 +5,16 @@
  */
 package intermediateGame;
 
+import java.util.Random;
+
 /**
  *
  * @author Dell
  */
 public class IntermediateGameLogic {
-   
+ 
     private char[][] board;
+    private Random random = new Random();
 
     public IntermediateGameLogic() {
         resetGame();
@@ -70,21 +73,21 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-        // تحقق إذا كان يمكن الفوز
+    
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
                     board[i][j] = player;
                     if (checkWinner(player)) {
                         board[i][j] = '-'; 
-                        return new int[]{i, j};
+                        return new int[]{i, j}; 
                     }
                     board[i][j] = '-'; 
                 }
             }
         }
 
-        
+     
         char opponent = (player == 'X') ? 'O' : 'X';
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -95,6 +98,17 @@ public class IntermediateGameLogic {
                         return new int[]{i, j}; 
                     }
                     board[i][j] = '-';
+                }
+            }
+        }
+
+       
+        if (random.nextDouble() < 0.2) { 
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j] == '-') {
+                        return new int[]{i, j}; 
+                    }
                 }
             }
         }
