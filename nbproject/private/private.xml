@@ -3,30 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/PlayersNameController.java</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/easyGame/EasyGameLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/LocalModeController.java</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGameController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/background.jpg</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/Level.fxml</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/tictactoe/TicTacToe.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/PlayersName.fxml</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/game.css</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/LocalMode.fxml</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/nbproject/build-impl.xml</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/GameLocalLogic.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/GameController.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/Game.fxml</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/PlayersNameController.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/easyGame/EasyGameLogic.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGameController.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/tictactoe/TicTacToe.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/game.css</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGame.fxml</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/computer.png</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/easyGame/EasyGame.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/tictactoe/TictactoeController.java</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/nbproject/build-impl.xml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/easyGame/EasyGameController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/welcome.gif</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/GameLocalLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/localMode.css</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/GameController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/level.css</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/LevelController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/playersname.css</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGameLogic.java</file>
-            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/Game.fxml</file>
         </group>
     </open-files>
 </project-private>
