@@ -57,7 +57,7 @@ public class LevelController implements Initializable {
 
     @FXML
     private void intermediateGame(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/intermediateLevel/IntermediateLevel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/intermediateGame/IntermediateGame.fxml"));
 
         Parent root = loader.load();
 
@@ -77,6 +77,15 @@ public class LevelController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Hard Level");
+        stage.show();
+    }
+    @FXML
+    private void backButton(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
         stage.show();
     }
     

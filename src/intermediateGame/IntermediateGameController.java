@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyGame;
+package intermediateGame;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +21,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class EasyGameController implements Initializable {
+/**
+ * FXML Controller class
+ *
+ * @author Dell
+ */
+public class IntermediateGameController implements Initializable {
+
 
     @FXML
     private Text playerLabel;
@@ -32,7 +38,7 @@ public class EasyGameController implements Initializable {
     @FXML
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
 
-    private EasyGameLogic logic = new EasyGameLogic();
+    private IntermediateGameLogic logic = new IntermediateGameLogic();
     private int playerScore = 0;
     private int computerScore = 0;
     private String player = "Player";
@@ -67,29 +73,28 @@ public class EasyGameController implements Initializable {
         }
     }
 
-    private void computerMove() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (logic.getBoard()[i][j] == '-') {
-                    logic.makeMove(i, j, 'O');
-                    Button button = getButtonByRowCol(i, j);
-                    if (button != null) {
-                        button.setText('O' + "");
-                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
-                    }
-                    if (logic.checkWinner('O')) {
-                        showGameOverAlert(computer + " Wins!");
-                        computerScore++;
-                        updateScores();
-                    }
-                    if (logic.isBoardFull()) {
-                        showGameOverAlert("It's a Draw!");
-                    }
-                    return;
-                }
-            }
+       private void computerMove() {
+       int[] move = logic.findBestMove('O'); 
+        if (move != null) {
+        int row = move[0];
+        int col = move[1];
+        logic.makeMove(row, col, 'O');
+
+        Button button = getButtonByRowCol(row, col);
+        if (button != null) {
+            button.setText('O' + "");
+            button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+        }
+
+        if (logic.checkWinner('O')) {
+            showGameOverAlert(computer + " Wins!");
+            computerScore++;
+            updateScores();
+        } else if (logic.isBoardFull()) {
+            showGameOverAlert("It's a Draw!");
         }
     }
+}
 
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -182,4 +187,6 @@ public class EasyGameController implements Initializable {
                 return null;
         }
     }
-}
+} 
+    
+
