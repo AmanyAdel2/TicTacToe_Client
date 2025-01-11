@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,18 +46,17 @@ public class LevelController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }  
-<<<<<<< HEAD
-    @FXML
-    private void gogame(MouseEvent event) throws IOException {
-        Stage stage = (Stage) easybtn.getScene().getWindow();
-        medbtn.getScene().getWindow();
-//        hardbtn.getScene().getWindow();
-=======
+
+//     @FXML
+//     private void gogame(MouseEvent event) throws IOException {
+//         Stage stage = (Stage) easybtn.getScene().getWindow();
+//         medbtn.getScene().getWindow();
+// //        hardbtn.getScene().getWindow();
+// =======
  
         @FXML
     private void easyGame(ActionEvent event) throws IOException {
->>>>>>> computermode
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/EasyGame.fxml"));
 
         Parent root = loader.load();
