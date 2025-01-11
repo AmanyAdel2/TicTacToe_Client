@@ -8,9 +8,11 @@ package level;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,16 +40,44 @@ public class LevelController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }  
-     @FXML
-    private void gogame(MouseEvent event) throws IOException {
-        Stage stage = (Stage) easybtn.getScene().getWindow();
-        medbtn.getScene().getWindow();
-        hardbtn.getScene().getWindow();
+ 
+        @FXML
+    private void easyGame(ActionEvent event) throws IOException {
         
-        
-        Parent root = FXMLLoader.load(getClass().getResource("/game/Game.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/EasyGame.fxml"));
+
+        Parent root = loader.load();
+
+       
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setTitle("Easy Level");
+        stage.show();
+    }
+
+    @FXML
+    private void intermediateGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/intermediateLevel/IntermediateLevel.fxml"));
+
+        Parent root = loader.load();
+
         
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Intermediate Level");
+        stage.show();
+    }
+    @FXML
+    private void hardGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
+
+        Parent root = loader.load();
+
+        
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Hard Level");
+        stage.show();
     }
     
 }

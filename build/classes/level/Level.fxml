@@ -46,17 +46,17 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Button fx:id="easybtn" mnemonicParsing="false" onMouseClicked="#gogame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="EASY" GridPane.rowIndex="1">
+            <Button fx:id="easybtn" mnemonicParsing="false" onAction="#easyGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="EASY" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#gogame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="MEDIUM" GridPane.rowIndex="2">
+            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#intermediateGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="MEDIUM" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="hardbtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onMouseClicked="#gogame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
+            <Button fx:id="hardbtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#hardGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
