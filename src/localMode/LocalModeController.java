@@ -62,14 +62,13 @@ public class LocalModeController implements Initializable {
         button.setText(currentPlayer);
         
         if (logic.getCurrentPlayer() == 'X') {
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;"); 
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
         } else {
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+            button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
         }
 
         if (logic.checkWinner()) {
             String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-            //updateWinnerDisplay(winner);
             showGameOverAlert(winner + " Wins!");
             if (winner.equals(player1)) {
                 player1Score++;
