@@ -69,7 +69,7 @@
             <Font name="Arial Bold" size="33.0" />
          </font>
       </Label>
-      <Button fx:id="signbtn" layoutX="143.0" layoutY="358.0" mnemonicParsing="false" style="-fx-background-color: YELLOW;" text="SIGN IN">
+      <Button fx:id="signbtn" layoutX="143.0" layoutY="358.0" mnemonicParsing="false" onAction="#onSignin" style="-fx-background-color: YELLOW;" text="SIGN IN">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

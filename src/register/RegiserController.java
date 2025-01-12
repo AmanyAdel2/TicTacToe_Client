@@ -76,8 +76,10 @@ public class RegiserController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "Your registration request has been sent.");
             System.out.println("Registration request sent for user: " + username);
+             Stage stage = (Stage) regBtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+            stage.setScene(new Scene(root));
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "An error occurred while sending the registration request.");
             Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, null, e);
