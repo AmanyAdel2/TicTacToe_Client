@@ -55,6 +55,8 @@ public class HardCompModeController implements Initializable {
     
     private boolean isGameOver = false; 
     private char turn = 'X';  
+    @FXML
+    private Button resetBtn;
     
     /**
      * Initializes the controller class.

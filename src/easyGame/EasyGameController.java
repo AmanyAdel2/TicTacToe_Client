@@ -51,7 +51,7 @@ public class EasyGameController implements Initializable {
         
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
 
             if (logic.checkWinner('X')) {
                 showGameOverAlert(player + " Wins!");
@@ -75,7 +75,7 @@ public class EasyGameController implements Initializable {
                     Button button = getButtonByRowCol(i, j);
                     if (button != null) {
                         button.setText('O' + "");
-                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
                     }
                     if (logic.checkWinner('O')) {
                         showGameOverAlert(computer + " Wins!");

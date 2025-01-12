@@ -62,9 +62,9 @@ public class LocalModeController implements Initializable {
         button.setText(currentPlayer);
         
         if (logic.getCurrentPlayer() == 'X') {
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;"); 
         } else {
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+            button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
         }
 
         if (logic.checkWinner()) {
