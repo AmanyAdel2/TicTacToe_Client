@@ -73,8 +73,8 @@ public class LoginController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            // Handle the server response (success or failure)
-            // For this example, we'll assume success
+  
+            
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "An error occurred during login.");
