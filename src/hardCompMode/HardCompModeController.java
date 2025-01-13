@@ -34,6 +34,7 @@ public class HardCompModeController implements Initializable {
     private Text computerLabel;
 
     @FXML
+
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
 
     private HardCompMode logic = new HardCompMode();
@@ -44,6 +45,7 @@ public class HardCompModeController implements Initializable {
     private String gameResult = ""; 
     private boolean gameEnded = false; 
     private Scene originalScene;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,7 +62,7 @@ public class HardCompModeController implements Initializable {
 
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
 
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";

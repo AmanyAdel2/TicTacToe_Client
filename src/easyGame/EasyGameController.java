@@ -54,6 +54,7 @@ public class EasyGameController implements Initializable {
     mediaPlayer.setVolume(1.0); 
     MediaView mediaView = new MediaView(mediaPlayer);
 
+
     StackPane videoRoot = new StackPane();
     videoRoot.getChildren().add(mediaView);
     
@@ -88,7 +89,7 @@ private void handleButtonPress(Button button) {
 
     if (logic.makeMove(row, col, 'X')) {
         button.setText('X' + "");
-        button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
+        button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
 
         if (logic.checkWinner('X')) {
             showGameOverVideo("winner2.mp4", player + " Wins!", false);
@@ -115,12 +116,13 @@ private void computerMove() {
                 Button button = getButtonByRowCol(i, j);
                 if (button != null) {
                     button.setText('O' + "");
-                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
                 }
                 if (logic.checkWinner('O')) {
                     showGameOverVideo("lose2.mp4", computer + " Wins!", false);
                     computerScore++;
                     updateScores();
+
                     return;
                 }
                 if (logic.isBoardFull()) {
