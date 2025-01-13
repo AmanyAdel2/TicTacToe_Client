@@ -12,7 +12,7 @@ import java.util.Random;
  * @author Dell
  */
 public class IntermediateGameLogic {
- 
+   
     private char[][] board;
     private Random random = new Random();
 
@@ -73,13 +73,28 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-    
+        
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
                     board[i][j] = player;
                     if (checkWinner(player)) {
                         board[i][j] = '-'; 
+                        return new int[]{i, j};
+                    }
+                    board[i][j] = '-'; 
+                }
+            }
+        }
+
+        
+        char opponent = (player == 'X') ? 'O' : 'X';
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == '-') {
+                    board[i][j] = opponent;
+                    if (checkWinner(opponent)) {
+                        board[i][j] = '-';
                         return new int[]{i, j}; 
                     }
                     board[i][j] = '-'; 
@@ -87,27 +102,12 @@ public class IntermediateGameLogic {
             }
         }
 
-     
-        char opponent = (player == 'X') ? 'O' : 'X';
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == '-') {
-                    board[i][j] = opponent;
-                    if (checkWinner(opponent)) {
-                        board[i][j] = '-'; 
-                        return new int[]{i, j}; 
-                    }
-                    board[i][j] = '-';
-                }
-            }
-        }
-
-       
-        if (random.nextDouble() < 0.2) { 
+        
+        if (random.nextDouble() < 0.4) { 
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
-                        return new int[]{i, j}; 
+                        return new int[]{i, j};
                     }
                 }
             }
@@ -125,4 +125,3 @@ public class IntermediateGameLogic {
         return null; 
     }
 }
-
