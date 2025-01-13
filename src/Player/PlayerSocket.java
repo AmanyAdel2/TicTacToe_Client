@@ -9,7 +9,14 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -23,9 +30,9 @@ public class PlayerSocket {
     public DataInputStream dis;
     public PrintStream ps;
     private JSONObject jsonMsg;
-    
+    private ObservableSet<String> onlinePlayers = FXCollections.observableSet();
     private static PlayerSocket instance; // Singleton instance
-    
+
     private  PlayerSocket(){
         try {
             socket = new Socket("127.0.0.1", 5005);
@@ -46,6 +53,11 @@ public class PlayerSocket {
         }
         return instance;
     }
+    
+    public ObservableSet<String> getOnlinePlayers() {
+        return onlinePlayers;
+    }
+    
     private void startListening() {
         Thread listenerThread = new Thread(() -> {
             while (!socket.isClosed()) {
@@ -70,13 +82,27 @@ public class PlayerSocket {
             
         switch(jsonMsg.get("type").toString()){
             case "register":
-            String res = jsonMsg.get("status").toString();
-            
-            if(res.equals("1")){
-                System.out.println("Resgistered successfully");
-            }else System.out.println("failed");
+                String res = jsonMsg.get("status").toString();
+
+                if(res.equals("1")){
+                    System.out.println("Resgistered successfully");
+                }else System.out.println("failed");
+                
+                break;
             case "login":
 //              createPlayer();
+                break;
+                
+            case "onlinePlayers":
+                JSONArray players = (JSONArray) jsonMsg.get("players");
+                
+                Platform.runLater(() -> {
+                   onlinePlayers.clear(); // Clear the list before updating
+                   for (Object player : players) {
+                       System.out.println(player.toString());
+                       onlinePlayers.add(player.toString());
+                   }
+               });
                 break;
             }
        
@@ -85,7 +111,6 @@ public class PlayerSocket {
     public void sendJSON(Map<String, String> fields) {
         
         JSONObject data = new JSONObject();
-       
         data.putAll(fields);
         System.out.println(data.get("username").toString());
         this.ps.println(data.toJSONString());

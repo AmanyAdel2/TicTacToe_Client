@@ -77,7 +77,7 @@ public class RegiserController implements Initializable {
         try {
             playerSocket.sendJSON(map);
             System.out.println("Registration request sent for user: " + username);
-             Stage stage = (Stage) regBtn.getScene().getWindow();
+            Stage stage = (Stage) regBtn.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
             stage.setScene(new Scene(root));
         } catch (Exception e) {

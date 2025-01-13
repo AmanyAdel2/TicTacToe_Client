@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="TicTacToe.jar" size="656791" download="eager" />
+    <jar href="TicTacToe.jar" size="658718" download="eager" />
     <jar href="lib\derby.jar" size="2766479" download="eager" />
     <jar href="lib\derbyclient.jar" size="576624" download="eager" />
     <jar href="lib\derbynet.jar" size="248898" download="eager" />
