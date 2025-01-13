@@ -96,7 +96,7 @@ public class IntermediateGameController implements Initializable {
 
             if (logic.checkWinner('O')) {
                 gameResult = "Computer Wins!";
-                showGameOverVideo("lose1.mp4", false); 
+                showGameOverVideo("lose2.mp4", false); 
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
@@ -118,7 +118,7 @@ public class IntermediateGameController implements Initializable {
         videoRoot.getChildren().add(mediaView);
         
        
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 :550, isDraw ? 800 : 400);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800:550, isDraw ? 600 : 550);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 

@@ -7,392 +7,223 @@ package hardCompMode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.ButtonType;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.layout.StackPane;
 
-/**
- * FXML Controller class
- *
- * @author DeSkToP
- */
 public class HardCompModeController implements Initializable {
 
     @FXML
-    private Button button00;
+    private Text playerLabel;
+
     @FXML
-    private Button button01;
+    private Text computerLabel;
+
     @FXML
-    private Button button10;
-    @FXML
-    private Button button20;
-    @FXML
-    private Button button02;
-    @FXML
-    private Button button11;
-    @FXML
-    private Button button12;
-    @FXML
-    private Button button22;
-    @FXML
-    private Button button21;
-    @FXML
-    private Button backBtn;
-    
-    
-    private Button[][] boardButtons;
-    private char[][] board = new char[3][3]; // 3x3 board
-    
-    private boolean isGameOver = false; 
-    private char turn = 'X';  
-    
-    /**
-     * Initializes the controller class.
-     */
+    private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
+
+    private HardCompMode logic = new HardCompMode();
+    private int playerScore = 0;
+    private int computerScore = 0;
+    private String player = "Player";
+    private String computer = "Computer";
+    private String gameResult = ""; 
+    private boolean gameEnded = false; 
+    private Scene originalScene;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL location, ResourceBundle resources) {
+        originalScene = p1.getScene();
+        resetGame();
+    }
 
-        boardButtons = new Button[][] {
-            { button00, button01, button02 },
-            { button10, button11, button12 },
-            { button20, button21, button22 }
-        };
+    private void handleButtonPress(Button button) {
+        if (gameEnded) return;
 
-        for(int i = 0; i < 3; i++) 
-        {
-            for (int j = 0; j < 3; j++) 
-            {
-                board[i][j] = ' ';
+        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int row = index / 3;
+        int col = index % 3;
+
+        if (logic.makeMove(row, col, 'X')) {
+            button.setText('X' + "");
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
+
+            if (logic.checkWinner('X')) {
+                gameResult = "Player Wins!";
+                showGameOverVideo("winner2.mp4", false); 
+                playerScore++;
+                updateScores();
+                return;
+            }
+            if (logic.isBoardFull()) {
+                gameResult = "It's a Draw!";
+                showGameOverVideo("draw.mp4", true); 
+                return;
+            }
+
+            computerMove();
+        }
+    }
+
+    private void computerMove() {
+        if (gameEnded) return; 
+
+        int[] move = logic.findBestMove('O'); 
+        if (move != null) {
+            int row = move[0];
+            int col = move[1];
+            logic.makeMove(row, col, 'O');
+
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setText('O' + "");
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+            }
+
+            if (logic.checkWinner('O')) {
+                gameResult = "Computer Wins!";
+                showGameOverVideo("lose1.mp4", false); 
+                computerScore++;
+                updateScores();
+            } else if (logic.isBoardFull()) {
+                gameResult = "It's a Draw!";
+                showGameOverVideo("draw.mp4", true); 
             }
         }
-    } 
-    
+    }
+
+    private void showGameOverVideo(String videoPath, boolean isDraw) {
+        gameEnded = true; 
+        Stage videoStage = new Stage();
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1.0); 
+        MediaView mediaView = new MediaView(mediaPlayer);
+
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+        
+       
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 :550, isDraw ? 600 : 400);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+     
+        videoStage.setOnCloseRequest(event -> {
+            mediaPlayer.stop(); 
+            videoStage.close(); 
+            showGameOverAlert(gameResult); 
+            event.consume();
+        });
+
+        videoStage.show();
+        mediaPlayer.play();
+    }
+
+    private void showGameOverAlert(String message) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(message);
+        alert.setContentText("Choose your next action:");
+
+        ButtonType playAgainButton = new ButtonType("Play Again");
+        ButtonType backButton = new ButtonType("Back");
+        alert.getButtonTypes().setAll(playAgainButton, backButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(backButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.showAndWait().ifPresent(response -> {
+            if (response == playAgainButton) {
+                resetGame();
+            } else {
+                playerScore = 0;
+                computerScore = 0;
+                updateScores();
+                goToBackScene();
+            }
+        });
+    }
+
+    private void resetGame() {
+        logic.resetGame();
+        for (Button button : new Button[]{p1, p2, p3, p4, p5, p6, p7, p8, p9}) {
+            button.setText("");
+            button.setStyle("-fx-background-color: beige; -fx-font-size: 14; -fx-font-weight: bold;");
+            button.setOnAction(e -> handleButtonPress(button));
+        }
+        gameEnded = false; 
+    }
+
+    private void updateScores() {
+        playerLabel.setText(player + " (" + playerScore + ")");
+        computerLabel.setText(computer + " (" + computerScore + ")");
+    }
+
     @FXML
-    private void goBack(ActionEvent event){
+    private void backButton(ActionEvent event) throws IOException {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Back Confirmation");
+        alert.setHeaderText("Are you sure you want to go back?");
+        alert.setContentText("Any unsaved progress will be lost.");
+
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == yesButton) {
+            goToBackScene();
+        }
+    }
+
+    private void goToBackScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
-            Parent root = loader.load(); 
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            
-            Scene scene = new Scene(root);
+            Stage stage = (Stage) p1.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
             stage.setScene(scene);
-
-            //Set a title for the window
-            stage.setTitle("Level Page");
-
-            // Show the updated stage
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(HardCompModeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    
-    
-    @FXML
-    private void handleButtonClick(ActionEvent event) {
-        if(isGameOver)
-        {
-            return; 
-        }
-        System.out.println("Button clicked!");
-        // object returns the object that triggered the event. (object) have to cast it
-        Button clickedButton = (Button) event.getSource();
-        int row = GridPane.getRowIndex(clickedButton);
-        int col = GridPane.getColumnIndex(clickedButton);
-        
-      
-        // Check if cell is empty
-        if(board[row][col] == ' ') 
-        { 
-            board[row][col] = turn;
-            
-            clickedButton.setText(String.valueOf(turn));
-            clickedButton.setStyle("-fx-text-fill: red; -fx-font-size: 45px; -fx-background-color: beige;");                
-           
-            checkGameState();
-
-            if (!isGameOver) 
-            {
-                switchPlayer();
-                // Let the computer play
-                computerMove(); 
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-    
-    private void switchPlayer() {
-        turn = (turn == 'X') ? 'O' : 'X';
-    }
-    
-    
-    private void checkGameState() {
-        // Check rows, columns, and diagonals for a win
-        if(checkWin('X'))
-        {
-            isGameOver = true;
-            showAlert("You win!");
-        }
-        else if(checkWin('O'))
-        {
-            isGameOver = true;
-            showAlert("Computer  wins!");
-        }
-        else if(isBoardFull()) 
-        {
-            isGameOver = true;
-            showAlert("It's a draw!");
-        }
-    }
-    
-    private boolean checkWin(char player) {
-        // Check rows and columns
-        for(int i = 0; i < 3; i++) 
-        {
-            if((board[i][0] == player && board[i][1] == player && board[i][2] == player) || 
-                (board[0][i] == player && board[1][i] == player && board[2][i] == player)) 
-            {
-                return true;
-            }
-        }
-        // Check diagonals
-        if((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-            (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    
-    private boolean isBoardFull() {
-        for(int i = 0; i < 3; i++)
-        {
-            for(int j = 0; j < 3; j++)
-            {
-                if (board[i][j] == ' ') return false;
-            }
-        }
-        return true;
-    }
-    
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-    
-    
-    private void computerMove() {
-        // Check if game is already over
-        if(isGameOver) return;
-        
-        // Find best move using minimax
-        int bestScore = Integer.MIN_VALUE;
-        int bestRow = -1;
-        int bestCol = -1;
-        
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
-                if(board[i][j] == ' ') {
-                    // Every possible move is made by the computer
-                    board[i][j] = 'O';
-                    int score = minimax(board, 0, false);
-                    board[i][j] = ' ';
-                    
-                    if(score > bestScore) {
-                        bestScore = score;
-                        // once finding the best score, the computer will store the row and column of the best score
-                        bestRow = i;
-                        bestCol = j;
-                    }
-                }
-            }
-        }
-        
-        // Make the best move
-        board[bestRow][bestCol] = 'O';
-        Button button = getButtonByPosition(bestRow, bestCol);
-        button.setText("O");
-        button.setStyle("-fx-text-fill: blue; -fx-font-size: 45px; -fx-background-color: beige;");
-        checkGameState();
-        if(!isGameOver) switchPlayer();
 
-        if(isGameOver) return;
-
-//         // pick the first empty spot
-//         for(int i = 0; i < 3; i++) 
-//         {
-//             for(int j = 0; j < 3; j++) 
-//             {
-//                 if (board[i][j] == ' ') 
-//                 {
-// //                  board[i][j] = turn;
-//                     int score = minimax(board, 0, true);
-//                     Button button = getButtonByPosition(i, j);
-//                     button.setText(String.valueOf(turn));
-//                     button.setStyle("-fx-font-size: 30px;");
-//                     checkGameState();
-//                     if (!isGameOver) switchPlayer();
-//                     return;
-//                 }
-//             }
-//         }
-    }
-      
-
-    private int minimax(char[][] board, int depth, boolean isMaximizingPlayer){
-        int score = evaluate(board);
-        // if the computer wins, return the score
-        if(score == 10) 
-        {
-            return score - depth;
-        }
-        
-        // if the player wins, return the score 
-        if(score == -10) 
-        {
-            // Adding depth to makes losses that occur at deeper levels of 
-            // the recursion tree (i.e., later in the game) appear less bad
-            return score + depth;
-        }
-
-        // if the game is a draw, return 0
-        if(score == 0 && isBoardFull()) {
-            return 0;
-        }   
-
-        // if the computer is maximizing, return the best score
-        if(isMaximizingPlayer) {
-            int best = -1000;
-            
-            for(int i = 0; i < 3; i++) {
-                for(int j = 0; j < 3; j++) {
-                    if(board[i][j] == ' ') {
-                        board[i][j] = 'O';
-                        best = Math.max(best, minimax(board, depth + 1, false));
-                        board[i][j] = ' ';
-                    }
-                }
-            }
-            return best;
-        } else {
-            // if the computer is minimizing (player's turn), return the best score
-            int best = 1000;
-            
-            for(int i = 0; i < 3; i++) {
-                for(int j = 0; j < 3; j++) {
-                    if(board[i][j] == ' ') {
-                        board[i][j] = 'X'; 
-                        best = Math.min(best, minimax(board, depth + 1, true));
-                        board[i][j] = ' ';
-                    }
-                }
-            }
-            return best;
-        }
-        
-    }
-    
-    private int evaluate(char[][] board) {
-         // Check rows for victory
-        for(int row = 0; row < 3; row++) 
-        {
-            if(board[row][0] == board[row][1] && board[row][1] == board[row][2]) 
-            {
-                if (board[row][0] == 'O') {
-                    return +10;
-                } else if (board[row][0] == 'X') {
-                    return -10;
-                }
-            }
-        }
-        
-         // Check columns for victory
-        for (int col = 0; col < 3; col++) {
-            if (board[0][col] == board[1][col] && board[1][col] == board[2][col]) {
-                if (board[0][col] == 'O') {
-                    return +10;
-                } else if (board[0][col] == 'X') {
-                    return -10;
-                }
-            }
-        }
-        
-         // Check diagonals for victory
-        if(board[0][0] == board[1][1] && board[1][1] == board[2][2]) 
-        {
-            if (board[0][0] == 'O') 
-            {
-                return +10;
-            } else if (board[0][0] == 'X') 
-            {
-                return -10;
-            }
-        }
-
-        if(board[0][2] == board[1][1] && board[1][1] == board[2][0]) 
-        {
-            if (board[0][2] == 'O') 
-            {
-                return +10;
-            } else if (board[0][2] == 'X') 
-            {
-                return -10;
-            }
-        }
-
-        return 0; // No winner yet
-    }
-    private Button getButtonByPosition(int row, int col) {
-        if(row == 0 && col == 0){
-            return button00;
-        } 
-        else if(row == 0 && col == 1){
-            return button01;
-        } 
-        else if(row == 0 && col == 2){
-            return button02;
-        } 
-        else if(row == 1 && col == 0){
-            return button10;
-        } 
-        else if(row == 1 && col == 1){
-            return button11;
-        } 
-        else if(row == 1 && col == 2){
-            return button12;
-        }
-        else if (row == 2 && col == 0){
-            return button20;
-        } 
-        else if (row == 2 && col == 1){
-            return button21;
-        } 
-        else return button22;
-    }
-    @FXML
-    private void resetGame(ActionEvent event) {
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                boardButtons[row][col].setText("");
-                boardButtons[row][col].setStyle("-fx-background-color: beige;");
-                board[row][col] = ' ';
-                turn = 'X';  
-                isGameOver = false;
-            }
+    private Button getButtonByRowCol(int row, int col) {
+        switch (row) {
+            case 0:
+                return (col == 0) ? p1 : (col == 1) ? p2 : p3;
+            case 1:
+                return (col == 0) ? p4 : (col == 1) ? p5 : p6;
+            case 2:
+                return (col == 0) ? p7 : (col == 1) ? p8 : p9;
+            default:
+                return null;
         }
     }
 }

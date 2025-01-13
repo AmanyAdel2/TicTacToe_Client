@@ -60,7 +60,7 @@ public class EasyGameController implements Initializable {
    
     Scene videoScene;
     if (isDraw) {
-        videoScene = new Scene(videoRoot, 800, 800); 
+        videoScene = new Scene(videoRoot, 800, 600); 
     } else {
         videoScene = new Scene(videoRoot, 550, 400);
     }
