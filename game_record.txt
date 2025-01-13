@@ -1,0 +1,9 @@
+Player: Player
+Computer: Computer
+Player Score: 0
+Computer Score: 0
+Final Board State:
+XOO
+XOO
+XXX
+Game Result: It's a Draw!

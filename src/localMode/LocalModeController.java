@@ -60,30 +60,19 @@ public class LocalModeController implements Initializable {
         int row = index / 3;
         int col = index % 3;
 
-
-    if (logic.makeMove(row, col)) {
-        String currentPlayer = String.valueOf(logic.getCurrentPlayer());
-        button.setText(currentPlayer);
-        
-        if (logic.getCurrentPlayer() == 'X') {
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;"); 
-        } else {
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
-        }
-
-        if (logic.checkWinner()) {
-            String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-            showGameOverAlert(winner + " Wins!");
-            if (winner.equals(player1)) {
-                player1Score++;
-
+        if (logic.makeMove(row, col)) {
+            String currentPlayer = String.valueOf(logic.getCurrentPlayer());
+            button.setText(currentPlayer);
+            
+            if (logic.getCurrentPlayer() == 'X') {
+                button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
             } else {
                 button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
             }
 
             if (logic.checkWinner()) {
                 String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-                showGameOverVideo("winner1.mp4", winner + " Wins!", false); 
+                showGameOverVideo("winner1.mp4", winner + " Wins!", false); // تمرير false للفوز
                 if (winner.equals(player1)) {
                     player1Score++;
                 } else {
@@ -93,7 +82,7 @@ public class LocalModeController implements Initializable {
                 return;
             }
             if (logic.isBoardFull()) {
-                showGameOverVideo("draw.mp4", "It's a Draw!", true); 
+                showGameOverVideo("draw.mp4", "It's a Draw!", true); // تمرير true للتعادل
                 return;
             }
             logic.switchPlayer();
@@ -104,23 +93,23 @@ public class LocalModeController implements Initializable {
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0); 
+        mediaPlayer.setVolume(1.0); // تأكد من أن الصوت شغال
         MediaView mediaView = new MediaView(mediaPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
         
-      
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 800 : 400);
+        // تحديد أبعاد الفيديو حسب الحالة
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
-       
+        // استماع لإغلاق نافذة الفيديو
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop();
-            videoStage.close();
-            showGameOverAlert(message);
-            event.consume(); 
+            mediaPlayer.stop(); // إيقاف الفيديو
+            videoStage.close(); // إغلاق نافذة الفيديو
+            showGameOverAlert(message); // عرض رسالة النتيجة
+            event.consume(); // منع الإغلاق الافتراضي
         });
 
         videoStage.show();
