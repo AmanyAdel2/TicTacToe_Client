@@ -60,7 +60,10 @@ public class IntermediateGameController implements Initializable {
 
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
+
             button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
+
+
 
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";
@@ -88,11 +91,13 @@ public class IntermediateGameController implements Initializable {
             int col = move[1];
             logic.makeMove(row, col, 'O');
 
-            Button button = getButtonByRowCol(row, col);
-            if (button != null) {
-                button.setText('O' + "");
-                button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
-            }
+
+        Button button = getButtonByRowCol(row, col);
+        if (button != null) {
+            button.setText('O' + "");
+            button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
+        }
+
 
             if (logic.checkWinner('O')) {
                 gameResult = "Computer Wins!";

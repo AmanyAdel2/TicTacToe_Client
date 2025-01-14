@@ -121,6 +121,8 @@ private void computerMove() {
                     showGameOverVideo("lose2.mp4", computer + " Wins!", false);
                     computerScore++;
                     updateScores();
+
+
                     return;
                 }
                 if (logic.isBoardFull()) {

@@ -36,8 +36,9 @@ public class LevelController implements Initializable {
     private Button medbtn;
     @FXML
     private Button hardBtn;
-    @FXML
     private Button backBtn;
+    @FXML
+    private Button backButton;
 
     /**
      * Initializes the controller class.
@@ -80,7 +81,6 @@ public class LevelController implements Initializable {
         stage.setTitle("Intermediate Level");
         stage.show();
     }
-    @FXML
     private void hardGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
 
@@ -125,7 +125,6 @@ public class LevelController implements Initializable {
         
     }
     
-    @FXML
     private void goBackToMain(ActionEvent event){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));

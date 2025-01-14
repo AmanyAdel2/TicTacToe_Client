@@ -12,60 +12,60 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="465.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="level.LevelController">
+<AnchorPane id="AnchorPane" prefHeight="671.0" prefWidth="664.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="level.LevelController">
     <stylesheets>
         <URL value="@level.css" />
     </stylesheets>
    <children>
-      <ImageView fitHeight="470.0" fitWidth="491.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="671.0" fitWidth="673.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="42.0" fitWidth="163.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="84.0" fitWidth="213.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@welcome.gif" />
          </image>
       </ImageView>
-      <GridPane layoutX="110.0" layoutY="143.0" prefHeight="186.0" prefWidth="227.0">
+      <GridPane layoutX="161.0" layoutY="150.0" prefHeight="308.0" prefWidth="375.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="52.666656494140625" minHeight="10.0" prefHeight="42.666656494140625" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="54.333343505859375" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="58.666656494140625" minHeight="10.0" prefHeight="46.333343505859375" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="52.666656494140625" minHeight="10.0" prefHeight="38.99998474121094" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="77.00001525878906" minHeight="10.0" prefHeight="69.33331298828125" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="88.33334350585938" minHeight="10.0" prefHeight="85.66668701171875" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="75.33334350585938" minHeight="10.0" prefHeight="46.666656494140625" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="CHOOSE LEVEL" textFill="YELLOW">
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                  <Insets bottom="20.0" left="50.0" right="20.0" top="10.0" />
                </padding>
                <font>
-                  <Font name="System Bold" size="25.0" />
+                  <Font name="System Bold" size="32.0" />
                </font>
             </Label>
-            <Button fx:id="easybtn" mnemonicParsing="false" onAction="#easyGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="EASY" GridPane.rowIndex="1">
+            <Button fx:id="easybtn" mnemonicParsing="false" onAction="#easyGame" prefHeight="71.0" prefWidth="334.0" style="-fx-background-color: YELLOW;" text="EASY" GridPane.rowIndex="1">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="32.0" />
                </font>
             </Button>
-            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#intermediateGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="MEDIUM" GridPane.rowIndex="2">
+            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#intermediateGame" prefHeight="66.0" prefWidth="339.0" style="-fx-background-color: YELLOW;" text="MEDIUM" GridPane.rowIndex="2">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="32.0" />
                </font>
             </Button>
-            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame" prefHeight="25.0" prefWidth="234.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
+            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame" prefHeight="58.0" prefWidth="341.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
 
 
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="32.0" />
                </font>
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="backButton" layoutX="37.0" layoutY="405.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: red;" text="Back">
+      <Button fx:id="backButton" layoutX="24.0" layoutY="549.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
