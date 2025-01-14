@@ -97,6 +97,7 @@ public class OnlineController implements Initializable {
 
     @FXML
     private void sendRequest(ActionEvent event) {
+        
         if(!selectedPlayer.equals("")){
             Map<String, String> request = new HashMap<>();
             request.put("type", "sendGameReq");
