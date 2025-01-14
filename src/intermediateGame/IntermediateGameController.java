@@ -20,14 +20,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.layout.StackPane;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class IntermediateGameController implements Initializable {
-
 
     @FXML
     private Text playerLabel;
@@ -43,58 +41,98 @@ public class IntermediateGameController implements Initializable {
     private int computerScore = 0;
     private String player = "Player";
     private String computer = "Computer";
+    private String gameResult = ""; 
+    private boolean gameEnded = false; 
+    private Scene originalScene;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        originalScene = p1.getScene();
         resetGame();
     }
 
     private void handleButtonPress(Button button) {
+        if (gameEnded) return;
+
         int index = Integer.parseInt(button.getId().substring(1)) - 1; 
         int row = index / 3;
         int col = index % 3;
 
-        
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
 
             if (logic.checkWinner('X')) {
-                showGameOverAlert(player + " Wins!");
+                gameResult = "Player Wins!";
+                showGameOverVideo("winner2.mp4", false); 
                 playerScore++;
                 updateScores();
                 return;
             }
             if (logic.isBoardFull()) {
-                showGameOverAlert("It's a Draw!");
+                gameResult = "It's a Draw!";
+                showGameOverVideo("draw.mp4", true); 
                 return;
             }
+
             computerMove();
         }
     }
 
-       private void computerMove() {
-       int[] move = logic.findBestMove('O'); 
+    private void computerMove() {
+        if (gameEnded) return; 
+
+        int[] move = logic.findBestMove('O'); 
         if (move != null) {
-        int row = move[0];
-        int col = move[1];
-        logic.makeMove(row, col, 'O');
+            int row = move[0];
+            int col = move[1];
+            logic.makeMove(row, col, 'O');
 
-        Button button = getButtonByRowCol(row, col);
-        if (button != null) {
-            button.setText('O' + "");
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
-        }
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setText('O' + "");
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+            }
 
-        if (logic.checkWinner('O')) {
-            showGameOverAlert(computer + " Wins!");
-            computerScore++;
-            updateScores();
-        } else if (logic.isBoardFull()) {
-            showGameOverAlert("It's a Draw!");
+            if (logic.checkWinner('O')) {
+                gameResult = "Computer Wins!";
+                showGameOverVideo("lose2.mp4", false); 
+                computerScore++;
+                updateScores();
+            } else if (logic.isBoardFull()) {
+                gameResult = "It's a Draw!";
+                showGameOverVideo("draw.mp4", true); 
+            }
         }
     }
-}
+
+    private void showGameOverVideo(String videoPath, boolean isDraw) {
+        gameEnded = true; 
+        Stage videoStage = new Stage();
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1.0); 
+        MediaView mediaView = new MediaView(mediaPlayer);
+
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+        
+       
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800:550, isDraw ? 600 : 550);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+     
+        videoStage.setOnCloseRequest(event -> {
+            mediaPlayer.stop(); 
+            videoStage.close(); 
+            showGameOverAlert(gameResult); 
+            event.consume();
+        });
+
+        videoStage.show();
+        mediaPlayer.play();
+    }
 
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -140,17 +178,7 @@ public class IntermediateGameController implements Initializable {
             button.setStyle("-fx-background-color: beige; -fx-font-size: 14; -fx-font-weight: bold;");
             button.setOnAction(e -> handleButtonPress(button));
         }
-    }
-
-    private void goToBackScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
-            Stage stage = (Stage) p1.getScene().getWindow();
-            Scene scene = new Scene(loader.load());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gameEnded = false; 
     }
 
     private void updateScores() {
@@ -175,6 +203,17 @@ public class IntermediateGameController implements Initializable {
         }
     }
 
+    private void goToBackScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
+            Stage stage = (Stage) p1.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Button getButtonByRowCol(int row, int col) {
         switch (row) {
             case 0:
@@ -187,6 +226,4 @@ public class IntermediateGameController implements Initializable {
                 return null;
         }
     }
-} 
-    
-
+}

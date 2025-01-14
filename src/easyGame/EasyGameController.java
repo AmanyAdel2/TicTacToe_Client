@@ -20,6 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.layout.StackPane;
 
 public class EasyGameController implements Initializable {
 
@@ -43,53 +47,91 @@ public class EasyGameController implements Initializable {
         resetGame();
     }
 
-    private void handleButtonPress(Button button) {
-        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
-        int row = index / 3;
-        int col = index % 3;
+    private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
+    Stage videoStage = new Stage();
+    Media media = new Media(getClass().getResource(videoPath).toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(1.0); 
+    MediaView mediaView = new MediaView(mediaPlayer);
 
-        
-        if (logic.makeMove(row, col, 'X')) {
-            button.setText('X' + "");
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
-
-            if (logic.checkWinner('X')) {
-                showGameOverAlert(player + " Wins!");
-                playerScore++;
-                updateScores();
-                return;
-            }
-            if (logic.isBoardFull()) {
-                showGameOverAlert("It's a Draw!");
-                return;
-            }
-            computerMove();
-        }
+    StackPane videoRoot = new StackPane();
+    videoRoot.getChildren().add(mediaView);
+    
+   
+    Scene videoScene;
+    if (isDraw) {
+        videoScene = new Scene(videoRoot, 800, 600); 
+    } else {
+        videoScene = new Scene(videoRoot, 550, 400);
     }
 
-    private void computerMove() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (logic.getBoard()[i][j] == '-') {
-                    logic.makeMove(i, j, 'O');
-                    Button button = getButtonByRowCol(i, j);
-                    if (button != null) {
-                        button.setText('O' + "");
-                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
-                    }
-                    if (logic.checkWinner('O')) {
-                        showGameOverAlert(computer + " Wins!");
-                        computerScore++;
-                        updateScores();
-                    }
-                    if (logic.isBoardFull()) {
-                        showGameOverAlert("It's a Draw!");
-                    }
+    videoStage.setScene(videoScene);
+    videoStage.setTitle("Game Over");
+
+    
+    videoStage.setOnCloseRequest(event -> {
+        mediaPlayer.stop();
+        videoStage.close(); 
+        showGameOverAlert(message); 
+        event.consume(); 
+    });
+
+    videoStage.show();
+    mediaPlayer.play();
+}
+
+
+private void handleButtonPress(Button button) {
+    int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+    int row = index / 3;
+    int col = index % 3;
+
+    if (logic.makeMove(row, col, 'X')) {
+        button.setText('X' + "");
+        button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
+
+        if (logic.checkWinner('X')) {
+            showGameOverVideo("winner2.mp4", player + " Wins!", false);
+            playerScore++;
+            updateScores();
+            return;
+        }
+
+        if (logic.isBoardFull()) {
+            
+            showGameOverVideo("draw.mp4", "It's a Draw!", true);
+            return;
+        }
+
+        computerMove();
+    }
+}
+
+private void computerMove() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (logic.getBoard()[i][j] == '-') {
+                logic.makeMove(i, j, 'O');
+                Button button = getButtonByRowCol(i, j);
+                if (button != null) {
+                    button.setText('O' + "");
+                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+                }
+                if (logic.checkWinner('O')) {
+                    showGameOverVideo("lose2.mp4", computer + " Wins!", false);
+                    computerScore++;
+                    updateScores();
                     return;
                 }
+                if (logic.isBoardFull()) {
+                    
+                    showGameOverVideo("draw.mp4", "It's a Draw!", true);
+                }
+                return;
             }
         }
     }
+}
 
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -116,6 +158,7 @@ public class EasyGameController implements Initializable {
             "-fx-font-size: 14;" +
             "-fx-font-weight: bold;"
         );
+
         alert.showAndWait().ifPresent(response -> {
             if (response == playAgainButton) {
                 resetGame();

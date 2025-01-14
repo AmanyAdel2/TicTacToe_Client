@@ -5,7 +5,6 @@
  */
 package localMode;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -22,6 +21,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.layout.StackPane;
 
 public class LocalModeController implements Initializable {
 
@@ -53,94 +56,120 @@ public class LocalModeController implements Initializable {
     }
 
     private void handleButtonPress(Button button) {
-    int index = Integer.parseInt(button.getId().substring(1)) - 1; 
-    int row = index / 3;
-    int col = index % 3;
+        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int row = index / 3;
+        int col = index % 3;
 
-    if (logic.makeMove(row, col)) {
-        String currentPlayer = String.valueOf(logic.getCurrentPlayer());
-        button.setText(currentPlayer);
-        
-        if (logic.getCurrentPlayer() == 'X') {
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
-        } else {
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
-        }
-
-        if (logic.checkWinner()) {
-            String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-            showGameOverAlert(winner + " Wins!");
-            if (winner.equals(player1)) {
-                player1Score++;
+        if (logic.makeMove(row, col)) {
+            String currentPlayer = String.valueOf(logic.getCurrentPlayer());
+            button.setText(currentPlayer);
+            
+            if (logic.getCurrentPlayer() == 'X') {
+                button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
             } else {
-                player2Score++;
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
             }
-            updateScores();
-            return;
+
+            if (logic.checkWinner()) {
+                String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
+                showGameOverVideo("winner1.mp4", winner + " Wins!", false); 
+                if (winner.equals(player1)) {
+                    player1Score++;
+                } else {
+                    player2Score++;
+                }
+                updateScores();
+                return;
+            }
+            if (logic.isBoardFull()) {
+                showGameOverVideo("draw.mp4", "It's a Draw!", true); 
+                return;
+            }
+            logic.switchPlayer();
         }
-        if (logic.isBoardFull()) {
-            showGameOverAlert("It's a Draw!");
-            return;
-        }
-        logic.switchPlayer();
     }
-}
 
-   private void showGameOverAlert(String message) {
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Game Over");
-    alert.setHeaderText(message);
-    alert.setContentText("Choose your next action:");
+    private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
+        Stage videoStage = new Stage();
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1.0); 
+        MediaView mediaView = new MediaView(mediaPlayer);
 
-    ButtonType playAgainButton = new ButtonType("Play Again");
-    ButtonType backButton = new ButtonType("Back");
-    alert.getButtonTypes().setAll(playAgainButton, backButton);
-    alert.setGraphic(null);
-    alert.getDialogPane().setStyle(
-        "-fx-background-color: beige;" +
-        "-fx-font-size: 16;" +
-        "-fx-font-weight: bold;"
-    );
-    alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-        "-fx-background-color: lightgreen;" +
-        "-fx-font-size: 14;" +
-        "-fx-font-weight: bold;"
-    );
-    alert.getDialogPane().lookupButton(backButton).setStyle(
-        "-fx-background-color: lightcoral;" +
-        "-fx-font-size: 14;" +
-        "-fx-font-weight: bold;"
-    );
-    if (message.contains("Player 1")) {
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+        
+      
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 800 : 400);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+       
+        videoStage.setOnCloseRequest(event -> {
+            mediaPlayer.stop();
+            videoStage.close();
+            showGameOverAlert(message);
+            event.consume(); 
+        });
+
+        videoStage.show();
+        mediaPlayer.play();
+    }
+
+    private void showGameOverAlert(String message) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(message);
+        alert.setContentText("Choose your next action:");
+
+        ButtonType playAgainButton = new ButtonType("Play Again");
+        ButtonType backButton = new ButtonType("Back");
+        alert.getButtonTypes().setAll(playAgainButton, backButton);
+        alert.setGraphic(null);
         alert.getDialogPane().setStyle(
-            "-fx-background-color: lightblue;" +
+            "-fx-background-color: beige;" +
             "-fx-font-size: 16;" +
             "-fx-font-weight: bold;"
         );
-    } else if (message.contains("Player 2")) {
-        alert.getDialogPane().setStyle(
-            "-fx-background-color: lightpink;" +
-            "-fx-font-size: 16;" +
+        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
             "-fx-font-weight: bold;"
         );
-    }
-    Node content = alert.getDialogPane().lookup(".content");
-    if (content != null) {
-        content.setStyle("-fx-background-color: beige;");
-    }
-
-    alert.showAndWait().ifPresent(response -> {
-        if (response == playAgainButton) {
-            resetGame();
-        } else {
-            player1Score = 0;
-            player2Score = 0;
-            updateScores();
-            goToBackScene();
+        alert.getDialogPane().lookupButton(backButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        if (message.contains("Player 1")) {
+            alert.getDialogPane().setStyle(
+                "-fx-background-color: lightblue;" +
+                "-fx-font-size: 16;" +
+                "-fx-font-weight: bold;"
+            );
+        } else if (message.contains("Player 2")) {
+            alert.getDialogPane().setStyle(
+                "-fx-background-color: lightpink;" +
+                "-fx-font-size: 16;" +
+                "-fx-font-weight: bold;"
+            );
         }
-    });
-}
+        Node content = alert.getDialogPane().lookup(".content");
+        if (content != null) {
+            content.setStyle("-fx-background-color: beige;");
+        }
 
+        alert.showAndWait().ifPresent(response -> {
+            if (response == playAgainButton) {
+                resetGame();
+            } else {
+                player1Score = 0;
+                player2Score = 0;
+                updateScores();
+                goToBackScene();
+            }
+        });
+    }
 
     private void resetGame() {
         logic.resetGame();
@@ -166,8 +195,8 @@ public class LocalModeController implements Initializable {
         player1Label.setText(player1 + " (" + player1Score + ")");
         player2Label.setText(player2 + " (" + player2Score + ")");
     }
+    
     @FXML
-   
     private void backButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Back Confirmation");
@@ -183,14 +212,4 @@ public class LocalModeController implements Initializable {
             goToBackScene();
         }
     }
-   
 }
-
-
-
-
-
-
-
-
-

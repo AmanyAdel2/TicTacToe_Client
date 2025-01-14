@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intermediateGame;
+package hardCompMode;
 
 import java.util.Random;
 
@@ -11,12 +11,11 @@ import java.util.Random;
  *
  * @author Dell
  */
-public class IntermediateGameLogic {
-   
+public class HardCompMode {
     private char[][] board;
     private Random random = new Random();
 
-    public IntermediateGameLogic() {
+    public HardCompMode() {
         resetGame();
     }
 
@@ -73,55 +72,59 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-        
+        int bestScore = Integer.MIN_VALUE;
+        int[] bestMove = null;
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
-                    board[i][j] = player;
-                    if (checkWinner(player)) {
-                        board[i][j] = '-'; 
-                        return new int[]{i, j};
-                    }
+                    board[i][j] = player; 
+                    int score = minimax(board, false); 
                     board[i][j] = '-'; 
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = new int[]{i, j}; 
+                    }
                 }
             }
         }
+        return bestMove;
+    }
 
-        
-        char opponent = (player == 'X') ? 'O' : 'X';
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == '-') {
-                    board[i][j] = opponent;
-                    if (checkWinner(opponent)) {
-                        board[i][j] = '-';
-                        return new int[]{i, j}; 
-                    }
-                    board[i][j] = '-'; 
-                }
-            }
-        }
+    private int minimax(char[][] board, boolean isMaximizing) {
+        char currentPlayer = isMaximizing ? 'O' : 'X';
 
-        
-        if (random.nextDouble() < 0.4) { 
+        if (checkWinner('O')) return 1; 
+        if (checkWinner('X')) return -1; 
+        if (isBoardFull()) return 0;
+
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
-                        return new int[]{i, j};
+                        board[i][j] = 'O'; 
+                        int score = minimax(board, false); 
+                        board[i][j] = '-'; 
+                        bestScore = Math.max(score, bestScore);
                     }
                 }
             }
-        }
-
-       
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == '-') {
-                    return new int[]{i, j};
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j] == '-') {
+                        board[i][j] = 'X';
+                        int score = minimax(board, true); 
+                        board[i][j] = '-'; 
+                        bestScore = Math.min(score, bestScore);
+                    }
                 }
             }
+            return bestScore;
         }
-
-        return null; 
     }
 }
