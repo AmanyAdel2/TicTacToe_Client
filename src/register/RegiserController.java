@@ -5,7 +5,6 @@
  */
 package register;
 
-import Player.DTOPlayer;
 import Player.PlayerSocket;
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +14,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +24,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import tictactoe.TictactoeController;
 
 /**
  * FXML Controller class
@@ -54,26 +51,7 @@ public class RegiserController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        playerSocket = PlayerSocket.getInstance();
-        Platform.runLater(() -> {
-            Stage stage = (Stage) regBtn.getScene().getWindow();
-            playerSocket.setStage(stage);
-        });
         
-        Platform.runLater(() -> {
-            Stage primaryStage = (Stage) regBtn.getScene().getWindow();
-            primaryStage.setOnCloseRequest(event -> {
-                // Handle window close
-            if (playerSocket.socket != null && !playerSocket.socket.isClosed()) {
-                try {
-                    playerSocket.socket.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            });
-        });
     }
 
     @FXML
@@ -82,12 +60,13 @@ public class RegiserController implements Initializable {
         String email = emailtxt.getText().trim();
         String password = passtxt.getText().trim();
         String confirmPassword = conftxt.getText().trim();
-        
+
         if (!validateInputs(username, email, password, confirmPassword)) {
             return;
         }
-        
+
         // Prepare the JSON message
+       PlayerSocket playerSocket = PlayerSocket.getInstance();
         Map<String, String> map = new HashMap<>();
         map.put("type", "register");
         map.put("username", username);
@@ -97,10 +76,8 @@ public class RegiserController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
-            playerSocket.setLoggedInPlayer(player);
+            showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "Your registration request has been sent.");
             System.out.println("Registration request sent for user: " + username);
-
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "An error occurred while sending the registration request.");
             Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, null, e);
