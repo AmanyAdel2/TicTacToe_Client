@@ -46,22 +46,7 @@ public class TictactoeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        PlayerSocket socPlayer = PlayerSocket.getInstance();
-        
-        Platform.runLater(() -> {
-            Stage primaryStage = (Stage) onbtn.getScene().getWindow();
-            primaryStage.setOnCloseRequest(event -> {
-                // Handle window close
-            if (socPlayer.socket != null && !socPlayer.socket.isClosed()) {
-                try {
-                    socPlayer.socket.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
 
-            });
-        });
     }    
 
     @FXML
