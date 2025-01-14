@@ -14,18 +14,18 @@ public class TicTacToe extends Application {
 
     @Override
    
-public void start(Stage primaryStage) {
-    try {
-        Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
-        System.out.println(getClass().getResource("/tictactoe.fxml"));
-        
-        
-         primaryStage.setScene(new Scene(root));
-         primaryStage.show();
-    } catch (Exception e) {
-        e.printStackTrace();
+    public void start(Stage primaryStage) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
+            System.out.println(getClass().getResource("/tictactoe.fxml"));
+
+
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
     public static void main(String[] args) {
         launch(args);

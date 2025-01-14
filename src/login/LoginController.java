@@ -94,6 +94,7 @@ public class LoginController implements Initializable {
         }
     }
 
+
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -101,6 +102,20 @@ public class LoginController implements Initializable {
         alert.showAndWait();
     }
 
+
+//     @FXML
+//     private void onSignin(ActionEvent event) {
+//         Stage stage = (Stage) signbtn.getScene().getWindow();
+//             Parent root;
+//         try {
+//             root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+//             stage.setScene(new Scene(root));
+//         } catch (IOException ex) {
+//             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+//         }
+            
+//     }
+// >>>>>>> online
     
     //private void goReg(MouseEvent event) {
     //}
