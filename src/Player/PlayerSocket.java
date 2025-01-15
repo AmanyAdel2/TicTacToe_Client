@@ -5,15 +5,18 @@
  */
 package Player;
 
+import game.GameController;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -32,6 +35,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
+
 /**
  *
  * @author Mohamed Sameh
@@ -44,7 +49,7 @@ public class PlayerSocket {
     private ObservableSet<String> onlinePlayers = FXCollections.observableSet();
     private static PlayerSocket instance; // Singleton instance
     private DTOPlayer loggedInPlayer;
-
+    private GameController gameController;  // Each socket has its own controller
     private Stage stage;
     private boolean running = true; 
     
@@ -146,14 +151,20 @@ public class PlayerSocket {
                         System.out.println("Error: loggedInPlayer or username is null");
                         return;
                     }
-
-                    onlinePlayers.clear(); 
+                    System.out.println("Updating online players list: " + players.toJSONString());
+                       // Create a temporary set to avoid multiple UI updates
+                    Set<String> tempSet = new HashSet<>();
                     for (Object player : players) {
                         String username = player.toString();
                         if (!username.equals(loggedInPlayer.getUsername())) {
-                            onlinePlayers.add(username);
+                            tempSet.add(username);
                         }
                     }
+                    
+                    // Update the observable set
+                    onlinePlayers.clear();
+                    onlinePlayers.addAll(tempSet);
+               
                 });
 
                 break;
@@ -173,6 +184,15 @@ public class PlayerSocket {
                         alert.setTitle("Challenge Accepted");
                         alert.setContentText(challenged + " accepted your challenge!");
                         alert.showAndWait();
+                        
+                        
+//                        try {
+//                            Parent root = FXMLLoader.load(getClass().getResource("/game/Game.fxml"));
+//                            stage.setScene(new Scene(root));
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+                        
                     } else {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Challenge Declined");
@@ -181,7 +201,88 @@ public class PlayerSocket {
                     }
                 });
                 break;
-            }
+                
+            case "gameStart":
+                String symbol = jsonMsg.get("symbol").toString();
+                String opponent = jsonMsg.get("opponent").toString();
+                
+                Platform.runLater(() -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
+                    Parent root = loader.load();
+                    
+                    gameController = loader.getController();
+                    gameController.initializeGame(symbol, opponent);
+                    
+                    stage.setScene(new Scene(root));
+                } catch (IOException ex) {
+                    Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                });
+                
+                break;
+                
+            case "gameMove":
+                System.out.println("Received gameMove message: " + jsonMsg.toJSONString());
+
+                int row, col;
+                String symbolRec;       
+                try{
+                    row = Integer.parseInt(jsonMsg.get("row").toString());
+                    col = Integer.parseInt(jsonMsg.get("col").toString());
+                    symbolRec = jsonMsg.get("symbol").toString();
+
+                    System.out.println("Parsed values - Row: " + row + ", Col: " + col + ", Symbol: " + symbolRec);
+
+                    final int finalRow = row;
+                    final int finalCol = col;
+                    final String finalSymbol = symbolRec;
+
+                     Platform.runLater(() -> {
+                        gameController.updateBoard(finalRow, finalCol, finalSymbol);
+                    });
+                    
+                }catch(Exception e){
+                    System.out.println("Error processing game move: " + e.getMessage());
+                }
+                break;
+            case "gameEnd":
+                Platform.runLater(() -> {
+                    String result = jsonMsg.get("result").toString();
+                    String winner = jsonMsg.get("winner") != null ? 
+                        jsonMsg.get("winner").toString() : null;
+                     System.out.println("gameEnd: "+  jsonMsg.get("result").toString());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    
+                    alert.setTitle("Game Over");
+                    
+                    switch(result) {
+                        case "win":
+                            alert.setContentText("Congratulations! You won!");
+                            break;
+                        case "lose":
+                            alert.setContentText("Game Over! " + winner + " won the game!");
+                            break;
+                        case "draw":
+                            alert.setContentText("It's a draw!");
+                            break;
+                    }
+                    
+                    alert.showAndWait();
+                    
+                    // Return to lobby
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+                        stage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                        Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                break;
+            default:
+                break;
+                
+        }
        
     }
     
@@ -196,6 +297,9 @@ public class PlayerSocket {
         this.ps.println(data.toJSONString());
     }
     
+//    public void sendJSON(JSONObject data) {     
+//        this.ps.println(data.toJSONString());
+//    }
     public void requestReceived(String challenger){
         Platform.runLater(()-> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -204,7 +308,7 @@ public class PlayerSocket {
             
             ButtonType acceptButton = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
             ButtonType declineButton = new ButtonType("Decline", ButtonBar.ButtonData.CANCEL_CLOSE);
-             alert.getButtonTypes().setAll(acceptButton, declineButton);
+            alert.getButtonTypes().setAll(acceptButton, declineButton);
 
              // Show the alert and capture the user's choice
             Optional<ButtonType> result = alert.showAndWait();
@@ -219,6 +323,7 @@ public class PlayerSocket {
 
                 System.out.println("Challenge accepted!");
                 response.put("status", "accepted");
+                
             } else {
                 System.out.println("Challenge declined.");
                 response.put("status", "declined");

@@ -72,13 +72,18 @@ public class OnlineController implements Initializable {
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
         scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
         
+        onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
+        
         playerSocket.getOnlinePlayers().addListener((SetChangeListener.Change<? extends String> c) -> {
             if (c.wasAdded()) {
-                onlinePlayersList.getItems().add(c.getElementAdded());
+                if(!onlinePlayersList.getItems().contains(c.getElementAdded())) {
+                    onlinePlayersList.getItems().add(c.getElementAdded());
+                }
             }
             if (c.wasRemoved()) {
                 onlinePlayersList.getItems().remove(c.getElementRemoved());
             }
+            onlinePlayersList.refresh();
         }); 
     }    
 

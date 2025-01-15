@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -25,7 +26,7 @@
             <Image url="@../welcome.gif" />
          </image>
       </ImageView>
-      <GridPane layoutX="78.0" layoutY="139.0" prefHeight="326.0" prefWidth="515.0">
+      <GridPane fx:id="gameBoard" layoutX="78.0" layoutY="139.0" prefHeight="326.0" prefWidth="515.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="171.6666259765625" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="168.0" />
@@ -84,5 +85,8 @@
             </Button>
          </children>
       </GridPane>
+      <Label fx:id="playerOLabel" layoutX="481.0" layoutY="49.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" />
+      <Label fx:id="playerXLabel" layoutX="87.0" layoutY="65.0" prefHeight="21.0" prefWidth="132.0" text="playerXLabel" />
+      <Label fx:id="turnLabel" layoutX="303.0" layoutY="76.0" text="Label" />
    </children>
 </AnchorPane>
