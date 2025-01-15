@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 package easyGame;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
@@ -32,6 +36,8 @@ public class EasyGameController implements Initializable {
 
     @FXML
     private Text computerLabel;
+    @FXML
+    private Button openRecordButton;
 
     @FXML
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
@@ -46,6 +52,102 @@ public class EasyGameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         resetGame();
     }
+    private void saveGameToFile(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("Player: " + player + "\n");
+            writer.write("Computer: " + computer + "\n");
+            writer.write("Player Score: " + playerScore + "\n");
+            writer.write("Computer Score: " + computerScore + "\n");
+            writer.write("Final Board State:\n");
+            for (char[] row : logic.getBoard()) {
+                writer.write(new String(row) + "\n");
+            }
+            writer.write("Game Result: " + (playerScore > computerScore ? player + " Wins!" : (computerScore > playerScore ? computer + " Wins!" : "It's a Draw!")) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showGameOverAlert(String message) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(message);
+        alert.setContentText("Choose your next action:");
+
+        ButtonType playAgainButton = new ButtonType("Play Again");
+        ButtonType backButton = new ButtonType("Back");
+        ButtonType saveGameButton = new ButtonType("Save Game");
+        alert.getButtonTypes().setAll(playAgainButton, backButton,saveGameButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(backButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(saveGameButton).setStyle(
+            "-fx-background-color: yellow;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        
+        alert.showAndWait().ifPresent(response -> {
+            if (response == playAgainButton) {
+                resetGame();
+            } else if (response == backButton) {
+                playerScore = 0;
+                computerScore = 0;
+                updateScores();
+                goToBackScene();
+            } else if (response == saveGameButton) {
+                saveGameToFile("game_record.txt");
+                Alert savedAlert = new Alert(AlertType.INFORMATION);
+                savedAlert.setTitle("Game Saved");
+                savedAlert.setHeaderText(null);
+                savedAlert.setContentText("Game has been saved successfully!");
+                savedAlert.showAndWait();
+            }
+        });
+    }
+
+    @FXML
+    private void openRecord(ActionEvent event) {
+        try {
+            StringBuilder content = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new FileReader("game_record.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            reader.close();
+
+            Stage stage = new Stage();
+            TextArea textArea = new TextArea(content.toString());
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+            Scene scene = new Scene(new StackPane(textArea), 400, 300);
+            stage.setScene(scene);
+            stage.setTitle("Game Record");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unable to open the game record.");
+            alert.setContentText("Please check if the record file exists.");
+            alert.showAndWait();
+        }
+    }
+
 
     private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
     Stage videoStage = new Stage();
@@ -53,7 +155,6 @@ public class EasyGameController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setVolume(1.0); 
     MediaView mediaView = new MediaView(mediaPlayer);
-
 
     StackPane videoRoot = new StackPane();
     videoRoot.getChildren().add(mediaView);
@@ -89,7 +190,7 @@ private void handleButtonPress(Button button) {
 
     if (logic.makeMove(row, col, 'X')) {
         button.setText('X' + "");
-        button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
+        button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
 
         if (logic.checkWinner('X')) {
             showGameOverVideo("winner2.mp4", player + " Wins!", false);
@@ -116,12 +217,13 @@ private void computerMove() {
                 Button button = getButtonByRowCol(i, j);
                 if (button != null) {
                     button.setText('O' + "");
-                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
+                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
                 }
                 if (logic.checkWinner('O')) {
                     showGameOverVideo("lose2.mp4", computer + " Wins!", false);
                     computerScore++;
                     updateScores();
+
 
                     return;
                 }
@@ -135,7 +237,7 @@ private void computerMove() {
     }
 }
 
-    private void showGameOverAlert(String message) {
+  /*  private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
         alert.setHeaderText(message);
@@ -172,6 +274,7 @@ private void computerMove() {
             }
         });
     }
+*/
 
     private void resetGame() {
         logic.resetGame();
