@@ -4,6 +4,5 @@ Player Score: 1
 Computer Score: 0
 Final Board State:
 XOO
-XXO
 X--
-Game Result: Player Wins!
+X--

@@ -1,0 +1,16 @@
+.dialog {
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
+
+.label {
+    -fx-font-size: 18;
+    -fx-text-fill: #2e8b57; /* لون نص */
+}
+
+.button {
+    -fx-background-color: #4caf50; /* لون زر */
+    -fx-text-fill: white; /* لون نص الزر */
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+}

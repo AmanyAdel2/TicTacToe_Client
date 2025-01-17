@@ -3,10 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
+
+
+
+
+
 package easyGame;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -21,13 +26,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.layout.StackPane;
+
 
 public class EasyGameController implements Initializable {
 
@@ -38,6 +44,7 @@ public class EasyGameController implements Initializable {
     private Text computerLabel;
     @FXML
     private Button openRecordButton;
+   
 
     @FXML
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
@@ -62,11 +69,12 @@ public class EasyGameController implements Initializable {
             for (char[] row : logic.getBoard()) {
                 writer.write(new String(row) + "\n");
             }
-            writer.write("Game Result: " + (playerScore > computerScore ? player + " Wins!" : (computerScore > playerScore ? computer + " Wins!" : "It's a Draw!")) + "\n");
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
 
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -115,41 +123,31 @@ public class EasyGameController implements Initializable {
                 savedAlert.setHeaderText(null);
                 savedAlert.setContentText("Game has been saved successfully!");
                 savedAlert.showAndWait();
+                resetGame();
             }
         });
     }
 
-    @FXML
-    private void openRecord(ActionEvent event) {
-        try {
-            StringBuilder content = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new FileReader("game_record.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-            reader.close();
+@FXML
+private void openRecord(ActionEvent event) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameRecord.fxml"));
+        AnchorPane root = loader.load();
 
-            Stage stage = new Stage();
-            TextArea textArea = new TextArea(content.toString());
-            textArea.setEditable(false);
-            textArea.setWrapText(true);
-            Scene scene = new Scene(new StackPane(textArea), 400, 300);
-            stage.setScene(scene);
-            stage.setTitle("Game Record");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Unable to open the game record.");
-            alert.setContentText("Please check if the record file exists.");
-            alert.showAndWait();
-        }
+        Stage recordStage = new Stage();
+        recordStage.setTitle("Game Moves");
+        recordStage.setScene(new Scene(root, 664, 664)); // استخدام نفس الأبعاد كما في الواجهة الأصلية
+        recordStage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setTitle("Error");
+        errorAlert.setHeaderText("Unable to open the game record.");
+        errorAlert.setContentText("Please check if the record file exists.");
+        errorAlert.showAndWait();
     }
-
-
-    private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
+}
+  private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
     Stage videoStage = new Stage();
     Media media = new Media(getClass().getResource(videoPath).toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -183,6 +181,8 @@ public class EasyGameController implements Initializable {
 }
 
 
+
+
 private void handleButtonPress(Button button) {
     int index = Integer.parseInt(button.getId().substring(1)) - 1; 
     int row = index / 3;
@@ -191,6 +191,7 @@ private void handleButtonPress(Button button) {
     if (logic.makeMove(row, col, 'X')) {
         button.setText('X' + "");
         button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
+       
 
         if (logic.checkWinner('X')) {
             showGameOverVideo("winner2.mp4", player + " Wins!", false);
@@ -200,7 +201,6 @@ private void handleButtonPress(Button button) {
         }
 
         if (logic.isBoardFull()) {
-            
             showGameOverVideo("draw.mp4", "It's a Draw!", true);
             return;
         }
