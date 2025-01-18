@@ -1,8 +1,0 @@
-Player: Player
-Computer: Computer
-Player Score: 1
-Computer Score: 0
-Final Board State:
-XOO
-X--
-X--

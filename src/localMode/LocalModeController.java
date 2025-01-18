@@ -72,7 +72,7 @@ public class LocalModeController implements Initializable {
 
             if (logic.checkWinner()) {
                 String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-                showGameOverVideo("winner1.mp4", winner + " Wins!", false); // تمرير false للفوز
+                showGameOverVideo("winner1.mp4", winner + " Wins!", false); 
                 if (winner.equals(player1)) {
                     player1Score++;
                 } else {
@@ -82,7 +82,7 @@ public class LocalModeController implements Initializable {
                 return;
             }
             if (logic.isBoardFull()) {
-                showGameOverVideo("draw.mp4", "It's a Draw!", true); // تمرير true للتعادل
+                showGameOverVideo("draw.mp4", "It's a Draw!", true);
                 return;
             }
             logic.switchPlayer();
@@ -93,23 +93,23 @@ public class LocalModeController implements Initializable {
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0); // تأكد من أن الصوت شغال
+        mediaPlayer.setVolume(1.0); 
         MediaView mediaView = new MediaView(mediaPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
         
-        // تحديد أبعاد الفيديو حسب الحالة
+      
         Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
-        // استماع لإغلاق نافذة الفيديو
+      
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop(); // إيقاف الفيديو
-            videoStage.close(); // إغلاق نافذة الفيديو
-            showGameOverAlert(message); // عرض رسالة النتيجة
-            event.consume(); // منع الإغلاق الافتراضي
+            mediaPlayer.stop();
+            videoStage.close(); 
+            showGameOverAlert(message);
+            event.consume();
         });
 
         videoStage.show();
