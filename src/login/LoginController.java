@@ -5,6 +5,7 @@
  */
 package login;
 
+import Player.DTOPlayer;
 import Player.PlayerSocket;
 import java.io.IOException;
 import java.net.URL;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +43,7 @@ public class LoginController implements Initializable {
     private Button signbtn;
     @FXML
     private Button regbtn;
-
+    private Stage stage;
     private PlayerSocket playerSocket;
 
     /**
@@ -52,6 +54,11 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         playerSocket = PlayerSocket.getInstance();
+        Platform.runLater(() -> {
+            stage = (Stage) signbtn.getScene().getWindow();
+            playerSocket.setStage(stage);
+        });
+        
     }
 
     @FXML
@@ -73,8 +80,8 @@ public class LoginController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-  
-            
+            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
+            playerSocket.setLoggedInPlayer(player);
             //showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "An error occurred during login.");

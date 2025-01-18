@@ -5,6 +5,7 @@
  */
 package tictactoe;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +19,6 @@ public class TicTacToe extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             System.out.println(getClass().getResource("/tictactoe.fxml"));
-
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();

@@ -85,8 +85,17 @@
             </Button>
          </children>
       </GridPane>
-      <Label fx:id="playerOLabel" layoutX="481.0" layoutY="49.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" />
-      <Label fx:id="playerXLabel" layoutX="87.0" layoutY="65.0" prefHeight="21.0" prefWidth="132.0" text="playerXLabel" />
-      <Label fx:id="turnLabel" layoutX="303.0" layoutY="76.0" text="Label" />
+      <Label fx:id="playerOLabel" layoutX="481.0" layoutY="49.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" textFill="#f2ebeb">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="playerXLabel" layoutX="87.0" layoutY="65.0" prefHeight="21.0" prefWidth="132.0" text="playerXLabel" textFill="#fbfcf8">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="turnLabel" layoutX="303.0" layoutY="76.0" text="Label" textFill="#f8f1f1">
+         <font>
+            <Font name="Bookman Old Style" size="18.0" />
+         </font></Label>
    </children>
 </AnchorPane>

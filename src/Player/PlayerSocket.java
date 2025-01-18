@@ -118,7 +118,7 @@ public class PlayerSocket {
                 String res = jsonMsg.get("status").toString();
 
                 if(res.equals("1")){
-                System.out.println("Resgistered successfully");
+                System.out.println("Registered successfully");
                 Platform.runLater(() -> {               
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -128,11 +128,44 @@ public class PlayerSocket {
                         Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                }else System.out.println("failed");
+                }else{
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Unable to Register!");
+                        alert.setContentText("The user name already exists");
+                        alert.showAndWait();
+                    });
+                    System.out.println("registration failed");
+                } 
                 
                 break;
             case "login":
-//              createPlayer();
+                String sts = jsonMsg.get("status").toString();
+
+                if(sts.equals("1")){
+                    System.out.println("Logged in successfully");
+                    Platform.runLater(() -> {               
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+                            stage.setScene(new Scene(root));
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                }
+                else
+                {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Unable to Log in!");
+                        alert.setContentText("the username or password is incorrect");
+                        alert.showAndWait();
+                    });
+                    System.out.println("Log in failed");
+                } 
                 break;
                 
             case "onlinePlayers":
@@ -184,15 +217,7 @@ public class PlayerSocket {
                         alert.setTitle("Challenge Accepted");
                         alert.setContentText(challenged + " accepted your challenge!");
                         alert.showAndWait();
-                        
-                        
-//                        try {
-//                            Parent root = FXMLLoader.load(getClass().getResource("/game/Game.fxml"));
-//                            stage.setScene(new Scene(root));
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-                        
+                     
                     } else {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Challenge Declined");
@@ -238,7 +263,7 @@ public class PlayerSocket {
                     final int finalCol = col;
                     final String finalSymbol = symbolRec;
 
-                     Platform.runLater(() -> {
+                    Platform.runLater(() -> {
                         gameController.updateBoard(finalRow, finalCol, finalSymbol);
                     });
                     
