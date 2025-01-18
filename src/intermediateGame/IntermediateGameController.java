@@ -5,6 +5,9 @@
  */
 package intermediateGame;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
@@ -43,12 +47,28 @@ public class IntermediateGameController implements Initializable {
     private String computer = "Computer";
     private String gameResult = ""; 
     private boolean gameEnded = false; 
-    private Scene originalScene;
+    private String currentGameFileName; 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        originalScene = p1.getScene();
+        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+        ensureGameRecordsFolderExists();
         resetGame();
+    }
+
+    private void ensureGameRecordsFolderExists() {
+        File folder = new File("game_records");
+        if (!folder.exists()) {
+            folder.mkdir(); 
+        }
+    }
+
+    private void saveMoveToFile(String move) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
+            writer.write(move + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleButtonPress(Button button) {
@@ -61,8 +81,13 @@ public class IntermediateGameController implements Initializable {
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
 
+
             button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
 
+
+
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
+            saveMoveToFile("X " + (index + 1));
 
 
             if (logic.checkWinner('X')) {
@@ -92,11 +117,12 @@ public class IntermediateGameController implements Initializable {
             logic.makeMove(row, col, 'O');
 
 
-        Button button = getButtonByRowCol(row, col);
-        if (button != null) {
-            button.setText('O' + "");
-            button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
-        }
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setText('O' + "");
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
+                saveMoveToFile("O " + ((row * 3) + col + 1));
+            }
 
 
             if (logic.checkWinner('O')) {
@@ -122,12 +148,10 @@ public class IntermediateGameController implements Initializable {
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
         
-       
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800:550, isDraw ? 600 : 550);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 550);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
-     
         videoStage.setOnCloseRequest(event -> {
             mediaPlayer.stop(); 
             videoStage.close(); 
@@ -147,7 +171,8 @@ public class IntermediateGameController implements Initializable {
 
         ButtonType playAgainButton = new ButtonType("Play Again");
         ButtonType backButton = new ButtonType("Back");
-        alert.getButtonTypes().setAll(playAgainButton, backButton);
+        ButtonType saveGameButton = new ButtonType("Save Game");
+        alert.getButtonTypes().setAll(playAgainButton, backButton, saveGameButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
             "-fx-background-color: beige;" +
@@ -164,16 +189,72 @@ public class IntermediateGameController implements Initializable {
             "-fx-font-size: 14;" +
             "-fx-font-weight: bold;"
         );
+        alert.getDialogPane().lookupButton(saveGameButton).setStyle(
+            "-fx-background-color: yellow;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+
         alert.showAndWait().ifPresent(response -> {
             if (response == playAgainButton) {
+                deleteTemporaryFile();
                 resetGame();
-            } else {
+            } else if (response == backButton) {
+                deleteTemporaryFile(); 
                 playerScore = 0;
                 computerScore = 0;
                 updateScores();
                 goToBackScene();
+            } else if (response == saveGameButton) {
+                moveFileToGameHistory(); 
+                Alert savedAlert = new Alert(AlertType.INFORMATION);
+                savedAlert.setTitle("Game Saved");
+                savedAlert.setHeaderText(null);
+                savedAlert.setContentText("Game has been saved successfully!");
+                savedAlert.showAndWait();
             }
+
+            resetGame();
         });
+    }
+
+    private void moveFileToGameHistory() {
+        File file = new File(currentGameFileName);
+        if (file.exists()) {
+            File destination = new File("game_records/" + file.getName());
+            if (file.renameTo(destination)) {
+                System.out.println("File moved to game_records folder.");
+            } else {
+                System.out.println("Failed to move the file.");
+            }
+        }
+    }
+
+    private void deleteTemporaryFile() {
+        File file = new File(currentGameFileName);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    @FXML
+    private void openRecord(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/GameRecord.fxml"));
+            AnchorPane root = loader.load();
+
+            Stage recordStage = new Stage();
+            recordStage.setTitle("Game Moves");
+            recordStage.setScene(new Scene(root, 664, 664)); 
+            recordStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Unable to open the game record.");
+            errorAlert.setContentText("Please check if the record file exists.");
+            errorAlert.showAndWait();
+        }
     }
 
     private void resetGame() {

@@ -5,13 +5,14 @@
  */
 package level;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.ResourceBundle;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,15 +20,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author HP
- */
 public class LevelController implements Initializable {
 
     @FXML
@@ -36,33 +32,83 @@ public class LevelController implements Initializable {
     private Button medbtn;
     @FXML
     private Button hardBtn;
-    private Button backBtn;
     @FXML
     private Button backButton;
+    @FXML
+    private ListView<String> recordsListView;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }  
+        loadRecordFiles();
+    }
 
-//     @FXML
-//     private void gogame(MouseEvent event) throws IOException {
-//         Stage stage = (Stage) easybtn.getScene().getWindow();
-//         medbtn.getScene().getWindow();
-// //        hardbtn.getScene().getWindow();
-// =======
+    private void loadRecordFiles() {
+        File folder = new File("game_records");
+        if (!folder.exists() || !folder.isDirectory()) {
+            return; 
+        }
+
+        File[] files = folder.listFiles();
+        if (files == null || files.length == 0) {
+            return; 
+        }
+
  
-        @FXML
-    private void easyGame(ActionEvent event) throws IOException {
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/EasyGame.fxml"));
 
-        Parent root = loader.load();
+        for (File file : files) {
+            String fileName = file.getName();
+            String dateTime = extractDateAndTimeFromFile(file); 
+            if (dateTime != null) {
+                String displayName = fileName + " - " + dateTime;
+                recordsListView.getItems().add(displayName);
+            }
+        }
 
+        
+        recordsListView.setOnMouseClicked(event -> {
+            String selectedFileName = recordsListView.getSelectionModel().getSelectedItem();
+            if (selectedFileName != null) {
+                String actualFileName = selectedFileName.split(" - ")[0]; 
+                openRecord(actualFileName);
+            }
+        });
+    }
+
+    private void openRecord(String fileName) {
+        try {
+            
+            Stage recordStage = new Stage();
+            recordStage.setTitle("Game Record: " + fileName);
+
+          
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/GameHistory.fxml"));
+            Parent root = loader.load();
+
+            
+            GameHistoryController historyController = loader.getController();
+            historyController.loadGameMovesFromFile("game_records/" + fileName);
+
+           
+            recordStage.setScene(new Scene(root));
+            recordStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String extractDateAndTimeFromFile(File file) {
        
+        long lastModified = file.lastModified();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm"); 
+        return sdf.format(new Date(lastModified));
+    }
+
+    @FXML
+    private void easyGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/EasyGame.fxml"));
+        Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Easy Level");
@@ -72,79 +118,34 @@ public class LevelController implements Initializable {
     @FXML
     private void intermediateGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/intermediateGame/IntermediateGame.fxml"));
-
         Parent root = loader.load();
-
-        
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Intermediate Level");
         stage.show();
     }
-    private void hardGame(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
 
-        Parent root = loader.load();
-
-        
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Hard Level");
-        stage.show();
-    }
     @FXML
-    private void backButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-    
-    @FXML
-    private void goHardGame(ActionEvent event){
+    private void goHardGame(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/hardCompMode/hardCompMode.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) hardBtn.getScene().getWindow();
-            
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            
-            //Set a title for the window
-            stage.setTitle("Hard Mode");
-            
-            // Show the updated stage
+            stage.setTitle("Hard Level");
             stage.show();
         } catch (IOException ex) {
-            
-            System.out.println("errrrorrr");
-            Logger.getLogger(LevelController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-        
     }
-    
-    private void goBackToMain(ActionEvent event){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            
-            //Set a title for the window
-            stage.setTitle("Main Page");
-            
-            // Show the updated stage
-            stage.show();
-        } catch (IOException ex) {
-            
-            System.out.println("errrrorrr");
-            Logger.getLogger(LevelController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
+    @FXML
+    private void backButton(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tictactoe/tictactoe.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
-    
 }

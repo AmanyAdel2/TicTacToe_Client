@@ -7,10 +7,6 @@ package intermediateGame;
 
 import java.util.Random;
 
-/**
- *
- * @author Dell
- */
 public class IntermediateGameLogic {
    
     private char[][] board;
@@ -73,16 +69,16 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-        
+       
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
                     board[i][j] = player;
                     if (checkWinner(player)) {
-                        board[i][j] = '-'; 
+                        board[i][j] = '-';
                         return new int[]{i, j};
                     }
-                    board[i][j] = '-'; 
+                    board[i][j] = '-';
                 }
             }
         }
@@ -95,15 +91,15 @@ public class IntermediateGameLogic {
                     board[i][j] = opponent;
                     if (checkWinner(opponent)) {
                         board[i][j] = '-';
-                        return new int[]{i, j}; 
+                        return new int[]{i, j};
                     }
-                    board[i][j] = '-'; 
+                    board[i][j] = '-';
                 }
             }
         }
 
         
-        if (random.nextDouble() < 0.4) { 
+        if (random.nextDouble() < 0.2) { 
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
@@ -122,6 +118,6 @@ public class IntermediateGameLogic {
             }
         }
 
-        return null; 
+        return null;
     }
 }

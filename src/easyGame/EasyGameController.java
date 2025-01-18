@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package easyGame;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -18,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
@@ -41,99 +47,119 @@ public class EasyGameController implements Initializable {
     private int computerScore = 0;
     private String player = "Player";
     private String computer = "Computer";
+    private String gameResult = ""; 
+    private boolean gameEnded = false; 
+    private String currentGameFileName; 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+        ensureGameRecordsFolderExists();
         resetGame();
     }
 
-    private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
-    Stage videoStage = new Stage();
-    Media media = new Media(getClass().getResource(videoPath).toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setVolume(1.0); 
-    MediaView mediaView = new MediaView(mediaPlayer);
 
-    StackPane videoRoot = new StackPane();
-    videoRoot.getChildren().add(mediaView);
-    
-   
-    Scene videoScene;
-    if (isDraw) {
-        videoScene = new Scene(videoRoot, 800, 600); 
-    } else {
-        videoScene = new Scene(videoRoot, 550, 400);
-    }
-
-    videoStage.setScene(videoScene);
-    videoStage.setTitle("Game Over");
-
-    
-    videoStage.setOnCloseRequest(event -> {
-        mediaPlayer.stop();
-        videoStage.close(); 
-        showGameOverAlert(message); 
-        event.consume(); 
-    });
-
-    videoStage.show();
-    mediaPlayer.play();
-}
-
-
-private void handleButtonPress(Button button) {
-    int index = Integer.parseInt(button.getId().substring(1)) - 1; 
-    int row = index / 3;
-    int col = index % 3;
-
-    if (logic.makeMove(row, col, 'X')) {
-        button.setText('X' + "");
-        button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;");
-
-        if (logic.checkWinner('X')) {
-            showGameOverVideo("winner2.mp4", player + " Wins!", false);
-            playerScore++;
-            updateScores();
-            return;
+    private void ensureGameRecordsFolderExists() {
+        File folder = new File("game_records");
+        if (!folder.exists()) {
+            folder.mkdir(); 
         }
 
-        if (logic.isBoardFull()) {
-            
-            showGameOverVideo("draw.mp4", "It's a Draw!", true);
-            return;
-        }
-
-        computerMove();
     }
-}
 
-private void computerMove() {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (logic.getBoard()[i][j] == '-') {
-                logic.makeMove(i, j, 'O');
-                Button button = getButtonByRowCol(i, j);
-                if (button != null) {
-                    button.setText('O' + "");
-                    button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
-                }
-                if (logic.checkWinner('O')) {
-                    showGameOverVideo("lose2.mp4", computer + " Wins!", false);
-                    computerScore++;
-                    updateScores();
+    private void saveMoveToFile(String move) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
+            writer.write(move + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    private void handleButtonPress(Button button) {
+        if (gameEnded) return;
+
+        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int row = index / 3;
+        int col = index % 3;
+
+        if (logic.makeMove(row, col, 'X')) {
+            button.setText('X' + "");
+            button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
+            saveMoveToFile("X " + (index + 1)); 
+
+            if (logic.checkWinner('X')) {
+                gameResult = "Player Wins!";
+                showGameOverVideo("winner2.mp4", false); 
+                playerScore++;
+                updateScores();
+                return;
+            }
+            if (logic.isBoardFull()) {
+                gameResult = "It's a Draw!";
+                showGameOverVideo("draw.mp4", true); 
+                return;
+            }
+
+            computerMove();
+        }
+    }
+
+    private void computerMove() {
+        if (gameEnded) return; 
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (logic.getBoard()[i][j] == '-') {
+                    logic.makeMove(i, j, 'O');
+
+                    Button button = getButtonByRowCol(i, j);
+                    if (button != null) {
+                        button.setText('O' + "");
+                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+                        saveMoveToFile("O " + ((i * 3) + j + 1));
+                    }
+
+                    if (logic.checkWinner('O')) {
+                        gameResult = "Computer Wins!";
+                        showGameOverVideo("lose1.mp4", false); 
+                        computerScore++;
+                        updateScores();
+                    } else if (logic.isBoardFull()) {
+                        gameResult = "It's a Draw!";
+                        showGameOverVideo("draw.mp4", true); 
+                    }
 
                     return;
                 }
-                if (logic.isBoardFull()) {
-                    
-                    showGameOverVideo("draw.mp4", "It's a Draw!", true);
-                }
-                return;
             }
         }
     }
-}
+
+    private void showGameOverVideo(String videoPath, boolean isDraw) {
+        gameEnded = true; 
+        Stage videoStage = new Stage();
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1.0); 
+        MediaView mediaView = new MediaView(mediaPlayer);
+
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+        
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+        videoStage.setOnCloseRequest(event -> {
+            mediaPlayer.stop(); 
+            videoStage.close(); 
+            showGameOverAlert(gameResult); 
+            event.consume();
+        });
+
+        videoStage.show();
+        mediaPlayer.play();
+    }
 
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -143,7 +169,8 @@ private void computerMove() {
 
         ButtonType playAgainButton = new ButtonType("Play Again");
         ButtonType backButton = new ButtonType("Back");
-        alert.getButtonTypes().setAll(playAgainButton, backButton);
+        ButtonType saveGameButton = new ButtonType("Save Game");
+        alert.getButtonTypes().setAll(playAgainButton, backButton, saveGameButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
             "-fx-background-color: beige;" +
@@ -160,17 +187,72 @@ private void computerMove() {
             "-fx-font-size: 14;" +
             "-fx-font-weight: bold;"
         );
+        alert.getDialogPane().lookupButton(saveGameButton).setStyle(
+            "-fx-background-color: yellow;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
 
         alert.showAndWait().ifPresent(response -> {
             if (response == playAgainButton) {
+                deleteTemporaryFile(); 
                 resetGame();
-            } else {
+            } else if (response == backButton) {
+                deleteTemporaryFile(); 
                 playerScore = 0;
                 computerScore = 0;
                 updateScores();
                 goToBackScene();
+            } else if (response == saveGameButton) {
+                moveFileToGameHistory(); 
+                Alert savedAlert = new Alert(AlertType.INFORMATION);
+                savedAlert.setTitle("Game Saved");
+                savedAlert.setHeaderText(null);
+                savedAlert.setContentText("Game has been saved successfully!");
+                savedAlert.showAndWait();
             }
+
+            resetGame();
         });
+    }
+
+    private void moveFileToGameHistory() {
+        File file = new File(currentGameFileName);
+        if (file.exists()) {
+            File destination = new File("game_records/" + file.getName());
+            if (file.renameTo(destination)) {
+                System.out.println("File moved to game_records folder.");
+            } else {
+                System.out.println("Failed to move the file.");
+            }
+        }
+    }
+
+    private void deleteTemporaryFile() {
+        File file = new File(currentGameFileName);
+        if (file.exists()) {
+            file.delete(); 
+        }
+    }
+
+    @FXML
+    private void openRecord(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/GameRecord.fxml"));
+            AnchorPane root = loader.load();
+
+            Stage recordStage = new Stage();
+            recordStage.setTitle("Game Moves");
+            recordStage.setScene(new Scene(root, 664, 664)); 
+            recordStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Unable to open the game record.");
+            errorAlert.setContentText("Please check if the record file exists.");
+            errorAlert.showAndWait();
+        }
     }
 
     private void resetGame() {
@@ -180,17 +262,7 @@ private void computerMove() {
             button.setStyle("-fx-background-color: beige; -fx-font-size: 14; -fx-font-weight: bold;");
             button.setOnAction(e -> handleButtonPress(button));
         }
-    }
-
-    private void goToBackScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
-            Stage stage = (Stage) p1.getScene().getWindow();
-            Scene scene = new Scene(loader.load());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gameEnded = false; 
     }
 
     private void updateScores() {
@@ -212,6 +284,17 @@ private void computerMove() {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
             goToBackScene();
+        }
+    }
+
+    private void goToBackScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
+            Stage stage = (Stage) p1.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

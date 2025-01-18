@@ -61,12 +61,17 @@ public class LocalModeController implements Initializable {
         int col = index % 3;
 
 
+
+
+
         if (logic.makeMove(row, col)) {
             String currentPlayer = String.valueOf(logic.getCurrentPlayer());
             button.setText(currentPlayer);
             
             if (logic.getCurrentPlayer() == 'X') {
                 button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
+
+
 
             } else {
                 button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
@@ -84,7 +89,7 @@ public class LocalModeController implements Initializable {
                 return;
             }
             if (logic.isBoardFull()) {
-                showGameOverVideo("draw.mp4", "It's a Draw!", true); 
+                showGameOverVideo("draw.mp4", "It's a Draw!", true);
                 return;
             }
             logic.switchPlayer();
@@ -102,16 +107,16 @@ public class LocalModeController implements Initializable {
         videoRoot.getChildren().add(mediaView);
         
       
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 800 : 400);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
-       
+      
         videoStage.setOnCloseRequest(event -> {
             mediaPlayer.stop();
-            videoStage.close();
+            videoStage.close(); 
             showGameOverAlert(message);
-            event.consume(); 
+            event.consume();
         });
 
         videoStage.show();
