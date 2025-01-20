@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tictactoe;
+import Player.PlayerSocket;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +20,13 @@ public class TicTacToe extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             System.out.println(getClass().getResource("/tictactoe.fxml"));
-
+            
             primaryStage.setScene(new Scene(root));
+            primaryStage.setOnCloseRequest(event -> {
+                System.out.println("Application is closing...");
+                PlayerSocket.getInstance().closeSocket();
+                System.exit(0); 
+            });
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

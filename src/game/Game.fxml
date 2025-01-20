@@ -16,7 +16,7 @@
         <URL value="@game.css" />
     </stylesheets>
    <children>
-      <ImageView fitHeight="664.0" fitWidth="664.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="664.0" fitWidth="670.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../background.jpg" />
          </image>
@@ -85,7 +85,7 @@
             </Button>
          </children>
       </GridPane>
-      <Label fx:id="playerOLabel" layoutX="481.0" layoutY="49.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" textFill="#f2ebeb">
+      <Label fx:id="playerOLabel" layoutX="482.0" layoutY="51.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" textFill="#fcfcfc">
          <font>
             <Font size="18.0" />
          </font></Label>

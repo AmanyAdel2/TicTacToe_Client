@@ -53,16 +53,17 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        playerSocket = PlayerSocket.getInstance();
-        Platform.runLater(() -> {
-            stage = (Stage) signbtn.getScene().getWindow();
-            playerSocket.setStage(stage);
-        });
+        
         
     }
 
     @FXML
     private void onSignIn(ActionEvent event) {
+        playerSocket = PlayerSocket.getInstance();
+        Platform.runLater(() -> {
+            stage = (Stage) signbtn.getScene().getWindow();
+            playerSocket.setStage(stage);
+        });
         String username = usertxt.getText().trim();
         String password = passtxt.getText().trim();
 
@@ -109,8 +110,4 @@ public class LoginController implements Initializable {
         alert.showAndWait();
     }
 
-
-    
-    //private void goReg(MouseEvent event) {
-    //}
 }

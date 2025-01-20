@@ -84,7 +84,6 @@ public class GameController implements Initializable {
         //System.out.println("GameController initializing...");   
         this.playerSymbol = symbol;
         this.isMyTurn = symbol.equals("X"); // X goes first
-        String myUsername = playerSocket.getLoggedInPlayer().getUsername();
         
         playerXLabel.setText(symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent);
@@ -113,12 +112,14 @@ public class GameController implements Initializable {
         
         // Update the button
         boardButtons[row][col].setText(playerSymbol);
+        boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = false;
         updateTurnLabel();
     }
     
     public void updateBoard(int row, int col, String symbol) {
         boardButtons[row][col].setText(symbol);
+        boardButtons[row][col].setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = !symbol.equals(playerSymbol);
         updateTurnLabel();
     }

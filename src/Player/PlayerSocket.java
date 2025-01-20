@@ -10,10 +10,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,6 +53,13 @@ public class PlayerSocket {
     private PlayerSocket(){
         
         if (!isServerAvailable("127.0.0.1", 5005)) {
+            Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Unable to connect!");
+                        alert.setContentText("Server is not available");
+                        alert.showAndWait();
+                    });
             System.out.println("Server is not available. Please start the server first.");
             return; 
         }
@@ -118,16 +122,16 @@ public class PlayerSocket {
                 String res = jsonMsg.get("status").toString();
 
                 if(res.equals("1")){
-                System.out.println("Registered successfully");
-                Platform.runLater(() -> {               
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
-                        stage.setScene(new Scene(root));
-                        
-                    } catch (IOException ex) {
-                        Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
+                    System.out.println("Registered successfully");
+                    Platform.runLater(() -> {               
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+                            stage.setScene(new Scene(root));
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
                 }else{
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -169,7 +173,7 @@ public class PlayerSocket {
                 break;
                 
             case "onlinePlayers":
-                JSONArray players = (JSONArray) jsonMsg.get("players");
+                final JSONArray players = (JSONArray) jsonMsg.get("players");
                 
                 Platform.runLater(() -> {
                     if (onlinePlayers == null) {
@@ -185,7 +189,7 @@ public class PlayerSocket {
                         return;
                     }
                     System.out.println("Updating online players list: " + players.toJSONString());
-                       // Create a temporary set to avoid multiple UI updates
+                    // Create a temporary set to avoid multiple UI updates
                     Set<String> tempSet = new HashSet<>();
                     for (Object player : players) {
                         String username = player.toString();
@@ -208,8 +212,8 @@ public class PlayerSocket {
                 break;
                   
             case "gameReqResult":
-                String status = jsonMsg.get("status").toString();
-                String challenged = jsonMsg.get("challenged").toString();
+                final String status = jsonMsg.get("status").toString();
+                final String challenged = jsonMsg.get("challenged").toString();
                 
                   Platform.runLater(() -> {
                     if (status.equals("accepted")) {
@@ -251,7 +255,11 @@ public class PlayerSocket {
                 System.out.println("Received gameMove message: " + jsonMsg.toJSONString());
 
                 int row, col;
-                String symbolRec;       
+                String symbolRec;   
+                if (gameController == null) {
+                    System.out.println("Warning: Received move but gameController is null");
+                    return;
+                }
                 try{
                     row = Integer.parseInt(jsonMsg.get("row").toString());
                     col = Integer.parseInt(jsonMsg.get("col").toString());
@@ -264,19 +272,30 @@ public class PlayerSocket {
                     final String finalSymbol = symbolRec;
 
                     Platform.runLater(() -> {
-                        gameController.updateBoard(finalRow, finalCol, finalSymbol);
-                    });
+                        try {
+                                if (gameController != null) {
+                                    gameController.updateBoard(finalRow, finalCol, finalSymbol);
+                                } else {
+                                    System.out.println("Warning: gameController became null before update");
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error updating board: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
+                    );
                     
                 }catch(Exception e){
                     System.out.println("Error processing game move: " + e.getMessage());
                 }
                 break;
             case "gameEnd":
-                Platform.runLater(() -> {
-                    String result = jsonMsg.get("result").toString();
-                    String winner = jsonMsg.get("winner") != null ? 
+                
+                final String result = jsonMsg.get("result").toString();
+                final String winner = jsonMsg.get("winner") != null ? 
                         jsonMsg.get("winner").toString() : null;
-                     System.out.println("gameEnd: "+  jsonMsg.get("result").toString());
+                Platform.runLater(() -> {
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     
                     alert.setTitle("Game Over");
@@ -294,7 +313,7 @@ public class PlayerSocket {
                     }
                     
                     alert.showAndWait();
-                    
+                    gameController = null;
                     // Return to lobby
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -375,7 +394,6 @@ public class PlayerSocket {
     public void setLoggedInPlayer(DTOPlayer loggedInPlayer) {
         this.loggedInPlayer = loggedInPlayer;
     }
-    
     
     private boolean isServerAvailable(String host, int port) {
         try (Socket testSocket = new Socket(host, port)) {

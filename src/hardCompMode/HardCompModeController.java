@@ -119,7 +119,7 @@ public class HardCompModeController implements Initializable {
             Button button = getButtonByRowCol(row, col);
             if (button != null) {
                 button.setText('O' + "");
-                button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
                 saveMoveToFile("O " + ((row * 3) + col + 1));
             }
 
