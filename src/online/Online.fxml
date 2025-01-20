@@ -4,13 +4,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="517.0" prefWidth="553.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="online.OnlineController">
     <stylesheets>
@@ -52,15 +51,12 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </TextField>
-      <MenuButton fx:id="historyMenu" layoutX="379.0" layoutY="72.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" style="-fx-background-color: yellow;" text="Game History">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </MenuButton>
       <ListView fx:id="onlinePlayersList" layoutX="30.0" layoutY="197.0" prefHeight="312.0" prefWidth="186.0" />
+      <ListView layoutX="331.0" layoutY="126.0" prefHeight="200.0" prefWidth="200.0" />
+      <Text fill="#f5ff32" layoutX="378.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game History">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
