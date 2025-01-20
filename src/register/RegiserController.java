@@ -93,6 +93,8 @@ public class RegiserController implements Initializable {
         map.put("username", username);
         map.put("email", email);
         map.put("password", password);
+       map.put("status", "online");
+
 
         // Send JSON to the server
         try {

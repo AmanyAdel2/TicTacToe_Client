@@ -8,14 +8,10 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-
-    
-
-    <jar href="TicTacToe.jar" size="25044573" download="eager" />
-    <jar href="lib\ffmpeg.jar" size="296689" download="eager" />
-    <jar href="lib\javacpp.jar" size="497251" download="eager" />
-    <jar href="lib\javacv.jar" size="430003" download="eager" />
-
+    <jar href="TicTacToe.jar" size="25057997" download="eager" />
+    <jar href="lib\derby.jar" size="2766479" download="eager" />
+    <jar href="lib\derbyclient.jar" size="576624" download="eager" />
+    <jar href="lib\derbynet.jar" size="248898" download="eager" />
     <jar href="lib\json-simple-1.1.1.jar" size="23737" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="TicTacToe" >
