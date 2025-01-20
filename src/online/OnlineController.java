@@ -112,6 +112,7 @@ public class OnlineController implements Initializable {
             onlinePlayersList.getSelectionModel().clearSelection();
         
             selectedPlayer = ""; // Reset selected player
+            onlinePlayersList.refresh();
         }
         else showAlert(Alert.AlertType.ERROR, " Error", "Select a player");  
     }
