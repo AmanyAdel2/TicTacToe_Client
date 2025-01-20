@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package game;
+
 import Player.PlayerSocket;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -64,7 +65,7 @@ public class GameController implements Initializable {
 
         
         currentGameFileName = SAVE_FOLDER + "/game_record_" + System.currentTimeMillis() + ".txt"; 
-        
+        askUserToSaveGame();
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -157,7 +158,8 @@ public class GameController implements Initializable {
             }
         }
 
-
+        
+        deleteTemporaryFile();
     }
 
     private void saveMoveToFile(String move) {
@@ -168,7 +170,26 @@ public class GameController implements Initializable {
         }
     }
 
-    
+    public void askUserToSaveGame() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Save Game");
+            alert.setHeaderText("Do you want to save the game?");
+            alert.setContentText("Choose your option.");
+
+            ButtonType saveButton = new ButtonType("Save");
+            ButtonType discardButton = new ButtonType("Discard");
+            alert.getButtonTypes().setAll(saveButton, discardButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == saveButton) {
+                moveFileToGameHistory();
+            } else {
+               
+                deleteTemporaryFile();
+            }
+        });
+    }
 
     private void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
@@ -184,7 +205,12 @@ public class GameController implements Initializable {
         }
     }
 
-   
+    private void deleteTemporaryFile() {
+        File file = new File(currentGameFileName);
+        if (file.exists()) {
+            file.delete(); 
+        }
+    }
 
     public static void clearInstance() {
         instance = null;
