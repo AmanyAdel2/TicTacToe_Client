@@ -63,7 +63,7 @@ public class GameController implements Initializable {
         ensureGameRecordsFolderExists();
 
         
-        currentGameFileName = SAVE_FOLDER + "/game_record_" + System.currentTimeMillis() + ".txt"; 
+        //currentGameFileName = SAVE_FOLDER + "/game_record_" + System.currentTimeMillis() + ".txt"; 
         askUserToSaveGame();
     }
 
@@ -94,7 +94,7 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-      
+        
         savePlayerNamesToFile();
     }
 
