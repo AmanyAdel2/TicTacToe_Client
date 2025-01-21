@@ -52,7 +52,7 @@
          </font>
       </TextField>
       <ListView fx:id="onlinePlayersList" layoutX="30.0" layoutY="197.0" prefHeight="312.0" prefWidth="186.0" />
-      <ListView layoutX="331.0" layoutY="126.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="recordsListView" layoutX="331.0" layoutY="126.0" prefHeight="200.0" prefWidth="200.0" />
       <Text fill="#f5ff32" layoutX="378.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game History">
          <font>
             <Font name="System Bold" size="15.0" />

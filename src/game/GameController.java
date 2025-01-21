@@ -35,12 +35,12 @@ public class GameController implements Initializable {
     private boolean isMyTurn;
     private PlayerSocket playerSocket;
 
-    private String currentGameFileName; // اسم الملف المؤقت للعبة الحالية
-    private static final String SAVE_FOLDER = "saved_games"; // مجلد حفظ الألعاب
+    private String currentGameFileName;
+    private static final String SAVE_FOLDER = "saved_games"; 
 
     private String playerXName;
     private String playerOName;
-    private boolean namesSaved = false; // متغير للتحقق مما إذا تم حفظ الأسماء
+    private boolean namesSaved = false; 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -60,7 +60,7 @@ public class GameController implements Initializable {
             }
         }
 
-        // إنشاء مجلد حفظ الألعاب إذا لم يكن موجودًا
+        
         ensureGameRecordsFolderExists();
     }
 
@@ -79,9 +79,9 @@ public class GameController implements Initializable {
 
     public void initializeGame(String symbol, String opponent) {
         this.playerSymbol = symbol;
-        this.isMyTurn = symbol.equals("X"); // X يلعب أولًا
+        this.isMyTurn = symbol.equals("X"); 
 
-        // تعيين أسماء اللاعبين
+    
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -92,7 +92,7 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-        // إنشاء ملف مؤقت للعبة الحالية (فريد لكل لاعب)
+       
         currentGameFileName = SAVE_FOLDER + "/game_record_" + playerSymbol + "_" + System.currentTimeMillis() + ".txt";
         savePlayerNamesToFile();
     }
@@ -102,8 +102,8 @@ public class GameController implements Initializable {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
                 writer.write("Player X: " + playerXName + "\n");
                 writer.write("Player O: " + playerOName + "\n");
-                writer.write("\n"); // إضافة سطر فارغ لفصل الأسماء عن الحركات
-                namesSaved = true; // تعيين المتغير إلى true بعد الحفظ
+                writer.write("\n"); 
+                namesSaved = true; 
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -119,17 +119,17 @@ public class GameController implements Initializable {
             return;
         }
 
-        // تحديث الزر
+    
         boardButtons[row][col].setText(playerSymbol);
         boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = false;
         updateTurnLabel();
 
-        // حفظ الحركة في الملف
-        int cellNumber = (row * 3) + col + 1; // حساب رقم الخانة من 1 إلى 9
+        
+        int cellNumber = (row * 3) + col + 1;
         saveMoveToFile(playerSymbol + " " + cellNumber);
 
-        // إرسال الحركة إلى الخادم
+        
         JSONObject moveData = new JSONObject();
         moveData.put("type", "gameMove");
         moveData.put("row", String.valueOf(row));
@@ -140,25 +140,25 @@ public class GameController implements Initializable {
     }
 
     public void updateBoard(int row, int col, String symbol) {
-        // تحديث الزر
+        
         boardButtons[row][col].setText(symbol);
         boardButtons[row][col].setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = !symbol.equals(playerSymbol);
         updateTurnLabel();
 
-        // حفظ الحركة في الملف
-        int cellNumber = (row * 3) + col + 1; // حساب رقم الخانة من 1 إلى 9
+        
+        int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
     }
 
     public void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                boardButtons[i][j].setText(""); // تعيين كل الخانات كفارغة
+                boardButtons[i][j].setText(""); 
             }
         }
 
-        // حذف الملف المؤقت عند إعادة تعيين اللوحة
+        
         deleteTemporaryFile();
     }
 
@@ -183,10 +183,10 @@ public class GameController implements Initializable {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == saveButton) {
-                // حفظ اللعبة
+                
                 moveFileToGameHistory();
             } else {
-                // تجاهل اللعبة وحذف الملف
+               
                 deleteTemporaryFile();
             }
         });
@@ -209,7 +209,7 @@ public class GameController implements Initializable {
     private void deleteTemporaryFile() {
         File file = new File(currentGameFileName);
         if (file.exists()) {
-            file.delete(); // حذف الملف المؤقت
+            file.delete();
         }
     }
 
