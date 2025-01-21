@@ -27,7 +27,7 @@
             <Image url="@../login/welcome.gif" />
          </image>
       </ImageView>
-      <Button fx:id="backbtn" layoutX="9.0" layoutY="9.0" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="41.0" style="-fx-background-color: YELLOW;" text="&lt;&lt;">
+      <Button fx:id="logoutbtn" layoutX="399.0" layoutY="479.0" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="123.0" style="-fx-background-color: YELLOW;" text="Logout">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

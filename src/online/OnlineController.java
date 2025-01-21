@@ -5,6 +5,7 @@
  */
 package online;
 
+import Player.DTOPlayer;
 import Player.PlayerSocket;
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +30,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import login.LoginController;
 import org.json.simple.JSONObject;
 import register.RegiserController;
 
@@ -48,8 +50,6 @@ public class OnlineController implements Initializable {
     @FXML
     private TextField scoretxt;
     @FXML
-    private Button backbtn;
-    @FXML
     private MenuButton historyMenu;
     @FXML
     private ListView<String> onlinePlayersList;
@@ -57,6 +57,8 @@ public class OnlineController implements Initializable {
     String selectedPlayer = "";
     
     PlayerSocket playerSocket;
+    @FXML
+    private Button logoutbtn;
     /**
      * Initializes the controller class.
      */
@@ -90,14 +92,28 @@ public class OnlineController implements Initializable {
 
     @FXML
     private void onBack(ActionEvent event) {
-//        try {
-//            Stage stage = (Stage) backbtn.getScene().getWindow();
-//            Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
-//            stage.setScene(new Scene(root));
-//        } catch (IOException ex) {
-//            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate back to the login screen.");
-//            Logger.getLogger(OnlineController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
+        String username=playerSocket.getLoggedInPlayer().getUsername();
+        
+
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "logout");
+        map.put("username", username);
+        
+        // Send JSON to the server
+        try {
+            playerSocket.sendJSON(map);
+             Platform.runLater(() -> {
+            FXCollections.observableArrayList(playerSocket.getOnlinePlayers()).remove(username);
+        });
+            Stage stage = (Stage) logoutbtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "An error occurred during login.");
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     @FXML
