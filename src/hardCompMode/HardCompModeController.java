@@ -56,11 +56,27 @@ public class HardCompModeController implements Initializable {
 
 
 
-    @Override
+     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+       String baseFileName = "game_records/" + player + "_vs_" + computer + " Hard Level" + ".txt";
+       currentGameFileName = getUniqueFileName(baseFileName);  
         ensureGameRecordsFolderExists();
         resetGame();
+    }
+     private String getUniqueFileName(String baseFileName) {
+        File file = new File(baseFileName);
+        if (!file.exists()) {
+            return baseFileName; 
+        }
+        int counter = 1;
+        String newFileName;
+        do {
+            newFileName = baseFileName.replace(".txt", "_" + counter + ".txt");
+            file = new File(newFileName);
+            counter++;
+        } while (file.exists());
+
+        return newFileName;
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -210,6 +226,7 @@ public class HardCompModeController implements Initializable {
                 savedAlert.setHeaderText(null);
                 savedAlert.setContentText("Game has been saved successfully!");
                 savedAlert.showAndWait();
+                goToBackScene();
             }
 
             resetGame();

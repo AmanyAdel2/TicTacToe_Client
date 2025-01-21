@@ -1,0 +1,35 @@
+X 1
+O 2
+X 4
+O 3
+X 7
+X 1
+O 2
+X 4
+O 7
+X 3
+O 5
+X 6
+O 8
+Computer Wins!
+Computer Wins!
+X 1
+O 2
+X 4
+O 7
+X 5
+O 6
+X 8
+O 9
+X 3
+It's a Draw!
+It's a Draw!
+X 1
+O 2
+X 5
+O 9
+X 4
+O 6
+X 7
+Player Wins!
+Player Wins!

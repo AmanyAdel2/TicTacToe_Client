@@ -6,16 +6,17 @@
 package online;
 
 import Player.PlayerSocket;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +30,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import level.GameHistoryController;
 import org.json.simple.JSONObject;
 import register.RegiserController;
 
@@ -53,10 +55,13 @@ public class OnlineController implements Initializable {
     private MenuButton historyMenu;
     @FXML
     private ListView<String> onlinePlayersList;
+    @FXML
+    private ListView<String> recordsListView;
     
     String selectedPlayer = "";
     
     PlayerSocket playerSocket;
+    
     /**
      * Initializes the controller class.
      */
@@ -85,7 +90,70 @@ public class OnlineController implements Initializable {
             }
             onlinePlayersList.refresh();
         }); 
-    }    
+        loadRecordFiles();
+    } 
+    private void loadRecordFiles() {
+        File folder = new File("saved_games");
+        if (!folder.exists() || !folder.isDirectory()) {
+            return; 
+        }
+
+        File[] files = folder.listFiles();
+        if (files == null || files.length == 0) {
+            return; 
+        }
+
+ 
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
+
+
+        for (File file : files) {
+            String fileName = file.getName();
+            String dateTime = extractDateAndTimeFromFile(file); 
+            if (dateTime != null) {
+                String displayName = fileName + " - " + dateTime;
+                recordsListView.getItems().add(displayName);
+            }
+        }
+
+        
+        recordsListView.setOnMouseClicked(event -> {
+            String selectedFileName = recordsListView.getSelectionModel().getSelectedItem();
+            if (selectedFileName != null) {
+                String actualFileName = selectedFileName.split(" - ")[0]; 
+                openRecord(actualFileName);
+            }
+        });
+    }
+
+    private void openRecord(String fileName) {
+        try {
+            
+            Stage recordStage = new Stage();
+            recordStage.setTitle("Game Record: " + fileName);
+
+          
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/online/GameHistoryOnline.fxml"));
+            Parent root = loader.load();
+
+            
+            GameHistoryOnlineController historyController = loader.getController();
+            historyController.loadGameMovesFromFile("saved_games/" + fileName);
+
+           
+            recordStage.setScene(new Scene(root));
+            recordStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String extractDateAndTimeFromFile(File file) {
+       
+        long lastModified = file.lastModified();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm"); 
+        return sdf.format(new Date(lastModified));
+    }
 
 
     @FXML

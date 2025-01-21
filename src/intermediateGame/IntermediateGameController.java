@@ -51,9 +51,25 @@ public class IntermediateGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+       String baseFileName = "game_records/" + player + "_vs_" + computer + " Intermediate Level" + ".txt";
+       currentGameFileName = getUniqueFileName(baseFileName);  
         ensureGameRecordsFolderExists();
         resetGame();
+    }
+     private String getUniqueFileName(String baseFileName) {
+        File file = new File(baseFileName);
+        if (!file.exists()) {
+            return baseFileName; 
+        }
+        int counter = 1;
+        String newFileName;
+        do {
+            newFileName = baseFileName.replace(".txt", "_" + counter + ".txt");
+            file = new File(newFileName);
+            counter++;
+        } while (file.exists());
+
+        return newFileName;
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -80,18 +96,12 @@ public class IntermediateGameController implements Initializable {
 
         if (logic.makeMove(row, col, 'X')) {
             button.setText('X' + "");
-
-
-            button.setStyle("-fx-text-fill: red; -fx-font-size: 14; -fx-font-weight: bold;");
-
-
-
             button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             saveMoveToFile("X " + (index + 1));
 
-
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";
+                saveMoveToFile(gameResult); 
                 showGameOverVideo("winner2.mp4", false); 
                 playerScore++;
                 updateScores();
@@ -99,6 +109,7 @@ public class IntermediateGameController implements Initializable {
             }
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
+                saveMoveToFile(gameResult);
                 showGameOverVideo("draw.mp4", true); 
                 return;
             }
@@ -116,7 +127,6 @@ public class IntermediateGameController implements Initializable {
             int col = move[1];
             logic.makeMove(row, col, 'O');
 
-
             Button button = getButtonByRowCol(row, col);
             if (button != null) {
                 button.setText('O' + "");
@@ -124,14 +134,15 @@ public class IntermediateGameController implements Initializable {
                 saveMoveToFile("O " + ((row * 3) + col + 1));
             }
 
-
             if (logic.checkWinner('O')) {
                 gameResult = "Computer Wins!";
+                saveMoveToFile(gameResult);
                 showGameOverVideo("lose2.mp4", false); 
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
+                saveMoveToFile(gameResult);
                 showGameOverVideo("draw.mp4", true); 
             }
         }
@@ -206,12 +217,14 @@ public class IntermediateGameController implements Initializable {
                 updateScores();
                 goToBackScene();
             } else if (response == saveGameButton) {
+                saveMoveToFile(gameResult); 
                 moveFileToGameHistory(); 
                 Alert savedAlert = new Alert(AlertType.INFORMATION);
                 savedAlert.setTitle("Game Saved");
                 savedAlert.setHeaderText(null);
                 savedAlert.setContentText("Game has been saved successfully!");
                 savedAlert.showAndWait();
+                goToBackScene();
             }
 
             resetGame();

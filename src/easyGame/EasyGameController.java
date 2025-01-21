@@ -53,12 +53,26 @@ public class EasyGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+       String baseFileName = "game_records/" + player + "_vs_" + computer + " Easy Level" + ".txt";
+       currentGameFileName = getUniqueFileName(baseFileName);  
         ensureGameRecordsFolderExists();
         resetGame();
     }
+     private String getUniqueFileName(String baseFileName) {
+        File file = new File(baseFileName);
+        if (!file.exists()) {
+            return baseFileName; 
+        }
+        int counter = 1;
+        String newFileName;
+        do {
+            newFileName = baseFileName.replace(".txt", "_" + counter + ".txt");
+            file = new File(newFileName);
+            counter++;
+        } while (file.exists());
 
-
+        return newFileName;
+    }
     private void ensureGameRecordsFolderExists() {
         File folder = new File("game_records");
         if (!folder.exists()) {
@@ -115,13 +129,13 @@ public class EasyGameController implements Initializable {
                     Button button = getButtonByRowCol(i, j);
                     if (button != null) {
                         button.setText('O' + "");
-                        button.setStyle("-fx-text-fill: blue; -fx-font-size: 14; -fx-font-weight: bold;");
+                        button.setStyle("-fx-text-fill: blue; -fx-font-size:45; -fx-font-weight: bold;");
                         saveMoveToFile("O " + ((i * 3) + j + 1));
                     }
 
                     if (logic.checkWinner('O')) {
                         gameResult = "Computer Wins!";
-                        showGameOverVideo("lose1.mp4", false); 
+                        showGameOverVideo("lose2.mp4", false); 
                         computerScore++;
                         updateScores();
                     } else if (logic.isBoardFull()) {
@@ -210,6 +224,7 @@ public class EasyGameController implements Initializable {
                 savedAlert.setHeaderText(null);
                 savedAlert.setContentText("Game has been saved successfully!");
                 savedAlert.showAndWait();
+                goToBackScene();
             }
 
             resetGame();
