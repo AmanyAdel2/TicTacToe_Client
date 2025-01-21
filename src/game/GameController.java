@@ -80,7 +80,7 @@ public class GameController implements Initializable {
         this.playerSymbol = symbol;
         this.isMyTurn = symbol.equals("X"); 
 
-        // تعيين أسماء اللاعبين
+        
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -91,12 +91,12 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-        // إنشاء اسم الملف باستخدام أسماء اللاعبين
+        
         String baseFileName = SAVE_FOLDER + "/" + playerXName + "_vs_" + playerOName + ".txt";
         currentGameFileName = getUniqueFileName(baseFileName);  
-        System.out.println("Current game file: " + currentGameFileName); // Debugging
+        System.out.println("Current game file: " + currentGameFileName);
 
-        // حفظ أسماء اللاعبين في الملف
+        
         savePlayerNamesToFile();
     }
 
@@ -113,7 +113,7 @@ public class GameController implements Initializable {
             counter++;
         } while (file.exists());
 
-        System.out.println("Unique file name generated: " + newFileName); // Debugging
+        System.out.println("Unique file name generated: " + newFileName); 
         return newFileName;
     }
 
@@ -185,7 +185,7 @@ public class GameController implements Initializable {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
             if (new File(currentGameFileName).exists()) {
                 writer.write(move + "\n");
-                System.out.println("Move saved: " + move); // Debugging
+                System.out.println("Move saved: " + move); 
             } else {
                 System.out.println("File does not exist: " + currentGameFileName);
             }
@@ -219,7 +219,7 @@ public class GameController implements Initializable {
         });
     }
 
-    private void moveFileToGameHistory() {
+    public void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
         if (file.exists()) {
             File destination = new File(SAVE_FOLDER + "/" + file.getName());
@@ -233,7 +233,7 @@ public class GameController implements Initializable {
         }
     }
 
-    private void deleteTemporaryFile() {
+    public void deleteTemporaryFile() {
         File file = new File(currentGameFileName);
         if (file.exists()) {
             file.delete();

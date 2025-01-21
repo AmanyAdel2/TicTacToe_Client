@@ -290,37 +290,55 @@ public class PlayerSocket {
                 }
                 break;
             case "gameEnd":
-                
                 final String result = jsonMsg.get("result").toString();
-                final String winner = jsonMsg.get("winner") != null ? 
-                        jsonMsg.get("winner").toString() : null;
+                final String winner = jsonMsg.get("winner") != null
+                        ? jsonMsg.get("winner").toString() : null;
                 Platform.runLater(() -> {
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Game Over");
-                    
-                    switch(result) {
+
+                    switch (result) {
                         case "win":
-                            alert.setContentText("Congratulations! You won!");
+                            alert.setHeaderText("Congratulations! You won!");
                             break;
                         case "lose":
-                            alert.setContentText("Game Over! " + winner + " won the game!");
+                            alert.setHeaderText("Game Over! " + winner + " won the game!");
                             break;
                         case "draw":
-                            alert.setContentText("It's a draw!");
+                            alert.setHeaderText("It's a draw!");
                             break;
                     }
+
+                    ButtonType saveButton = new ButtonType("Save Game");
+                    ButtonType discardButton = new ButtonType("Discard");
+                    alert.getButtonTypes().setAll(saveButton, discardButton);
+
+                    Optional<ButtonType> choice = alert.showAndWait();
+                    if (choice.isPresent()) {
+                        if (choice.get() == saveButton) {
+                            
+                            if (gameController != null) {
+                                gameController.moveFileToGameHistory();
+                                System.out.println("Game saved successfully.");
+                            }
+                        } else {
+
+                            if (gameController != null) {
+                                gameController.deleteTemporaryFile();
+                                System.out.println("Game discarded.");
+                            }
+                        }
+                    }
+
                     
-                    alert.showAndWait();
-                    gameController = null;
-                    // Return to lobby
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
                         stage.setScene(new Scene(root));
                     } catch (IOException ex) {
                         Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
+
+                    gameController = null; 
                 });
                 break;
             default:
