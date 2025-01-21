@@ -60,7 +60,6 @@ public class GameController implements Initializable {
             }
         }
 
-        
         ensureGameRecordsFolderExists();
     }
 
@@ -81,7 +80,7 @@ public class GameController implements Initializable {
         this.playerSymbol = symbol;
         this.isMyTurn = symbol.equals("X"); 
 
-    
+        // تعيين أسماء اللاعبين
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -92,9 +91,30 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-       
-        currentGameFileName = SAVE_FOLDER + "/game_record_" + playerSymbol + "_" + System.currentTimeMillis() + ".txt";
+        // إنشاء اسم الملف باستخدام أسماء اللاعبين
+        String baseFileName = SAVE_FOLDER + "/" + playerXName + "_vs_" + playerOName + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);  
+        System.out.println("Current game file: " + currentGameFileName); // Debugging
+
+        // حفظ أسماء اللاعبين في الملف
         savePlayerNamesToFile();
+    }
+
+    private String getUniqueFileName(String baseFileName) {
+        File file = new File(baseFileName);
+        if (!file.exists()) {
+            return baseFileName; 
+        }
+        int counter = 1;
+        String newFileName;
+        do {
+            newFileName = baseFileName.replace(".txt", "_" + counter + ".txt");
+            file = new File(newFileName);
+            counter++;
+        } while (file.exists());
+
+        System.out.println("Unique file name generated: " + newFileName); // Debugging
+        return newFileName;
     }
 
     private void savePlayerNamesToFile() {
@@ -116,20 +136,20 @@ public class GameController implements Initializable {
 
     private void handleMove(int row, int col) {
         if (!isMyTurn || !boardButtons[row][col].getText().isEmpty()) {
+            System.out.println("Invalid move: Not your turn or cell is not empty.");
             return;
         }
 
-    
+        System.out.println("Player " + playerSymbol + " made a move at (" + row + ", " + col + ")");
+
         boardButtons[row][col].setText(playerSymbol);
         boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = false;
         updateTurnLabel();
 
-        
         int cellNumber = (row * 3) + col + 1;
         saveMoveToFile(playerSymbol + " " + cellNumber);
 
-        
         JSONObject moveData = new JSONObject();
         moveData.put("type", "gameMove");
         moveData.put("row", String.valueOf(row));
@@ -140,13 +160,11 @@ public class GameController implements Initializable {
     }
 
     public void updateBoard(int row, int col, String symbol) {
-        
         boardButtons[row][col].setText(symbol);
         boardButtons[row][col].setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = !symbol.equals(playerSymbol);
         updateTurnLabel();
 
-        
         int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
     }
@@ -158,13 +176,19 @@ public class GameController implements Initializable {
             }
         }
 
-        
-        deleteTemporaryFile();
+        if (new File(currentGameFileName).exists()) {
+            deleteTemporaryFile();
+        }
     }
 
     private void saveMoveToFile(String move) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
-            writer.write(move + "\n"); // حفظ الحركة في سطر جديد
+            if (new File(currentGameFileName).exists()) {
+                writer.write(move + "\n");
+                System.out.println("Move saved: " + move); // Debugging
+            } else {
+                System.out.println("File does not exist: " + currentGameFileName);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -172,6 +196,11 @@ public class GameController implements Initializable {
 
     public void askUserToSaveGame() {
         Platform.runLater(() -> {
+            if (!new File(currentGameFileName).exists()) {
+                System.out.println("No game to save.");
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Save Game");
             alert.setHeaderText("Do you want to save the game?");
@@ -183,10 +212,8 @@ public class GameController implements Initializable {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == saveButton) {
-                
                 moveFileToGameHistory();
             } else {
-               
                 deleteTemporaryFile();
             }
         });
