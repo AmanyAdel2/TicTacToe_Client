@@ -77,6 +77,8 @@ public class LoginController implements Initializable {
         map.put("type", "login");
         map.put("username", username);
         map.put("password", password);
+        map.put("status", "online");
+
 
         // Send JSON to the server
         try {
