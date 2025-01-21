@@ -60,11 +60,11 @@ public class GameController implements Initializable {
         }
 
       
-        ensureGameRecordsFolderExists();
+        //ensureGameRecordsFolderExists();
 
         
         //currentGameFileName = SAVE_FOLDER + "/game_record_" + System.currentTimeMillis() + ".txt"; 
-        askUserToSaveGame();
+       // askUserToSaveGame();
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -97,7 +97,7 @@ public class GameController implements Initializable {
         updateTurnLabel();
 
         
-        savePlayerNamesToFile();
+    //    savePlayerNamesToFile();
     }
 
     private void savePlayerNamesToFile() {
@@ -129,7 +129,7 @@ public class GameController implements Initializable {
 
        
         int cellNumber = (row * 3) + col + 1;
-        saveMoveToFile(playerSymbol + " " + cellNumber);
+   //     saveMoveToFile(playerSymbol + " " + cellNumber);
 
         
         JSONObject moveData = new JSONObject();
@@ -160,7 +160,7 @@ public class GameController implements Initializable {
 
         
         int cellNumber = (row * 3) + col + 1;
-        saveMoveToFile(symbol + " " + cellNumber);
+     //   saveMoveToFile(symbol + " " + cellNumber);
     }
 
     public void resetBoard() {
@@ -171,19 +171,19 @@ public class GameController implements Initializable {
         }
 
         
-        deleteTemporaryFile();
+        //deleteTemporaryFile();
     }
 
     private void saveMoveToFile(String move) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
+  /*      try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
             writer.write(move + "\n");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void askUserToSaveGame() {
-        Platform.runLater(() -> {
+      /*  Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Save Game");
             alert.setHeaderText("Do you want to save the game?");
@@ -198,13 +198,13 @@ public class GameController implements Initializable {
                 moveFileToGameHistory();
             } else {
                
-                deleteTemporaryFile();
+              //  deleteTemporaryFile();
             }
-        });
+        });*/
     }
 
     private void moveFileToGameHistory() {
-        File file = new File(currentGameFileName);
+      /*  File file = new File(currentGameFileName);
         if (file.exists()) {
             File destination = new File(SAVE_FOLDER + "/" + file.getName());
             if (file.renameTo(destination)) {
@@ -214,14 +214,14 @@ public class GameController implements Initializable {
             }
         } else {
             System.out.println("Temporary file does not exist: " + currentGameFileName);
-        }
+        }*/
     }
 
     private void deleteTemporaryFile() {
-        File file = new File(currentGameFileName);
+       /* File file = new File(currentGameFileName);
         if (file.exists()) {
             file.delete(); 
-        }
+        }*/
     }
 
     public static void clearInstance() {
