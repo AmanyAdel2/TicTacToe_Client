@@ -49,6 +49,7 @@ public class PlayerSocket {
     private GameController gameController;  // Each socket has its own controller
     private Stage stage;
     private boolean running = true; 
+    private int score=0;
     
     private PlayerSocket(){
         
@@ -146,6 +147,9 @@ public class PlayerSocket {
                 break;
             case "login":
                 String sts = jsonMsg.get("status").toString();
+                int jscore = Integer.parseInt(jsonMsg.get("score").toString());;
+                setPlayerScore(jscore);
+
 
                 if(sts.equals("1")){
                     System.out.println("Logged in successfully");
@@ -330,6 +334,13 @@ public class PlayerSocket {
        
     }
     
+  public int getPlayerScore() {
+  return score;
+}
+   public void setPlayerScore(int jscore) {
+       
+  score=jscore;
+}
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");

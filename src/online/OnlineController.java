@@ -82,7 +82,7 @@ public class OnlineController implements Initializable {
             selectedPlayer = onlinePlayersList.getSelectionModel().getSelectedItem();
         });
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
-        scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
+        scoretxt.setText(Integer.toString(playerSocket.getPlayerScore()));
         
         onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
         

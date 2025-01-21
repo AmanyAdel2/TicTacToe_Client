@@ -83,7 +83,8 @@ public class LoginController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
+            int score=playerSocket.getPlayerScore();
+            DTOPlayer player = new DTOPlayer(username, "ONLINE", score, playerSocket.socket);
             playerSocket.setLoggedInPlayer(player);
             //showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         } catch (Exception e) {
