@@ -49,7 +49,7 @@ public class OnlineController implements Initializable {
     @FXML
     private ListView<String> onlinePlayersList;
     @FXML
-    private ListView<String> recordsListView; // ListView لعرض سجل الألعاب
+    private ListView<String> recordsListView;
 
     String selectedPlayer = "";
     PlayerSocket playerSocket;
@@ -62,14 +62,14 @@ public class OnlineController implements Initializable {
         playerSocket = PlayerSocket.getInstance();
         System.out.println("OnlineController initializing...");
 
-        // تعيين اسم اللاعب ودرجته
+       
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
         scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
 
-        // تعيين اللاعبين المتصلين في onlinePlayersList
+       
         onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
 
-        // تحديث قائمة اللاعبين المتصلين
+        
         playerSocket.getOnlinePlayers().addListener((SetChangeListener.Change<? extends String> c) -> {
             if (c.wasAdded()) {
                 if (!onlinePlayersList.getItems().contains(c.getElementAdded())) {
@@ -82,40 +82,49 @@ public class OnlineController implements Initializable {
             onlinePlayersList.refresh();
         });
 
-        // تحميل الملفات المحفوظة وعرضها في recordsListView
+        
+        onlinePlayersList.setOnMouseClicked(event -> {
+            String selected = onlinePlayersList.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                selectedPlayer = selected;
+                System.out.println("Selected player: " + selectedPlayer);
+            }
+        });
+
+       
         loadRecordFiles();
     }
 
     private void loadRecordFiles() {
         File folder = new File("saved_games");
         if (!folder.exists() || !folder.isDirectory()) {
-            return; // إذا لم يكن المجلد موجودًا، لا تفعل شيئًا
+            return; 
         }
 
         File[] files = folder.listFiles();
         if (files == null || files.length == 0) {
-            return; // إذا لم تكن هناك ملفات، لا تفعل شيئًا
+            return;
         }
 
-        // ترتيب الملفات حسب آخر تعديل (من الأحدث إلى الأقدم)
+       
         Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
-        // إضافة الملفات إلى recordsListView
+       
         for (File file : files) {
             String fileName = file.getName();
-            String dateTime = extractDateAndTimeFromFile(file); // استخراج التاريخ والوقت
+            String dateTime = extractDateAndTimeFromFile(file);
             if (dateTime != null) {
                 String displayName = fileName + " - " + dateTime;
-                recordsListView.getItems().add(displayName); // إضافة الملف إلى ListView
+                recordsListView.getItems().add(displayName); 
             }
         }
 
-        // تفاعل مع recordsListView عند النقر على عنصر
+       
         recordsListView.setOnMouseClicked(event -> {
             String selectedFileName = recordsListView.getSelectionModel().getSelectedItem();
             if (selectedFileName != null) {
-                String actualFileName = selectedFileName.split(" - ")[0]; // استخراج اسم الملف الحقيقي
-                openRecord(actualFileName); // فتح الملف المحفوظ
+                String actualFileName = selectedFileName.split(" - ")[0];
+                openRecord(actualFileName);
             }
         });
     }
@@ -140,7 +149,7 @@ public class OnlineController implements Initializable {
 
     private String extractDateAndTimeFromFile(File file) {
         long lastModified = file.lastModified();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm"); // تنسيق التاريخ والوقت
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm");
         return sdf.format(new Date(lastModified));
     }
 
@@ -176,7 +185,7 @@ public class OnlineController implements Initializable {
             playerSocket.sendJSON(request);
             onlinePlayersList.getSelectionModel().clearSelection();
 
-            selectedPlayer = ""; // إعادة تعيين اللاعب المحدد
+            selectedPlayer = "";
             onlinePlayersList.refresh();
         } else {
             showAlert(Alert.AlertType.ERROR, "Error", "Select a player");
