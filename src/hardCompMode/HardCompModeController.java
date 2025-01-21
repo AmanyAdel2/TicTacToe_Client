@@ -58,7 +58,7 @@ public class HardCompModeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentGameFileName = "game_record_" + System.currentTimeMillis() + ".txt"; 
+        currentGameFileName = player + " vs " + computer + ""; 
         ensureGameRecordsFolderExists();
         resetGame();
     }
