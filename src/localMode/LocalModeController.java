@@ -69,12 +69,12 @@ public class LocalModeController implements Initializable {
             button.setText(currentPlayer);
             
             if (logic.getCurrentPlayer() == 'X') {
-                button.setStyle("-fx-text-fill: red; -fx-font-size: 20; -fx-font-weight: bold;"); 
+                button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;"); 
 
 
 
             } else {
-                button.setStyle("-fx-text-fill: blue; -fx-font-size: 20; -fx-font-weight: bold;");
+                button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
             }
 
             if (logic.checkWinner()) {
@@ -213,6 +213,22 @@ public class LocalModeController implements Initializable {
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
         alert.getButtonTypes().setAll(yesButton, noButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(yesButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(noButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {

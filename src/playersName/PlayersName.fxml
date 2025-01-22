@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -30,25 +31,34 @@
             <Font name="Algerian" size="45.0" />
          </font>
       </Label>
-      <TextField fx:id="player1Field" layoutX="314.0" layoutY="248.0" prefHeight="42.0" prefWidth="249.0" />
+      <TextField fx:id="player1Field" layoutX="314.0" layoutY="248.0" prefHeight="42.0" prefWidth="249.0">
+          <style>
+       
+        -fx-border-width: 2px;    
+        -fx-border-radius: 16px;   
+        -fx-padding: 5px;         
+    </style>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></TextField>
       <TextField fx:id="player2Field" layoutX="314.0" layoutY="320.0" prefHeight="42.0" prefWidth="249.0" />
       <Text fill="#edff2d" layoutX="78.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1" wrappingWidth="190.40576964244246">
          <font>
             <Font name="Algerian" size="41.0" />
          </font>
       </Text>
-      <Text fill="#deff3b" layoutX="86.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
+      <Text fill="#deff3b" layoutX="78.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
          <font>
-            <Font name="System Bold" size="41.0" />
+            <Font name="Algerian" size="41.0" />
          </font>
       </Text>
       <Button fx:id="startGameBtn" layoutX="232.0" layoutY="443.0" mnemonicParsing="false" onAction="#startGame" prefHeight="55.0" prefWidth="164.0" style="-fx-background-color: yellow;" text="Start Game">
          <font>
-            <Font name="System Bold" size="21.0" />
+            <Font name="System Bold Italic" size="21.0" />
          </font></Button>
       <Button fx:id="backBtn" layoutX="24.0" layoutY="570.0" mnemonicParsing="false" onAction="#bkButton" style="-fx-background-color: YELLOW;" text="Back">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold Italic" size="15.0" />
          </font>
       </Button>
       </children>
