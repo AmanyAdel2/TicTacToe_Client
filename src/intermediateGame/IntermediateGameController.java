@@ -209,24 +209,24 @@ public class IntermediateGameController implements Initializable {
         alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
-            "-fx-background-color: beige;" +
-            "-fx-font-size: 16;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: beige;"
+                + "-fx-font-size: 16;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-            "-fx-background-color: lightgreen;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: lightgreen;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(backButton).setStyle(
-            "-fx-background-color: lightcoral;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: lightcoral;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(saveGameButton).setStyle(
-            "-fx-background-color: yellow;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: yellow;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
 
         alert.showAndWait().ifPresent(response -> {
@@ -240,29 +240,45 @@ public class IntermediateGameController implements Initializable {
                 updateScores();
                 goToBackScene();
             } else if (response == saveGameButton) {
-                saveMoveToFile(gameResult);
                 moveFileToGameHistory();
-                Alert savedAlert = new Alert(AlertType.INFORMATION);
-                savedAlert.setTitle("Game Saved");
-                savedAlert.setHeaderText(null);
-                savedAlert.setContentText("Game has been saved successfully!");
-                savedAlert.getDialogPane().setStyle(
-                        "-fx-background-color: #f0f0f0;"
-                        + "-fx-text-fill: #333333;"
+                Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Game Saved");
+                confirmAlert.setHeaderText("Game has been saved successfully!");
+                confirmAlert.setContentText("What would you like to do next?");
+
+                ButtonType playAgainAfterSaveButton = new ButtonType("Play Again");
+                ButtonType backAfterSaveButton = new ButtonType("Back");
+                confirmAlert.getButtonTypes().setAll(playAgainAfterSaveButton, backAfterSaveButton);
+                confirmAlert.setGraphic(null);
+                confirmAlert.getDialogPane().setStyle(
+                        "-fx-background-color: beige;"
+                        + "-fx-font-size: 16;"
+                        + "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(playAgainAfterSaveButton).setStyle(
+                        "-fx-background-color: lightgreen;"
+                        + "-fx-font-size: 14;"
+                        + "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(backAfterSaveButton).setStyle(
+                        "-fx-background-color: lightcoral;"
+                        + "-fx-font-size: 14;"
+                        + "-fx-font-weight: bold;"
                 );
 
-                savedAlert.getDialogPane().lookupButton(ButtonType.OK).setStyle(
-                        "-fx-background-color: #4CAF50;"
-                        + "-fx-text-fill: white;"
-                );
-                savedAlert.showAndWait();
-                goToBackScene();
+                confirmAlert.showAndWait().ifPresent(confirmResponse -> {
+                    if (confirmResponse == playAgainAfterSaveButton) {
+                        resetGame();
+                    } else if (confirmResponse == backAfterSaveButton) {
+                        playerScore = 0;
+                        computerScore = 0;
+                        updateScores();
+                        goToBackScene();
+                    }
+                });
             }
-
-            resetGame();
         });
     }
-
     private void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
         if (file.exists()) {

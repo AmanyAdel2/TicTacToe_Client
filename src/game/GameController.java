@@ -33,7 +33,7 @@ public class GameController implements Initializable {
     private Label playerXLabel, turnLabel, playerOLabel;
 
     private Button[][] boardButtons;
-    private String playerSymbol; // "X" or "O"
+    private String playerSymbol;
     private boolean isMyTurn;
     private PlayerSocket playerSocket;
 
@@ -157,14 +157,13 @@ public class GameController implements Initializable {
 
         playerSocket.sendJSON(moveData);
 
-        // Check for winner
         List<int[]> winningCells = checkWinner();
         if (!winningCells.isEmpty()) {
             highlightWinningCells(winningCells);
-            return; // توقف اللعبة بعد الفوز
+            return; 
         }
 
-        // Check for draw
+     
         boolean isDraw = true;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -175,7 +174,7 @@ public class GameController implements Initializable {
             }
         }
         if (isDraw) {
-            // لا يتم عرض أي Alert في حالة التعادل
+            
         }
     }
 
@@ -188,14 +187,14 @@ public class GameController implements Initializable {
         int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
 
-        // Check for winner
+        
         List<int[]> winningCells = checkWinner();
         if (!winningCells.isEmpty()) {
             highlightWinningCells(winningCells);
-            return; // توقف اللعبة بعد الفوز
+            return;
         }
 
-        // Check for draw
+    
         boolean isDraw = true;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -206,14 +205,14 @@ public class GameController implements Initializable {
             }
         }
         if (isDraw) {
-            // لا يتم عرض أي Alert في حالة التعادل
+            
         }
     }
 
     private List<int[]> checkWinner() {
         List<int[]> winningCells = new ArrayList<>();
 
-        // Check rows
+        
         for (int i = 0; i < 3; i++) {
             if (!boardButtons[i][0].getText().isEmpty() &&
                 boardButtons[i][0].getText().equals(boardButtons[i][1].getText()) &&
@@ -225,7 +224,7 @@ public class GameController implements Initializable {
             }
         }
 
-        // Check columns
+        
         for (int i = 0; i < 3; i++) {
             if (!boardButtons[0][i].getText().isEmpty() &&
                 boardButtons[0][i].getText().equals(boardButtons[1][i].getText()) &&
@@ -237,7 +236,7 @@ public class GameController implements Initializable {
             }
         }
 
-        // Check first diagonal
+       
         if (!boardButtons[0][0].getText().isEmpty() &&
             boardButtons[0][0].getText().equals(boardButtons[1][1].getText()) &&
             boardButtons[1][1].getText().equals(boardButtons[2][2].getText())) {
@@ -247,7 +246,7 @@ public class GameController implements Initializable {
             return winningCells;
         }
 
-        // Check second diagonal
+      
         if (!boardButtons[0][2].getText().isEmpty() &&
             boardButtons[0][2].getText().equals(boardButtons[1][1].getText()) &&
             boardButtons[1][1].getText().equals(boardButtons[2][0].getText())) {
@@ -257,7 +256,7 @@ public class GameController implements Initializable {
             return winningCells;
         }
 
-        return winningCells; // Empty list means no winner
+        return winningCells; 
     }
 
     private void highlightWinningCells(List<int[]> winningCells) {
@@ -266,13 +265,13 @@ public class GameController implements Initializable {
             int col = cell[1];
             Button button = boardButtons[row][col];
             if (button != null) {
-                // الحصول على النمط الحالي للزر
+                
                 String currentStyle = button.getStyle();
                 
-                // إضافة تغيير الخلفية فقط مع الحفاظ على النمط الحالي
+                
                 button.setStyle(
-                    currentStyle + // الحفاظ على النمط الحالي (لون النص، حجم الخط، إلخ)
-                    "-fx-background-color: lightgreen; " // تغيير الخلفية إلى أخضر فاتح
+                    currentStyle +
+                    "-fx-background-color: lightgreen; " 
                 );
             }
         }
@@ -282,7 +281,7 @@ public class GameController implements Initializable {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 boardButtons[i][j].setText(""); 
-                boardButtons[i][j].setStyle(""); // إعادة تعيين النمط
+                boardButtons[i][j].setStyle(""); 
             }
         }
 

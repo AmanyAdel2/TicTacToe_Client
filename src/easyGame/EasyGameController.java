@@ -198,70 +198,88 @@ public class EasyGameController implements Initializable {
         mediaPlayer.play();
     }
 
-    private void showGameOverAlert(String message) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(message);
-        alert.setContentText("Choose your next action:");
+   private void showGameOverAlert(String message) {
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Game Over");
+    alert.setHeaderText(message);
+    alert.setContentText("Choose your next action:");
 
-        ButtonType playAgainButton = new ButtonType("Play Again");
-        ButtonType saveGameButton = new ButtonType("Save Game");
-        ButtonType backButton = new ButtonType("Back");
-        alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
-        alert.setGraphic(null);
-        alert.getDialogPane().setStyle(
-            "-fx-background-color: beige;" +
-            "-fx-font-size: 16;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-            "-fx-background-color: lightgreen;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(backButton).setStyle(
-            "-fx-background-color: lightcoral;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(saveGameButton).setStyle(
-            "-fx-background-color: yellow;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
+    ButtonType playAgainButton = new ButtonType("Play Again");
+    ButtonType saveGameButton = new ButtonType("Save Game");
+    ButtonType backButton = new ButtonType("Back");
+    alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
+    alert.setGraphic(null);
+    alert.getDialogPane().setStyle(
+        "-fx-background-color: beige;" +
+        "-fx-font-size: 16;" +
+        "-fx-font-weight: bold;"
+    );
+    alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+        "-fx-background-color: lightgreen;" +
+        "-fx-font-size: 14;" +
+        "-fx-font-weight: bold;"
+    );
+    alert.getDialogPane().lookupButton(backButton).setStyle(
+        "-fx-background-color: lightcoral;" +
+        "-fx-font-size: 14;" +
+        "-fx-font-weight: bold;"
+    );
+    alert.getDialogPane().lookupButton(saveGameButton).setStyle(
+        "-fx-background-color: yellow;" +
+        "-fx-font-size: 14;" +
+        "-fx-font-weight: bold;"
+    );
 
-        alert.showAndWait().ifPresent(response -> {
-            if (response == playAgainButton) {
-                deleteTemporaryFile();
-                resetGame();
-            } else if (response == backButton) {
-                deleteTemporaryFile();
-                playerScore = 0;
-                computerScore = 0;
-                updateScores();
-                goToBackScene();
-            } else if (response == saveGameButton) {
-                moveFileToGameHistory();
-                Alert savedAlert = new Alert(AlertType.INFORMATION);
-                savedAlert.setTitle("Game Saved");
-                savedAlert.setHeaderText(null);
-                savedAlert.setContentText("Game has been saved successfully!");
-                savedAlert.getDialogPane().setStyle(
-                        "-fx-background-color: #f0f0f0;"
-                        + "-fx-text-fill: #333333;"
-                );
-
-                savedAlert.getDialogPane().lookupButton(ButtonType.OK).setStyle(
-                        "-fx-background-color: #4CAF50;"
-                        + "-fx-text-fill: white;"
-                );
-                savedAlert.showAndWait();
-                goToBackScene();
-            }
-
+    alert.showAndWait().ifPresent(response -> {
+        if (response == playAgainButton) {
+            deleteTemporaryFile();
             resetGame();
-        });
-    }
+        } else if (response == backButton) {
+            deleteTemporaryFile();
+            playerScore = 0;
+            computerScore = 0;
+            updateScores();
+            goToBackScene();
+        } else if (response == saveGameButton) {
+            moveFileToGameHistory();
+            Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Game Saved");
+            confirmAlert.setHeaderText("Game has been saved successfully!");
+            confirmAlert.setContentText("What would you like to do next?");
+
+            ButtonType playAgainAfterSaveButton = new ButtonType("Play Again");
+            ButtonType backAfterSaveButton = new ButtonType("Back");
+            confirmAlert.getButtonTypes().setAll(playAgainAfterSaveButton, backAfterSaveButton);
+            confirmAlert.setGraphic(null);
+            confirmAlert.getDialogPane().setStyle(
+                "-fx-background-color: beige;" +
+                "-fx-font-size: 16;" +
+                "-fx-font-weight: bold;"
+            );
+            confirmAlert.getDialogPane().lookupButton(playAgainAfterSaveButton).setStyle(
+                "-fx-background-color: lightgreen;" +
+                "-fx-font-size: 14;" +
+                "-fx-font-weight: bold;"
+            );
+            confirmAlert.getDialogPane().lookupButton(backAfterSaveButton).setStyle(
+                "-fx-background-color: lightcoral;" +
+                "-fx-font-size: 14;" +
+                "-fx-font-weight: bold;"
+            );
+
+            confirmAlert.showAndWait().ifPresent(confirmResponse -> {
+                if (confirmResponse == playAgainAfterSaveButton) {
+                    resetGame();
+                } else if (confirmResponse == backAfterSaveButton) {
+                    playerScore = 0;
+                    computerScore = 0;
+                    updateScores();
+                    goToBackScene();
+                }
+            });
+        }
+    });
+}
 
     private void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
@@ -279,26 +297,6 @@ public class EasyGameController implements Initializable {
         File file = new File(currentGameFileName);
         if (file.exists()) {
             file.delete();
-        }
-    }
-
-    @FXML
-    private void openRecord(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/GameRecord.fxml"));
-            AnchorPane root = loader.load();
-
-            Stage recordStage = new Stage();
-            recordStage.setTitle("Game Moves");
-            recordStage.setScene(new Scene(root, 664, 664));
-            recordStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setTitle("Error");
-            errorAlert.setHeaderText("Unable to open the game record.");
-            errorAlert.setContentText("Please check if the record file exists.");
-            errorAlert.showAndWait();
         }
     }
 

@@ -304,15 +304,15 @@ public class PlayerSocket {
                     switch (result) {
                         case "win":
 
-                           // showGameOverVideo("/assets/videos/loser.mp4", false);
+                            showGameOverVideo("/assets/videos/loser.mp4", false);
                             alert.setHeaderText("Congratulations! You won!");
                             break;
                         case "lose":
-                            //showGameOverVideo("/assets/videos/winner2.mp4", false);
+                            showGameOverVideo("/assets/videos/winner2.mp4", false);
                              alert.setHeaderText("Game Over! " + winner + " won the game!");
                             break;
                         case "draw":
-                            //showGameOverVideo("/assets/videos/draw.mp4", false);
+                            showGameOverVideo("/assets/videos/draw.mp4", false);
                             alert.setHeaderText("It's a draw!");
                             break;
                     }
