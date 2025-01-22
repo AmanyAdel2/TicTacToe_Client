@@ -32,12 +32,6 @@
          </font>
       </Label>
       <TextField fx:id="player1Field" layoutX="314.0" layoutY="248.0" prefHeight="42.0" prefWidth="249.0">
-          <style>
-       
-        -fx-border-width: 2px;    
-        -fx-border-radius: 16px;   
-        -fx-padding: 5px;         
-    </style>
          <opaqueInsets>
             <Insets />
          </opaqueInsets></TextField>

@@ -126,18 +126,13 @@ public class LevelController implements Initializable {
     }
 
     @FXML
-    private void goHardGame(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/hardCompMode/hardCompMode.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) hardBtn.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Hard Level");
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void goHardGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/hardCompMode/hardCompMode.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Hard Level");
+        stage.show();
     }
 
     @FXML
