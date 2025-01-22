@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -80,7 +82,6 @@ public class GameController implements Initializable {
         this.playerSymbol = symbol;
         this.isMyTurn = symbol.equals("X"); 
 
-        
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -91,12 +92,10 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-        
         String baseFileName = SAVE_FOLDER + "/" + playerXName + "_vs_" + playerOName + ".txt";
         currentGameFileName = getUniqueFileName(baseFileName);  
         System.out.println("Current game file: " + currentGameFileName);
 
-        
         savePlayerNamesToFile();
     }
 
@@ -157,6 +156,27 @@ public class GameController implements Initializable {
         moveData.put("symbol", playerSymbol);
 
         playerSocket.sendJSON(moveData);
+
+        // Check for winner
+        List<int[]> winningCells = checkWinner();
+        if (!winningCells.isEmpty()) {
+            highlightWinningCells(winningCells);
+            return; // توقف اللعبة بعد الفوز
+        }
+
+        // Check for draw
+        boolean isDraw = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (boardButtons[i][j].getText().isEmpty()) {
+                    isDraw = false;
+                    break;
+                }
+            }
+        }
+        if (isDraw) {
+            // لا يتم عرض أي Alert في حالة التعادل
+        }
     }
 
     public void updateBoard(int row, int col, String symbol) {
@@ -167,12 +187,102 @@ public class GameController implements Initializable {
 
         int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
+
+        // Check for winner
+        List<int[]> winningCells = checkWinner();
+        if (!winningCells.isEmpty()) {
+            highlightWinningCells(winningCells);
+            return; // توقف اللعبة بعد الفوز
+        }
+
+        // Check for draw
+        boolean isDraw = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (boardButtons[i][j].getText().isEmpty()) {
+                    isDraw = false;
+                    break;
+                }
+            }
+        }
+        if (isDraw) {
+            // لا يتم عرض أي Alert في حالة التعادل
+        }
+    }
+
+    private List<int[]> checkWinner() {
+        List<int[]> winningCells = new ArrayList<>();
+
+        // Check rows
+        for (int i = 0; i < 3; i++) {
+            if (!boardButtons[i][0].getText().isEmpty() &&
+                boardButtons[i][0].getText().equals(boardButtons[i][1].getText()) &&
+                boardButtons[i][1].getText().equals(boardButtons[i][2].getText())) {
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
+            }
+        }
+
+        // Check columns
+        for (int i = 0; i < 3; i++) {
+            if (!boardButtons[0][i].getText().isEmpty() &&
+                boardButtons[0][i].getText().equals(boardButtons[1][i].getText()) &&
+                boardButtons[1][i].getText().equals(boardButtons[2][i].getText())) {
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
+            }
+        }
+
+        // Check first diagonal
+        if (!boardButtons[0][0].getText().isEmpty() &&
+            boardButtons[0][0].getText().equals(boardButtons[1][1].getText()) &&
+            boardButtons[1][1].getText().equals(boardButtons[2][2].getText())) {
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
+        }
+
+        // Check second diagonal
+        if (!boardButtons[0][2].getText().isEmpty() &&
+            boardButtons[0][2].getText().equals(boardButtons[1][1].getText()) &&
+            boardButtons[1][1].getText().equals(boardButtons[2][0].getText())) {
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
+        }
+
+        return winningCells; // Empty list means no winner
+    }
+
+    private void highlightWinningCells(List<int[]> winningCells) {
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+            Button button = boardButtons[row][col];
+            if (button != null) {
+                // الحصول على النمط الحالي للزر
+                String currentStyle = button.getStyle();
+                
+                // إضافة تغيير الخلفية فقط مع الحفاظ على النمط الحالي
+                button.setStyle(
+                    currentStyle + // الحفاظ على النمط الحالي (لون النص، حجم الخط، إلخ)
+                    "-fx-background-color: lightgreen; " // تغيير الخلفية إلى أخضر فاتح
+                );
+            }
+        }
     }
 
     public void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 boardButtons[i][j].setText(""); 
+                boardButtons[i][j].setStyle(""); // إعادة تعيين النمط
             }
         }
 
@@ -238,9 +348,5 @@ public class GameController implements Initializable {
         if (file.exists()) {
             file.delete();
         }
-    }
-
-    public static void clearInstance() {
-        instance = null;
     }
 }
