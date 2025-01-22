@@ -329,6 +329,7 @@ public class HardCompModeController implements Initializable {
 
             goToBackScene();
 //        }
+        }
     }
 
     private void goToBackScene() {

@@ -54,30 +54,18 @@ public class RegiserController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        playerSocket = PlayerSocket.getInstance();
-        Platform.runLater(() -> {
-            Stage stage = (Stage) regBtn.getScene().getWindow();
-            playerSocket.setStage(stage);
-        });
         
-        Platform.runLater(() -> {
-            Stage primaryStage = (Stage) regBtn.getScene().getWindow();
-            primaryStage.setOnCloseRequest(event -> {
-                // Handle window close
-            if (playerSocket.socket != null && !playerSocket.socket.isClosed()) {
-                try {
-                    playerSocket.socket.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            });
-        });
     }
 
     @FXML
     private void onReg(ActionEvent event) {
+        
+        playerSocket = PlayerSocket.getInstance();
+        
+        Platform.runLater(() -> {
+            Stage stage = (Stage) regBtn.getScene().getWindow();
+            playerSocket.setStage(stage);
+        });
         String username = userNametxt.getText().trim();
         String email = emailtxt.getText().trim();
         String password = passtxt.getText().trim();

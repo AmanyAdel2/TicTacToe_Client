@@ -91,7 +91,7 @@ public class LoginController implements Initializable {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-
+    
     @FXML
     private void goReg(ActionEvent event) {
         try {

@@ -5,6 +5,8 @@
  */
 package Player;
 
+import Popups.CustomDialogController;
+import Popups.PopUps;
 import game.GameController;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -374,25 +377,30 @@ public class PlayerSocket {
 //        this.ps.println(data.toJSONString());
 //    }
     public void requestReceived(String challenger){
-        Platform.runLater(()-> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Game Challenge");
-            alert.setContentText("do you want to play against " + challenger + " ?");
-            
-            ButtonType acceptButton = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
-            ButtonType declineButton = new ButtonType("Decline", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(acceptButton, declineButton);
+        PopUps popup = new PopUps();
 
-             // Show the alert and capture the user's choice
-            Optional<ButtonType> result = alert.showAndWait();
-            
+        Platform.runLater(()-> {
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//            alert.setTitle("Game Challenge");
+//            alert.setContentText("do you want to play against " + challenger + " ?");
+//            
+//            ButtonType acceptButton = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
+//            ButtonType declineButton = new ButtonType("Decline", ButtonBar.ButtonData.CANCEL_CLOSE);
+//            alert.getButtonTypes().setAll(acceptButton, declineButton);
+//
+//             // Show the alert and capture the user's choice
+//            Optional<ButtonType> result = alert.showAndWait();
+
+            String result = popup.showCustomDialog(stage, challenger);
+
             Map<String, String> response = new HashMap<>();
             
             response.put("type", "gameReqResponse");
             response.put("challenger", challenger);  // Add challenger username
             response.put("challenged", loggedInPlayer.getUsername()); 
+            System.out.println("result is "+ result);
             
-            if (result.isPresent() && result.get() == acceptButton) {
+            if (result != null && result.equals("Accepted")) {
 
                 System.out.println("Challenge accepted!");
                 response.put("status", "accepted");
