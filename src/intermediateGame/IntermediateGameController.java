@@ -102,7 +102,7 @@ public class IntermediateGameController implements Initializable {
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";
                 saveMoveToFile(gameResult); 
-                showGameOverVideo("winner2.mp4", false); 
+                showGameOverVideo("/assets/videos/winner2.mp4", false); 
                 playerScore++;
                 updateScores();
                 return;
@@ -110,7 +110,7 @@ public class IntermediateGameController implements Initializable {
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true); 
                 return;
             }
 
@@ -137,13 +137,13 @@ public class IntermediateGameController implements Initializable {
             if (logic.checkWinner('O')) {
                 gameResult = "Computer Wins!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("lose2.mp4", false); 
+                showGameOverVideo("/assets/videos/lose2.mp4", false); 
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true); 
             }
         }
     }

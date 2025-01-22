@@ -44,12 +44,12 @@
         <Text fx:id="computerLabel" fill="WHITE" layoutX="402.0" layoutY="144.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Computer" />
         <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="81.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@playerPhoto.png" />
+                <Image url="@../assets/Images/playerPhoto.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="419.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@computer.png" />
+                <Image url="@../assets/Images/easy.png" />
             </image>
         </ImageView>
         <Button layoutX="26.0" layoutY="606.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">

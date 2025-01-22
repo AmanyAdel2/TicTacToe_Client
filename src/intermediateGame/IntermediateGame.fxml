@@ -14,45 +14,45 @@
    <children>
         <ImageView fitHeight="671.0" fitWidth="673.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../background.jpg" />
+                <Image url="@../assets/Images/background.jpg" />
             </image>
         </ImageView>
-        <GridPane layoutX="103.0" layoutY="149.0" prefHeight="339.0" prefWidth="501.0">
+        <GridPane layoutX="90.0" layoutY="149.0" prefHeight="339.0" prefWidth="501.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="146.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.66668701171875" minWidth="10.0" prefWidth="142.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="140.0" minWidth="10.0" prefWidth="140.0" />
+                <ColumnConstraints prefWidth="167.0" />
+                <ColumnConstraints prefWidth="167.0" />
+                <ColumnConstraints prefWidth="167.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="97.66665649414062" minHeight="10.0" prefHeight="97.66665649414062" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="135.66665649414062" minHeight="10.0" prefHeight="135.66665649414062" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="78.33334350585938" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="113.0" />
+                <RowConstraints prefHeight="113.0" />
+                <RowConstraints prefHeight="113.0" />
             </rowConstraints>
             <children>
-                <Button fx:id="p1" mnemonicParsing="false" prefHeight="87.0" prefWidth="132.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" />
-                <Button fx:id="p2" mnemonicParsing="false" prefHeight="88.0" prefWidth="140.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" />
-                <Button fx:id="p3" mnemonicParsing="false" prefHeight="91.0" prefWidth="135.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" />
-                <Button fx:id="p4" mnemonicParsing="false" prefHeight="95.0" prefWidth="136.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="1" />
-                <Button fx:id="p5" mnemonicParsing="false" prefHeight="92.0" prefWidth="139.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button fx:id="p6" mnemonicParsing="false" prefHeight="94.0" prefWidth="138.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <Button fx:id="p7" mnemonicParsing="false" prefHeight="84.0" prefWidth="140.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="2" />
-                <Button fx:id="p8" mnemonicParsing="false" prefHeight="86.0" prefWidth="140.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button fx:id="p9" mnemonicParsing="false" prefHeight="89.0" prefWidth="146.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Button fx:id="p1" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" />
+                <Button fx:id="p2" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" />
+                <Button fx:id="p3" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" />
+                <Button fx:id="p4" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="1" />
+                <Button fx:id="p5" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="p6" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Button fx:id="p7" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="2" />
+                <Button fx:id="p8" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button fx:id="p9" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             </children>
         </GridPane>
-        <Text fx:id="playerLabel" fill="WHITE" layoutX="150.0" layoutY="119.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player" />
-        <Text fx:id="computerLabel" fill="WHITE" layoutX="422.0" layoutY="120.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Computer" />
+        <Text fx:id="playerLabel" fill="WHITE" layoutX="150.0" layoutY="129.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player" />
+        <Text fx:id="computerLabel" fill="WHITE" layoutX="445.0" layoutY="130.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Computer" />
         <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="151.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@playerPhoto.png" />
+                <Image url="@../assets/Images/playerPhoto.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="439.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="462.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@computer.png" />
+                <Image url="@../assets/Images/evilbot.png" />
             </image>
         </ImageView>
-        <Button layoutX="53.0" layoutY="545.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
+        <Button layoutX="90.0" layoutY="552.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -62,6 +62,6 @@
             <Image url="@../welcome.gif" />
          </image>
       </ImageView>
-      <Button fx:id="openRecordButton" layoutX="487.0" layoutY="606.0" mnemonicParsing="false" onAction="#openRecord" style="-fx-background-color: lightblue;" text="Last Record" />
+      <Button fx:id="openRecordButton" layoutX="481.0" layoutY="552.0" mnemonicParsing="false" onAction="#openRecord" style="-fx-background-color: lightblue;" text="Last Record" />
     </children> 
 </AnchorPane>

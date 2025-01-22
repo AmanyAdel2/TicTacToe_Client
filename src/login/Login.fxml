@@ -19,12 +19,12 @@
         <URL value="@fxml.css" />
     </stylesheets>
    <children>
-      <ImageView fitHeight="671.0" fitWidth="664.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="671.0" fitWidth="672.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <GridPane layoutX="143.0" layoutY="173.0" prefHeight="185.0" prefWidth="350.0">
+      <GridPane layoutX="143.0" layoutY="180.0" prefHeight="178.0" prefWidth="414.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.3333740234375" minWidth="10.0" prefWidth="165.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.6666259765625" minWidth="10.0" prefWidth="185.0" />
@@ -34,9 +34,9 @@
           <RowConstraints maxHeight="121.66665649414062" minHeight="10.0" prefHeight="101.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="USERNAME" textAlignment="CENTER" textFill="WHITE">
+            <Label text="Username" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="27.0" />
+                  <Font name="System Bold Italic" size="27.0" />
                </font>
                <opaqueInsets>
                   <Insets />
@@ -45,9 +45,9 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <Label layoutX="10.0" layoutY="26.0" text="PASSWORD" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1">
+            <Label layoutX="10.0" layoutY="26.0" text="Password" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1">
                <font>
-                  <Font name="System Bold" size="27.0" />
+                  <Font name="System Bold Italic" size="27.0" />
                </font>
                <opaqueInsets>
                   <Insets />
@@ -56,8 +56,8 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <TextField fx:id="usertxt" layoutX="127.0" layoutY="132.0" prefHeight="41.0" prefWidth="230.0" GridPane.columnIndex="1" />
-            <PasswordField fx:id="passtxt" prefHeight="43.0" prefWidth="232.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="usertxt" layoutX="127.0" layoutY="132.0" prefHeight="41.0" prefWidth="236.0" style="-fx-border-radius: 50px; -fx-background-radius: 50px;" GridPane.columnIndex="1" />
+            <PasswordField fx:id="passtxt" prefHeight="43.0" prefWidth="232.0" style="-fx-border-radius: 50px; -fx-background-radius: 50px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <ImageView fitHeight="37.0" fitWidth="165.0" layoutX="22.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
@@ -67,20 +67,25 @@
       </ImageView>
       <Label layoutX="241.0" layoutY="115.0" text="SIGN IN" textFill="YELLOW">
          <font>
-            <Font name="Arial Bold" size="45.0" />
+            <Font name="System Bold Italic" size="45.0" />
          </font>
       </Label>
 
-      <Button fx:id="signbtn" layoutX="187.0" layoutY="393.0" mnemonicParsing="false" onAction="#onSignIn" prefHeight="37.0" prefWidth="109.0" style="-fx-background-color: YELLOW;" text="SIGN IN">
+      <Button fx:id="signbtn" layoutX="300.0" layoutY="384.0" mnemonicParsing="false" onAction="#onSignIn" prefHeight="37.0" prefWidth="109.0" style=" -fx-border-radius: 50px; -fx-background-radius: 50px; -fx-background-color: YELLOW;" text="Sign in">
 
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="regbtn" layoutX="325.0" layoutY="393.0" mnemonicParsing="false" onAction="#goReg" prefHeight="37.0" prefWidth="109.0" style="-fx-background-color: YELLOW;" text="REGISTER">
+      <Button fx:id="regbtn" layoutX="384.0" layoutY="509.0" mnemonicParsing="false" onAction="#goReg" prefHeight="37.0" prefWidth="109.0" style=" -fx-border-radius: 50px; -fx-background-radius: 50px; -fx-background-color: yellow;" text="Register">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Button>
+      <Label layoutX="163.0" layoutY="510.0" prefHeight="37.0" prefWidth="221.0" text="Don't have an account?" textFill="#fffdfd">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

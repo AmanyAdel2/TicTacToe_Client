@@ -26,6 +26,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -302,18 +306,22 @@ public class PlayerSocket {
                     
                     switch(result) {
                         case "win":
+                            showGameOverVideo("/assets/videos/loser.mp4", false);
                             alert.setContentText("Congratulations! You won!");
                             break;
                         case "lose":
+                            showGameOverVideo("/assets/videos/winner2.mp4", false);
                             alert.setContentText("Game Over! " + winner + " won the game!");
                             break;
                         case "draw":
+                            showGameOverVideo("/assets/videos/draw.mp4", false);
                             alert.setContentText("It's a draw!");
                             break;
                     }
                     
                     alert.showAndWait();
                     gameController = null;
+                    
                     // Return to lobby
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -412,6 +420,37 @@ public class PlayerSocket {
             alert.showAndWait();
         });
     }
+    
+    private void showGameOverVideo(String videoPath, boolean isDraw) {
+        Stage videoStage = new Stage();
+
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1); 
+
+        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaView.setPreserveRatio(true); // Maintain aspect ratio
+        mediaView.fitWidthProperty().bind(videoStage.widthProperty());
+        mediaView.fitHeightProperty().bind(videoStage.heightProperty());
+
+        // Create the root layout
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+
+        Scene videoScene = new Scene(videoRoot);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+        videoStage.setOnCloseRequest(event -> {
+            mediaPlayer.stop(); 
+            videoStage.close(); 
+            event.consume();
+        });
+
+        videoStage.show();
+        mediaPlayer.play();
+    }
+
 
     public void closeSocket() {
         running = false;

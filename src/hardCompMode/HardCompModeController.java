@@ -108,14 +108,14 @@ public class HardCompModeController implements Initializable {
 
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";
-                showGameOverVideo("winner2.mp4", false); 
+                showGameOverVideo("/assets/videos/winner2.mp4", false); 
                 playerScore++;
                 updateScores();
                 return;
             }
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
-                showGameOverVideo("draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true); 
                 return;
             }
 
@@ -141,12 +141,12 @@ public class HardCompModeController implements Initializable {
 
             if (logic.checkWinner('O')) {
                 gameResult = "Computer Wins!";
-                showGameOverVideo("lose1.mp4", false); 
+                showGameOverVideo("/assets/videos/lose1.mp4", false); 
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
-                showGameOverVideo("draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true); 
             }
         }
     }
@@ -289,19 +289,19 @@ public class HardCompModeController implements Initializable {
 
     @FXML
     private void backButton(ActionEvent event) throws IOException {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Back Confirmation");
-        alert.setHeaderText("Are you sure you want to go back?");
-        alert.setContentText("Any unsaved progress will be lost.");
-
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        alert.getButtonTypes().setAll(yesButton, noButton);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == yesButton) {
+//        Alert alert = new Alert(AlertType.CONFIRMATION);
+//        alert.setTitle("Back Confirmation");
+//        alert.setHeaderText("Are you sure you want to go back?");
+//        alert.setContentText("Any unsaved progress will be lost.");
+//
+//        ButtonType yesButton = new ButtonType("Yes");
+//        ButtonType noButton = new ButtonType("No");
+//        alert.getButtonTypes().setAll(yesButton, noButton);
+//
+//        Optional<ButtonType> result = alert.showAndWait();
+//        if (result.isPresent() && result.get() == yesButton) {
             goToBackScene();
-        }
+//        }
     }
 
     private void goToBackScene() {

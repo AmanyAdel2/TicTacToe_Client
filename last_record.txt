@@ -1,5 +1,0 @@
-Player moved to (0, 0)
-Computer moved to (0, 1)
-Player moved to (1, 1)
-Computer moved to (0, 2)
-Player moved to (2, 2)

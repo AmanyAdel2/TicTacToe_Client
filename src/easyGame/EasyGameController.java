@@ -104,14 +104,14 @@ public class EasyGameController implements Initializable {
 
             if (logic.checkWinner('X')) {
                 gameResult = "Player Wins!";
-                showGameOverVideo("winner2.mp4", false); 
+                showGameOverVideo("/assets/videos/winner2.mp4", false); 
                 playerScore++;
                 updateScores();
                 return;
             }
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
-                showGameOverVideo("draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true); 
                 return;
             }
 
@@ -135,12 +135,12 @@ public class EasyGameController implements Initializable {
 
                     if (logic.checkWinner('O')) {
                         gameResult = "Computer Wins!";
-                        showGameOverVideo("lose2.mp4", false); 
+                        showGameOverVideo("/assets/videos/lose2.mp4", false); 
                         computerScore++;
                         updateScores();
                     } else if (logic.isBoardFull()) {
                         gameResult = "It's a Draw!";
-                        showGameOverVideo("draw.mp4", true); 
+                        showGameOverVideo("/assets/videos/draw.mp4", true); 
                     }
 
                     return;
