@@ -182,9 +182,9 @@ public class EasyGameController implements Initializable {
         alert.setContentText("Choose your next action:");
 
         ButtonType playAgainButton = new ButtonType("Play Again");
-        ButtonType backButton = new ButtonType("Back");
         ButtonType saveGameButton = new ButtonType("Save Game");
-        alert.getButtonTypes().setAll(playAgainButton, backButton, saveGameButton);
+        ButtonType backButton = new ButtonType("Back");
+        alert.getButtonTypes().setAll(playAgainButton, saveGameButton,backButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
             "-fx-background-color: beige;" +
@@ -223,6 +223,15 @@ public class EasyGameController implements Initializable {
                 savedAlert.setTitle("Game Saved");
                 savedAlert.setHeaderText(null);
                 savedAlert.setContentText("Game has been saved successfully!");
+                savedAlert.getDialogPane().setStyle(
+                        "-fx-background-color: #f0f0f0;"
+                        + "-fx-text-fill: #333333;"
+                );
+
+                savedAlert.getDialogPane().lookupButton(ButtonType.OK).setStyle(
+                        "-fx-background-color: #4CAF50;"
+                        + "-fx-text-fill: white;"
+                );
                 savedAlert.showAndWait();
                 goToBackScene();
             }
@@ -285,7 +294,7 @@ public class EasyGameController implements Initializable {
         computerLabel.setText(computer + " (" + computerScore + ")");
     }
 
-    @FXML
+   @FXML
     private void backButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Back Confirmation");
@@ -295,6 +304,22 @@ public class EasyGameController implements Initializable {
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
         alert.getButtonTypes().setAll(yesButton, noButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(yesButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(noButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {

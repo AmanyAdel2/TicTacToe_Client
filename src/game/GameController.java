@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package game;
+
 import Player.PlayerSocket;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,11 +31,11 @@ public class GameController implements Initializable {
     private Label playerXLabel, turnLabel, playerOLabel;
 
     private Button[][] boardButtons;
-    private String playerSymbol;
+    private String playerSymbol; // "X" or "O"
     private boolean isMyTurn;
     private PlayerSocket playerSocket;
 
-    private String currentGameFileName; 
+    private String currentGameFileName;
     private static final String SAVE_FOLDER = "saved_games"; 
 
     private String playerXName;
@@ -59,12 +60,7 @@ public class GameController implements Initializable {
             }
         }
 
-      
-        //ensureGameRecordsFolderExists();
-
-        
-        //currentGameFileName = SAVE_FOLDER + "/game_record_" + System.currentTimeMillis() + ".txt"; 
-       // askUserToSaveGame();
+        ensureGameRecordsFolderExists();
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -82,9 +78,9 @@ public class GameController implements Initializable {
 
     public void initializeGame(String symbol, String opponent) {
         this.playerSymbol = symbol;
+        this.isMyTurn = symbol.equals("X"); 
 
-        this.isMyTurn = symbol.equals("X");
-
+        
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -93,11 +89,32 @@ public class GameController implements Initializable {
         playerXLabel.setText(playerXName);
         playerOLabel.setText(playerOName);
 
-
         updateTurnLabel();
 
         
-    //    savePlayerNamesToFile();
+        String baseFileName = SAVE_FOLDER + "/" + playerXName + "_vs_" + playerOName + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);  
+        System.out.println("Current game file: " + currentGameFileName);
+
+        
+        savePlayerNamesToFile();
+    }
+
+    private String getUniqueFileName(String baseFileName) {
+        File file = new File(baseFileName);
+        if (!file.exists()) {
+            return baseFileName; 
+        }
+        int counter = 1;
+        String newFileName;
+        do {
+            newFileName = baseFileName.replace(".txt", "_" + counter + ".txt");
+            file = new File(newFileName);
+            counter++;
+        } while (file.exists());
+
+        System.out.println("Unique file name generated: " + newFileName); 
+        return newFileName;
     }
 
     private void savePlayerNamesToFile() {
@@ -119,19 +136,20 @@ public class GameController implements Initializable {
 
     private void handleMove(int row, int col) {
         if (!isMyTurn || !boardButtons[row][col].getText().isEmpty()) {
+            System.out.println("Invalid move: Not your turn or cell is not empty.");
             return;
         }
 
-       
+        System.out.println("Player " + playerSymbol + " made a move at (" + row + ", " + col + ")");
+
         boardButtons[row][col].setText(playerSymbol);
+        boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = false;
         updateTurnLabel();
 
-       
         int cellNumber = (row * 3) + col + 1;
-   //     saveMoveToFile(playerSymbol + " " + cellNumber);
+        saveMoveToFile(playerSymbol + " " + cellNumber);
 
-        
         JSONObject moveData = new JSONObject();
         moveData.put("type", "gameMove");
         moveData.put("row", String.valueOf(row));
@@ -139,51 +157,50 @@ public class GameController implements Initializable {
         moveData.put("symbol", playerSymbol);
 
         playerSocket.sendJSON(moveData);
-
-        
-        // Update the button
-        boardButtons[row][col].setText(playerSymbol);
-        boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
-        isMyTurn = false;
-        updateTurnLabel();
-
-
     }
 
     public void updateBoard(int row, int col, String symbol) {
-
         boardButtons[row][col].setText(symbol);
         boardButtons[row][col].setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
-
         isMyTurn = !symbol.equals(playerSymbol);
         updateTurnLabel();
 
-        
-        int cellNumber = (row * 3) + col + 1;
-     //   saveMoveToFile(symbol + " " + cellNumber);
+        int cellNumber = (row * 3) + col + 1; 
+        saveMoveToFile(symbol + " " + cellNumber);
     }
 
     public void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                boardButtons[i][j].setText("");
+                boardButtons[i][j].setText(""); 
             }
         }
 
-        
-        //deleteTemporaryFile();
+        if (new File(currentGameFileName).exists()) {
+            deleteTemporaryFile();
+        }
     }
 
     private void saveMoveToFile(String move) {
-  /*      try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
-            writer.write(move + "\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentGameFileName, true))) {
+            if (new File(currentGameFileName).exists()) {
+                writer.write(move + "\n");
+                System.out.println("Move saved: " + move); 
+            } else {
+                System.out.println("File does not exist: " + currentGameFileName);
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     public void askUserToSaveGame() {
-      /*  Platform.runLater(() -> {
+        Platform.runLater(() -> {
+            if (!new File(currentGameFileName).exists()) {
+                System.out.println("No game to save.");
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Save Game");
             alert.setHeaderText("Do you want to save the game?");
@@ -197,14 +214,13 @@ public class GameController implements Initializable {
             if (result.isPresent() && result.get() == saveButton) {
                 moveFileToGameHistory();
             } else {
-               
-              //  deleteTemporaryFile();
+                deleteTemporaryFile();
             }
-        });*/
+        });
     }
 
-    private void moveFileToGameHistory() {
-      /*  File file = new File(currentGameFileName);
+    public void moveFileToGameHistory() {
+        File file = new File(currentGameFileName);
         if (file.exists()) {
             File destination = new File(SAVE_FOLDER + "/" + file.getName());
             if (file.renameTo(destination)) {
@@ -214,14 +230,14 @@ public class GameController implements Initializable {
             }
         } else {
             System.out.println("Temporary file does not exist: " + currentGameFileName);
-        }*/
+        }
     }
 
-    private void deleteTemporaryFile() {
-       /* File file = new File(currentGameFileName);
+    public void deleteTemporaryFile() {
+        File file = new File(currentGameFileName);
         if (file.exists()) {
-            file.delete(); 
-        }*/
+            file.delete();
+        }
     }
 
     public static void clearInstance() {

@@ -10,51 +10,58 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+
 <AnchorPane id="AnchorPane" prefHeight="643.0" prefWidth="630.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="easyGame.EasyGameController">
+
+
     <children>
         <ImageView fitHeight="671.0" fitWidth="664.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../background.jpg" />
             </image>
         </ImageView>
-       <GridPane layoutX="90.0" layoutY="149.0" prefHeight="339.0" prefWidth="501.0">
+
+        <GridPane layoutX="70.0" layoutY="183.0" prefHeight="385.0" prefWidth="524.0">
             <columnConstraints>
-                <ColumnConstraints prefWidth="167.0" />
-                <ColumnConstraints prefWidth="167.0" />
-                <ColumnConstraints prefWidth="167.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.66668701171875" minWidth="10.0" prefWidth="153.66668701171875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.33331298828125" minWidth="10.0" prefWidth="182.6666259765625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="107.3333740234375" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints prefHeight="113.0" />
-                <RowConstraints prefHeight="113.0" />
-                <RowConstraints prefHeight="113.0" />
+                <RowConstraints maxHeight="117.66665649414062" minHeight="10.0" prefHeight="116.33331298828125" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="139.0" minHeight="10.0" prefHeight="118.33334350585938" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="105.66665649414062" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button fx:id="p1" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" />
-                <Button fx:id="p2" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" />
-                <Button fx:id="p3" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" />
-                <Button fx:id="p4" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="1" />
-                <Button fx:id="p5" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button fx:id="p6" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <Button fx:id="p7" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="2" />
-                <Button fx:id="p8" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button fx:id="p9" mnemonicParsing="false" prefHeight="100.0" prefWidth="159.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+               <Button fx:id="p1" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" />
+<Button fx:id="p2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="167.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" />
+<Button fx:id="p3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" />
+<Button fx:id="p4" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.rowIndex="1" />
+<Button fx:id="p5" mnemonicParsing="false" prefHeight="106.0" prefWidth="167.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+<Button fx:id="p6" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+<Button fx:id="p7" mnemonicParsing="false" prefHeight="113.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.rowIndex="2" />
+<Button fx:id="p8" mnemonicParsing="false" prefHeight="111.0" prefWidth="168.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+<Button fx:id="p9" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="111.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             </children>
         </GridPane>
-        <Text fx:id="playerLabel" fill="WHITE" layoutX="158.0" layoutY="120.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player" />
-        <Text fx:id="computerLabel" fill="WHITE" layoutX="452.0" layoutY="119.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Computer" />
-        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="159.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+        <Text fx:id="playerLabel" fill="WHITE" layoutX="106.0" layoutY="153.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player" />
+        <Text fx:id="computerLabel" fill="WHITE" layoutX="468.0" layoutY="154.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Computer" />
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="107.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+
             <image>
                 <Image url="@../assets/Images/playerPhoto.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="51.0" fitWidth="74.0" layoutX="469.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
-            <image>
+
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="485.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+
+          <image>
                 <Image url="@../assets/Images/easy.png" />
             </image>
         </ImageView>
         <Button layoutX="83.0" layoutY="551.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
             <font>
-                <Font name="System Bold" size="15.0" />
+                <Font name="System Bold Italic" size="15.0" />
             </font>
         </Button>
       <ImageView fitHeight="31.0" fitWidth="173.0" layoutX="32.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
@@ -62,6 +69,11 @@
             <Image url="@../welcome.gif" />
          </image>
       </ImageView>
-       <Button fx:id="openRecordButton" layoutX="465.0" layoutY="551.0" mnemonicParsing="false" onAction="#openRecord" style="-fx-background-color: lightblue;" text="Last Record" />
+
+       <Button fx:id="openRecordButton" layoutX="487.0" layoutY="606.0" mnemonicParsing="false" onAction="#openRecord" style="-fx-background-color: lightblue;" text="Last Record">
+         <font>
+            <Font name="System Bold Italic" size="15.0" />
+         </font></Button>
+
     </children>
 </AnchorPane>

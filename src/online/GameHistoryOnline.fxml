@@ -11,42 +11,42 @@
 
 <AnchorPane id="AnchorPane" prefHeight="664.0" prefWidth="664.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="online.GameHistoryOnlineController">
     <children>
-        <ImageView fitHeight="664.0" fitWidth="676.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="664.0" fitWidth="676.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../background.jpg" />
             </image>
         </ImageView>
-        <GridPane layoutX="59.0" layoutY="171.0" prefHeight="365.0" prefWidth="533.0">
+        <GridPane layoutX="70.0" layoutY="183.0" prefHeight="385.0" prefWidth="524.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.66665649414062" minWidth="10.0" prefWidth="182.66665649414062" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="176.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="169.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.66668701171875" minWidth="10.0" prefWidth="153.66668701171875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.33331298828125" minWidth="10.0" prefWidth="182.6666259765625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="107.3333740234375" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="118.33334350585938" minHeight="10.0" prefHeight="118.33334350585938" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="135.33331298828125" minHeight="10.0" prefHeight="127.33334350585938" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="130.66665649414062" minHeight="10.0" prefHeight="106.66665649414062" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="117.66665649414062" minHeight="10.0" prefHeight="116.33331298828125" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="139.0" minHeight="10.0" prefHeight="118.33334350585938" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="105.66665649414062" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button fx:id="p1" mnemonicParsing="false" prefHeight="110.0" prefWidth="174.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" />
-                <Button fx:id="p2" mnemonicParsing="false" prefHeight="108.0" prefWidth="175.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" />
-                <Button fx:id="p3" mnemonicParsing="false" prefHeight="109.0" prefWidth="172.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" />
-                <Button fx:id="p4" mnemonicParsing="false" prefHeight="112.0" prefWidth="176.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="1" />
-                <Button fx:id="p5" mnemonicParsing="false" prefHeight="107.0" prefWidth="175.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button fx:id="p6" mnemonicParsing="false" prefHeight="107.0" prefWidth="171.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <Button fx:id="p7" mnemonicParsing="false" prefHeight="100.0" prefWidth="178.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.rowIndex="2" />
-                <Button fx:id="p8" mnemonicParsing="false" prefHeight="102.0" prefWidth="176.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button fx:id="p9" mnemonicParsing="false" prefHeight="98.0" prefWidth="168.0" style="-fx-background-color: beige; -fx-font-size: 45; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Button fx:id="p1" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" />
+                <Button fx:id="p2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="167.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" />
+                <Button fx:id="p3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" />
+                <Button fx:id="p4" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.rowIndex="1" />
+                <Button fx:id="p5" mnemonicParsing="false" prefHeight="106.0" prefWidth="167.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="p6" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="106.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Button fx:id="p7" mnemonicParsing="false" prefHeight="113.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.rowIndex="2" />
+                <Button fx:id="p8" mnemonicParsing="false" prefHeight="111.0" prefWidth="168.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button fx:id="p9" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="111.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <Text fx:id="playerLabel" fill="WHITE" layoutX="80.0" layoutY="143.0" style="-fx-font-size: 18; -fx-font-weight: bold;" />
         <Text fx:id="computerLabel" fill="WHITE" layoutX="402.0" layoutY="144.0" style="-fx-font-size: 18; -fx-font-weight: bold;" />
-        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="81.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="114.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@playerPhoto.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="419.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="484.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@playerPhoto.png" />
             </image>
