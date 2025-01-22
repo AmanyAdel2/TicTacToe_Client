@@ -68,10 +68,5 @@
             <Image url="@../welcome.gif" />
          </image>
       </ImageView>
-
-      <Button fx:id="openRecordButton" layoutX="487.0" layoutY="606.0" mnemonicParsing="false" onAction="#openRecord" style="-fx-background-color: lightblue;" text="Last Record">
-         <font>
-            <Font name="System Bold Italic" size="15.0" />
-         </font></Button>
     </children> 
 </AnchorPane>

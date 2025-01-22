@@ -340,7 +340,7 @@ public class PlayerSocket {
                             }
                         }
                     }
-                    alert.showAndWait();
+                   
                     gameController = null;
                     
                     // Return to lobby

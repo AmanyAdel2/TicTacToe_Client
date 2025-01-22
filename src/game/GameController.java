@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -31,7 +33,7 @@ public class GameController implements Initializable {
     private Label playerXLabel, turnLabel, playerOLabel;
 
     private Button[][] boardButtons;
-    private String playerSymbol; // "X" or "O"
+    private String playerSymbol;
     private boolean isMyTurn;
     private PlayerSocket playerSocket;
 
@@ -80,7 +82,6 @@ public class GameController implements Initializable {
         this.playerSymbol = symbol;
         this.isMyTurn = symbol.equals("X"); 
 
-        
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOName = symbol.equals("O") ? 
@@ -91,12 +92,10 @@ public class GameController implements Initializable {
 
         updateTurnLabel();
 
-        
         String baseFileName = SAVE_FOLDER + "/" + playerXName + "_vs_" + playerOName + ".txt";
         currentGameFileName = getUniqueFileName(baseFileName);  
         System.out.println("Current game file: " + currentGameFileName);
 
-        
         savePlayerNamesToFile();
     }
 
@@ -157,6 +156,26 @@ public class GameController implements Initializable {
         moveData.put("symbol", playerSymbol);
 
         playerSocket.sendJSON(moveData);
+
+        List<int[]> winningCells = checkWinner();
+        if (!winningCells.isEmpty()) {
+            highlightWinningCells(winningCells);
+            return; 
+        }
+
+     
+        boolean isDraw = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (boardButtons[i][j].getText().isEmpty()) {
+                    isDraw = false;
+                    break;
+                }
+            }
+        }
+        if (isDraw) {
+            
+        }
     }
 
     public void updateBoard(int row, int col, String symbol) {
@@ -167,12 +186,102 @@ public class GameController implements Initializable {
 
         int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
+
+        
+        List<int[]> winningCells = checkWinner();
+        if (!winningCells.isEmpty()) {
+            highlightWinningCells(winningCells);
+            return;
+        }
+
+    
+        boolean isDraw = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (boardButtons[i][j].getText().isEmpty()) {
+                    isDraw = false;
+                    break;
+                }
+            }
+        }
+        if (isDraw) {
+            
+        }
+    }
+
+    private List<int[]> checkWinner() {
+        List<int[]> winningCells = new ArrayList<>();
+
+        
+        for (int i = 0; i < 3; i++) {
+            if (!boardButtons[i][0].getText().isEmpty() &&
+                boardButtons[i][0].getText().equals(boardButtons[i][1].getText()) &&
+                boardButtons[i][1].getText().equals(boardButtons[i][2].getText())) {
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
+            }
+        }
+
+        
+        for (int i = 0; i < 3; i++) {
+            if (!boardButtons[0][i].getText().isEmpty() &&
+                boardButtons[0][i].getText().equals(boardButtons[1][i].getText()) &&
+                boardButtons[1][i].getText().equals(boardButtons[2][i].getText())) {
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
+            }
+        }
+
+       
+        if (!boardButtons[0][0].getText().isEmpty() &&
+            boardButtons[0][0].getText().equals(boardButtons[1][1].getText()) &&
+            boardButtons[1][1].getText().equals(boardButtons[2][2].getText())) {
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
+        }
+
+      
+        if (!boardButtons[0][2].getText().isEmpty() &&
+            boardButtons[0][2].getText().equals(boardButtons[1][1].getText()) &&
+            boardButtons[1][1].getText().equals(boardButtons[2][0].getText())) {
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
+        }
+
+        return winningCells; 
+    }
+
+    private void highlightWinningCells(List<int[]> winningCells) {
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+            Button button = boardButtons[row][col];
+            if (button != null) {
+                
+                String currentStyle = button.getStyle();
+                
+                
+                button.setStyle(
+                    currentStyle +
+                    "-fx-background-color: lightgreen; " 
+                );
+            }
+        }
     }
 
     public void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 boardButtons[i][j].setText(""); 
+                boardButtons[i][j].setStyle(""); 
             }
         }
 
@@ -238,9 +347,5 @@ public class GameController implements Initializable {
         if (file.exists()) {
             file.delete();
         }
-    }
-
-    public static void clearInstance() {
-        instance = null;
     }
 }

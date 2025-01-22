@@ -1,0 +1,8 @@
+Player X: ahmed12
+Player O: ahmed11
+
+X 1
+O 3
+X 4
+O 6
+X 7

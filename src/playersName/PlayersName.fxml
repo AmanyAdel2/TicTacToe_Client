@@ -28,22 +28,22 @@
       </ImageView>
       <Label layoutX="123.0" layoutY="146.0" prefHeight="66.0" prefWidth="499.0" text="ENTER YOUR NAME" textFill="#edff4c">
          <font>
-            <Font name="Algerian" size="45.0" />
+            <Font name="System Bold Italic" size="45.0" />
          </font>
       </Label>
-      <TextField fx:id="player1Field" layoutX="314.0" layoutY="248.0" prefHeight="42.0" prefWidth="249.0">
+      <TextField fx:id="player1Field" layoutX="314.0" layoutY="248.0" prefHeight="42.0" prefWidth="249.0" style="-fx-border-radius: 32; -fx-background-radius: 32;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets></TextField>
-      <TextField fx:id="player2Field" layoutX="314.0" layoutY="320.0" prefHeight="42.0" prefWidth="249.0" />
-      <Text fill="#edff2d" layoutX="78.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1" wrappingWidth="190.40576964244246">
+      <TextField fx:id="player2Field" layoutX="314.0" layoutY="320.0" prefHeight="42.0" prefWidth="249.0" style="-fx-background-radius: 32;" />
+      <Text fill="#edff2d" layoutX="106.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1" wrappingWidth="190.40576964244246">
          <font>
-            <Font name="Algerian" size="41.0" />
+            <Font name="System Bold Italic" size="35.0" />
          </font>
       </Text>
-      <Text fill="#deff3b" layoutX="78.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
+      <Text fill="#deff3b" layoutX="106.0" layoutY="350.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
          <font>
-            <Font name="Algerian" size="41.0" />
+            <Font name="System Bold Italic" size="35.0" />
          </font>
       </Text>
       <Button fx:id="startGameBtn" layoutX="232.0" layoutY="443.0" mnemonicParsing="false" onAction="#startGame" prefHeight="55.0" prefWidth="164.0" style="-fx-background-color: yellow;" text="Start Game">

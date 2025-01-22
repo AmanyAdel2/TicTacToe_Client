@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,9 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
-
-
-public class GameHistoryOnlineController  implements Initializable {
+public class GameHistoryOnlineController implements Initializable {
 
     @FXML
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
@@ -30,7 +30,7 @@ public class GameHistoryOnlineController  implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    
+     
     }
 
     public void loadGameMovesFromFile(String fileName) {
@@ -45,17 +45,14 @@ public class GameHistoryOnlineController  implements Initializable {
     private void loadGameMoves(File file) {
         new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                
                 String playerXName = reader.readLine();
                 String playerOName = reader.readLine();
 
-               
                 Platform.runLater(() -> {
                     playerLabel.setText(playerXName);
                     computerLabel.setText(playerOName);
                 });
 
-                
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.matches("^[XO] [1-9]$")) {
@@ -64,6 +61,14 @@ public class GameHistoryOnlineController  implements Initializable {
                         Thread.sleep(1000); 
                     }
                 }
+
+                
+                Platform.runLater(() -> {
+                    List<Integer> winningCells = checkWinner();
+                    if (!winningCells.isEmpty()) {
+                        highlightWinningCells(winningCells);
+                    }
+                });
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -79,6 +84,12 @@ public class GameHistoryOnlineController  implements Initializable {
         if (buttonToUpdate != null) {
             buttonToUpdate.setText(player);
             buttonToUpdate.setStyle("-fx-text-fill: " + (player.equals("X") ? "red" : "blue") + "; -fx-font-size: 45; -fx-font-weight: bold;");
+        }
+
+        
+        List<Integer> winningCells = checkWinner();
+        if (!winningCells.isEmpty()) {
+            highlightWinningCells(winningCells);
         }
     }
 
@@ -97,7 +108,69 @@ public class GameHistoryOnlineController  implements Initializable {
         }
     }
 
-   
+    private List<Integer> checkWinner() {
+        List<Integer> winningCells = new ArrayList<>();
 
-   
+      
+        for (int i = 0; i < 3; i++) {
+            if (!getButtonByIndex(i * 3).getText().isEmpty() &&
+                getButtonByIndex(i * 3).getText().equals(getButtonByIndex(i * 3 + 1).getText()) &&
+                getButtonByIndex(i * 3 + 1).getText().equals(getButtonByIndex(i * 3 + 2).getText())) {
+                winningCells.add(i * 3);
+                winningCells.add(i * 3 + 1);
+                winningCells.add(i * 3 + 2);
+                return winningCells;
+            }
+        }
+
+       
+        for (int i = 0; i < 3; i++) {
+            if (!getButtonByIndex(i).getText().isEmpty() &&
+                getButtonByIndex(i).getText().equals(getButtonByIndex(i + 3).getText()) &&
+                getButtonByIndex(i + 3).getText().equals(getButtonByIndex(i + 6).getText())) {
+                winningCells.add(i);
+                winningCells.add(i + 3);
+                winningCells.add(i + 6);
+                return winningCells;
+            }
+        }
+
+     
+        if (!getButtonByIndex(0).getText().isEmpty() &&
+            getButtonByIndex(0).getText().equals(getButtonByIndex(4).getText()) &&
+            getButtonByIndex(4).getText().equals(getButtonByIndex(8).getText())) {
+            winningCells.add(0);
+            winningCells.add(4);
+            winningCells.add(8);
+            return winningCells;
+        }
+
+       
+        if (!getButtonByIndex(2).getText().isEmpty() &&
+            getButtonByIndex(2).getText().equals(getButtonByIndex(4).getText()) &&
+            getButtonByIndex(4).getText().equals(getButtonByIndex(6).getText())) {
+            winningCells.add(2);
+            winningCells.add(4);
+            winningCells.add(6);
+            return winningCells;
+        }
+
+        return winningCells;
+    }
+
+    private void highlightWinningCells(List<Integer> winningCells) {
+        for (int index : winningCells) {
+            Button button = getButtonByIndex(index);
+            if (button != null) {
+            
+                String currentStyle = button.getStyle();
+                
+                
+                button.setStyle(
+                    currentStyle + 
+                    "-fx-background-color: lightgreen; " 
+                );
+            }
+        }
+    }
 }

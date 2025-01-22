@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -45,21 +46,22 @@ public class IntermediateGameController implements Initializable {
     private int computerScore = 0;
     private String player = "Player";
     private String computer = "Computer";
-    private String gameResult = ""; 
-    private boolean gameEnded = false; 
-    private String currentGameFileName; 
+    private String gameResult = "";
+    private boolean gameEnded = false;
+    private String currentGameFileName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       String baseFileName = "game_records/" + player + "_vs_" + computer + " Intermediate Level" + ".txt";
-       currentGameFileName = getUniqueFileName(baseFileName);  
+        String baseFileName = "game_records/" + player + "_vs_" + computer + " Intermediate Level" + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);
         ensureGameRecordsFolderExists();
         resetGame();
     }
-     private String getUniqueFileName(String baseFileName) {
+
+    private String getUniqueFileName(String baseFileName) {
         File file = new File(baseFileName);
         if (!file.exists()) {
-            return baseFileName; 
+            return baseFileName;
         }
         int counter = 1;
         String newFileName;
@@ -75,7 +77,7 @@ public class IntermediateGameController implements Initializable {
     private void ensureGameRecordsFolderExists() {
         File folder = new File("game_records");
         if (!folder.exists()) {
-            folder.mkdir(); 
+            folder.mkdir();
         }
     }
 
@@ -90,7 +92,7 @@ public class IntermediateGameController implements Initializable {
     private void handleButtonPress(Button button) {
         if (gameEnded) return;
 
-        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int index = Integer.parseInt(button.getId().substring(1)) - 1;
         int row = index / 3;
         int col = index % 3;
 
@@ -99,10 +101,12 @@ public class IntermediateGameController implements Initializable {
             button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             saveMoveToFile("X " + (index + 1));
 
-            if (logic.checkWinner('X')) {
+            List<int[]> winningCells = logic.checkWinner('X');
+            if (!winningCells.isEmpty()) {
+                highlightWinningCells(winningCells, 'X'); 
                 gameResult = "Player Wins!";
-                saveMoveToFile(gameResult); 
-                showGameOverVideo("/assets/videos/winner2.mp4", false); 
+                saveMoveToFile(gameResult);
+                showGameOverVideo("/assets/videos/winner2.mp4", false);
                 playerScore++;
                 updateScores();
                 return;
@@ -110,7 +114,7 @@ public class IntermediateGameController implements Initializable {
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("/assets/videos/draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true);
                 return;
             }
 
@@ -119,9 +123,9 @@ public class IntermediateGameController implements Initializable {
     }
 
     private void computerMove() {
-        if (gameEnded) return; 
+        if (gameEnded) return;
 
-        int[] move = logic.findBestMove('O'); 
+        int[] move = logic.findBestMove('O');
         if (move != null) {
             int row = move[0];
             int col = move[1];
@@ -134,39 +138,58 @@ public class IntermediateGameController implements Initializable {
                 saveMoveToFile("O " + ((row * 3) + col + 1));
             }
 
-            if (logic.checkWinner('O')) {
+            List<int[]> winningCells = logic.checkWinner('O');
+            if (!winningCells.isEmpty()) {
+                highlightWinningCells(winningCells, 'O');
                 gameResult = "Computer Wins!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("/assets/videos/lose2.mp4", false); 
+                showGameOverVideo("/assets/videos/lose2.mp4", false);
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
                 saveMoveToFile(gameResult);
-                showGameOverVideo("/assets/videos/draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true);
+            }
+        }
+    }
+
+    private void highlightWinningCells(List<int[]> winningCells, char player) {
+        String color = (player == 'X') ? "red" : "blue"; 
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setStyle(
+                    "-fx-background-color: lightgreen; " + 
+                    "-fx-text-fill: " + color + "; " + 
+                    "-fx-font-size: 45; " +
+                    "-fx-font-weight: bold;"
+                );
             }
         }
     }
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
-        gameEnded = true; 
+        gameEnded = true;
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0); 
+        mediaPlayer.setVolume(1.0);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
-        
+
         Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 550);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop(); 
-            videoStage.close(); 
-            showGameOverAlert(gameResult); 
+            mediaPlayer.stop();
+            videoStage.close();
+            showGameOverAlert(gameResult);
             event.consume();
         });
 
@@ -186,24 +209,24 @@ public class IntermediateGameController implements Initializable {
         alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
-            "-fx-background-color: beige;" +
-            "-fx-font-size: 16;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: beige;"
+                + "-fx-font-size: 16;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-            "-fx-background-color: lightgreen;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: lightgreen;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(backButton).setStyle(
-            "-fx-background-color: lightcoral;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: lightcoral;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
         alert.getDialogPane().lookupButton(saveGameButton).setStyle(
-            "-fx-background-color: yellow;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
+                "-fx-background-color: yellow;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
         );
 
         alert.showAndWait().ifPresent(response -> {
@@ -211,35 +234,51 @@ public class IntermediateGameController implements Initializable {
                 deleteTemporaryFile();
                 resetGame();
             } else if (response == backButton) {
-                deleteTemporaryFile(); 
+                deleteTemporaryFile();
                 playerScore = 0;
                 computerScore = 0;
                 updateScores();
                 goToBackScene();
             } else if (response == saveGameButton) {
-                saveMoveToFile(gameResult); 
-                moveFileToGameHistory(); 
-                Alert savedAlert = new Alert(AlertType.INFORMATION);
-                savedAlert.setTitle("Game Saved");
-                savedAlert.setHeaderText(null);
-                savedAlert.setContentText("Game has been saved successfully!");
-                savedAlert.getDialogPane().setStyle(
-                        "-fx-background-color: #f0f0f0;"
-                        + "-fx-text-fill: #333333;"
+                moveFileToGameHistory();
+                Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Game Saved");
+                confirmAlert.setHeaderText("Game has been saved successfully!");
+                confirmAlert.setContentText("What would you like to do next?");
+
+                ButtonType playAgainAfterSaveButton = new ButtonType("Play Again");
+                ButtonType backAfterSaveButton = new ButtonType("Back");
+                confirmAlert.getButtonTypes().setAll(playAgainAfterSaveButton, backAfterSaveButton);
+                confirmAlert.setGraphic(null);
+                confirmAlert.getDialogPane().setStyle(
+                        "-fx-background-color: beige;"
+                        + "-fx-font-size: 16;"
+                        + "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(playAgainAfterSaveButton).setStyle(
+                        "-fx-background-color: lightgreen;"
+                        + "-fx-font-size: 14;"
+                        + "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(backAfterSaveButton).setStyle(
+                        "-fx-background-color: lightcoral;"
+                        + "-fx-font-size: 14;"
+                        + "-fx-font-weight: bold;"
                 );
 
-                savedAlert.getDialogPane().lookupButton(ButtonType.OK).setStyle(
-                        "-fx-background-color: #4CAF50;"
-                        + "-fx-text-fill: white;"
-                );
-                savedAlert.showAndWait();
-                goToBackScene();
+                confirmAlert.showAndWait().ifPresent(confirmResponse -> {
+                    if (confirmResponse == playAgainAfterSaveButton) {
+                        resetGame();
+                    } else if (confirmResponse == backAfterSaveButton) {
+                        playerScore = 0;
+                        computerScore = 0;
+                        updateScores();
+                        goToBackScene();
+                    }
+                });
             }
-
-            resetGame();
         });
     }
-
     private void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
         if (file.exists()) {
@@ -267,7 +306,7 @@ public class IntermediateGameController implements Initializable {
 
             Stage recordStage = new Stage();
             recordStage.setTitle("Game Moves");
-            recordStage.setScene(new Scene(root, 664, 664)); 
+            recordStage.setScene(new Scene(root, 664, 664));
             recordStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -286,7 +325,7 @@ public class IntermediateGameController implements Initializable {
             button.setStyle("-fx-background-color: beige; -fx-font-size: 14; -fx-font-weight: bold;");
             button.setOnAction(e -> handleButtonPress(button));
         }
-        gameEnded = false; 
+        gameEnded = false;
     }
 
     private void updateScores() {
@@ -294,7 +333,7 @@ public class IntermediateGameController implements Initializable {
         computerLabel.setText(computer + " (" + computerScore + ")");
     }
 
-   @FXML
+    @FXML
     private void backButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Back Confirmation");
