@@ -52,7 +52,7 @@
             </image>
         </ImageView>
 
-        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="482.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="482.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
 
             <image>
                 <Image url="@../assets/Images/evilbot.png" />

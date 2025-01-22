@@ -330,7 +330,7 @@ public class HardCompModeController implements Initializable {
             goToBackScene();
 //        }
     }
-
+    }
     private void goToBackScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
