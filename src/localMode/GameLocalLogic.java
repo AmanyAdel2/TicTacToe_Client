@@ -5,8 +5,11 @@
  */
 package localMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameLocalLogic {
-    
+
     private char[][] board;
     private char currentPlayer;
 
@@ -40,24 +43,46 @@ public class GameLocalLogic {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     }
 
-    public boolean checkWinner() {
+    public List<int[]> checkWinner() {
+        List<int[]> winningCells = new ArrayList<>();
+
+        
         for (int i = 0; i < 3; i++) {
             if (board[i][0] != '-' && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
-                return true;
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
             }
         }
+
+       
         for (int i = 0; i < 3; i++) {
             if (board[0][i] != '-' && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
-                return true;
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
             }
         }
+
+        
         if (board[0][0] != '-' && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
-            return true;
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
         }
+
+     
         if (board[0][2] != '-' && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
-            return true;
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
         }
-        return false;
+
+        return winningCells;
     }
 
     public boolean isBoardFull() {

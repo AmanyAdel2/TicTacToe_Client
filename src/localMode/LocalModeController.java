@@ -7,6 +7,7 @@ package localMode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -56,30 +57,25 @@ public class LocalModeController implements Initializable {
     }
 
     private void handleButtonPress(Button button) {
-        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int index = Integer.parseInt(button.getId().substring(1)) - 1;
         int row = index / 3;
         int col = index % 3;
-
-
-
-
 
         if (logic.makeMove(row, col)) {
             String currentPlayer = String.valueOf(logic.getCurrentPlayer());
             button.setText(currentPlayer);
-            
+
             if (logic.getCurrentPlayer() == 'X') {
-                button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;"); 
-
-
-
+                button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             } else {
                 button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
             }
 
-            if (logic.checkWinner()) {
+            List<int[]> winningCells = logic.checkWinner();
+            if (!winningCells.isEmpty()) {
+                highlightWinningCells(winningCells, logic.getCurrentPlayer()); 
                 String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-                showGameOverVideo("winner1.mp4", winner + " Wins!", false); 
+                showGameOverVideo("winner1.mp4", winner + " Wins!", false);
                 if (winner.equals(player1)) {
                     player1Score++;
                 } else {
@@ -96,25 +92,40 @@ public class LocalModeController implements Initializable {
         }
     }
 
+    private void highlightWinningCells(List<int[]> winningCells, char player) {
+        String color = (player == 'X') ? "red" : "blue"; 
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setStyle(
+                    "-fx-background-color: lightgreen; " + 
+                    "-fx-text-fill: " + color + "; " + 
+                    "-fx-font-size: 45; " +
+                    "-fx-font-weight: bold;"
+                );
+            }
+        }
+    }
+
     private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0); 
+        mediaPlayer.setVolume(1.0);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
-        
-      
+
         Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
-      
         videoStage.setOnCloseRequest(event -> {
             mediaPlayer.stop();
-            videoStage.close(); 
+            videoStage.close();
             showGameOverAlert(message);
             event.consume();
         });
@@ -202,7 +213,7 @@ public class LocalModeController implements Initializable {
         player1Label.setText(player1 + " (" + player1Score + ")");
         player2Label.setText(player2 + " (" + player2Score + ")");
     }
-    
+
     @FXML
     private void backButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -233,6 +244,19 @@ public class LocalModeController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
             goToBackScene();
+        }
+    }
+
+    private Button getButtonByRowCol(int row, int col) {
+        switch (row) {
+            case 0:
+                return (col == 0) ? p1 : (col == 1) ? p2 : p3;
+            case 1:
+                return (col == 0) ? p4 : (col == 1) ? p5 : p6;
+            case 2:
+                return (col == 0) ? p7 : (col == 1) ? p8 : p9;
+            default:
+                return null;
         }
     }
 }

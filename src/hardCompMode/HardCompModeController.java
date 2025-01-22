@@ -103,7 +103,7 @@ public class HardCompModeController implements Initializable {
 
             List<int[]> winningCells = logic.checkWinner('X');
             if (!winningCells.isEmpty()) {
-                highlightWinningCells(winningCells, 'X'); // تظليل الخلايا الفائزة باللون الأحمر
+                highlightWinningCells(winningCells, 'X'); 
                 gameResult = "Player Wins!";
                 showGameOverVideo("/assets/videos/winner2.mp4", false);
                 playerScore++;
@@ -138,7 +138,7 @@ public class HardCompModeController implements Initializable {
 
             List<int[]> winningCells = logic.checkWinner('O');
             if (!winningCells.isEmpty()) {
-                highlightWinningCells(winningCells, 'O'); // تظليل الخلايا الفائزة باللون الأزرق
+                highlightWinningCells(winningCells, 'O'); 
                 gameResult = "Computer Wins!";
                 showGameOverVideo("/assets/videos/lose1.mp4", false);
                 computerScore++;
@@ -151,15 +151,15 @@ public class HardCompModeController implements Initializable {
     }
 
     private void highlightWinningCells(List<int[]> winningCells, char player) {
-        String color = (player == 'X') ? "red" : "blue"; // تحديد اللون بناءً على اللاعب
+        String color = (player == 'X') ? "red" : "blue";
         for (int[] cell : winningCells) {
             int row = cell[0];
             int col = cell[1];
             Button button = getButtonByRowCol(row, col);
             if (button != null) {
                 button.setStyle(
-                    "-fx-background-color: lightgreen; " + // الخلفية تظل خضراء
-                    "-fx-text-fill: " + color + "; " + // لون النص بناءً على اللاعب
+                    "-fx-background-color: lightgreen; " + 
+                    "-fx-text-fill: " + color + "; " + 
                     "-fx-font-size: 45; " +
                     "-fx-font-weight: bold;"
                 );

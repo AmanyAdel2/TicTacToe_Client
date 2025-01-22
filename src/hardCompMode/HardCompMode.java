@@ -41,7 +41,7 @@ public class HardCompMode {
     public List<int[]> checkWinner(char player) {
         List<int[]> winningCells = new ArrayList<>();
 
-        // Check rows
+        
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
                 winningCells.add(new int[]{i, 0});
@@ -51,7 +51,7 @@ public class HardCompMode {
             }
         }
 
-        // Check columns
+        
         for (int i = 0; i < 3; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
                 winningCells.add(new int[]{0, i});
@@ -61,7 +61,7 @@ public class HardCompMode {
             }
         }
 
-        // Check first diagonal
+        
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
             winningCells.add(new int[]{0, 0});
             winningCells.add(new int[]{1, 1});
@@ -69,7 +69,7 @@ public class HardCompMode {
             return winningCells;
         }
 
-        // Check second diagonal
+        
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
             winningCells.add(new int[]{0, 2});
             winningCells.add(new int[]{1, 1});
@@ -77,7 +77,7 @@ public class HardCompMode {
             return winningCells;
         }
 
-        return winningCells; // Empty list means no winner
+        return winningCells; 
     }
 
     public boolean isBoardFull() {

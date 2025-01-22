@@ -42,7 +42,7 @@ public class IntermediateGameLogic {
     public List<int[]> checkWinner(char player) {
         List<int[]> winningCells = new ArrayList<>();
 
-        // Check rows
+
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
                 winningCells.add(new int[]{i, 0});
@@ -52,7 +52,7 @@ public class IntermediateGameLogic {
             }
         }
 
-        // Check columns
+
         for (int i = 0; i < 3; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
                 winningCells.add(new int[]{0, i});
@@ -62,7 +62,7 @@ public class IntermediateGameLogic {
             }
         }
 
-        // Check first diagonal
+   
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
             winningCells.add(new int[]{0, 0});
             winningCells.add(new int[]{1, 1});
@@ -70,7 +70,7 @@ public class IntermediateGameLogic {
             return winningCells;
         }
 
-        // Check second diagonal
+      
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
             winningCells.add(new int[]{0, 2});
             winningCells.add(new int[]{1, 1});
@@ -78,7 +78,7 @@ public class IntermediateGameLogic {
             return winningCells;
         }
 
-        return winningCells; // Empty list means no winner
+        return winningCells; 
     }
 
     public boolean isBoardFull() {
@@ -93,7 +93,7 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-        // Check for a winning move
+       
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
@@ -107,7 +107,7 @@ public class IntermediateGameLogic {
             }
         }
 
-        // Check to block the opponent's winning move
+        
         char opponent = (player == 'X') ? 'O' : 'X';
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -122,7 +122,7 @@ public class IntermediateGameLogic {
             }
         }
 
-        // Random move with a 20% chance
+
         if (random.nextDouble() < 0.2) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
@@ -133,7 +133,7 @@ public class IntermediateGameLogic {
             }
         }
 
-        // Default move (first available cell)
+        
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
