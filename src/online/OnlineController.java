@@ -29,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
@@ -62,14 +63,14 @@ public class OnlineController implements Initializable {
         playerSocket = PlayerSocket.getInstance();
         System.out.println("OnlineController initializing...");
 
-       
+        
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
         scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
 
-       
+    
         onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
 
-        
+       
         playerSocket.getOnlinePlayers().addListener((SetChangeListener.Change<? extends String> c) -> {
             if (c.wasAdded()) {
                 if (!onlinePlayersList.getItems().contains(c.getElementAdded())) {
@@ -82,7 +83,7 @@ public class OnlineController implements Initializable {
             onlinePlayersList.refresh();
         });
 
-        
+    
         onlinePlayersList.setOnMouseClicked(event -> {
             String selected = onlinePlayersList.getSelectionModel().getSelectedItem();
             if (selected != null) {
@@ -91,14 +92,14 @@ public class OnlineController implements Initializable {
             }
         });
 
-       
+        
         loadRecordFiles();
     }
 
     private void loadRecordFiles() {
         File folder = new File("saved_games");
         if (!folder.exists() || !folder.isDirectory()) {
-            return; 
+            return;
         }
 
         File[] files = folder.listFiles();
@@ -109,24 +110,91 @@ public class OnlineController implements Initializable {
        
         Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
-       
+     
         for (File file : files) {
             String fileName = file.getName();
             String dateTime = extractDateAndTimeFromFile(file);
             if (dateTime != null) {
                 String displayName = fileName + " - " + dateTime;
-                recordsListView.getItems().add(displayName); 
+                recordsListView.getItems().add(displayName);
             }
         }
 
-       
+        
         recordsListView.setOnMouseClicked(event -> {
             String selectedFileName = recordsListView.getSelectionModel().getSelectedItem();
             if (selectedFileName != null) {
                 String actualFileName = selectedFileName.split(" - ")[0];
-                openRecord(actualFileName);
+                showFileOptions(actualFileName);
             }
         });
+    }
+
+    private void showFileOptions(String fileName) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("File Options");
+        alert.setHeaderText("Choose an action for the file: " + fileName);
+        alert.setContentText("What would you like to do with this file?");
+        alert.getDialogPane().setPrefSize(450, 200);
+       
+        ButtonType openButton = new ButtonType("Open");
+        ButtonType deleteButton = new ButtonType("Delete");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonType.CANCEL.getButtonData());
+
+        
+        alert.getButtonTypes().setAll(openButton, deleteButton, cancelButton);
+
+       
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+
+        
+        alert.getDialogPane().lookupButton(openButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+
+        
+        alert.getDialogPane().lookupButton(deleteButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+
+       
+        alert.getDialogPane().lookupButton(cancelButton).setStyle(
+            "-fx-background-color: lightgray;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+
+       
+        alert.showAndWait().ifPresent(response -> {
+            if (response == openButton) {
+                openRecord(fileName);
+            } else if (response == deleteButton) {
+                deleteRecord(fileName);
+            }
+        });
+    }
+
+    private void deleteRecord(String fileName) {
+        File fileToDelete = new File("saved_games/" + fileName);
+        if (fileToDelete.exists()) {
+            if (fileToDelete.delete()) {
+            
+                recordsListView.getItems().removeIf(item -> item.startsWith(fileName));
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+        } else {
+            System.out.println("File does not exist.");
+        }
     }
 
     private void openRecord(String fileName) {
