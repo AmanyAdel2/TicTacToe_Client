@@ -5,10 +5,12 @@
  */
 package intermediateGame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class IntermediateGameLogic {
-   
+
     private char[][] board;
     private Random random = new Random();
 
@@ -37,24 +39,46 @@ public class IntermediateGameLogic {
         return board;
     }
 
-    public boolean checkWinner(char player) {
+    public List<int[]> checkWinner(char player) {
+        List<int[]> winningCells = new ArrayList<>();
+
+        // Check rows
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
-                return true;
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
             }
         }
+
+        // Check columns
         for (int i = 0; i < 3; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
-                return true;
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
             }
         }
+
+        // Check first diagonal
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
-            return true;
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
         }
+
+        // Check second diagonal
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
-            return true;
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
         }
-        return false;
+
+        return winningCells; // Empty list means no winner
     }
 
     public boolean isBoardFull() {
@@ -69,12 +93,12 @@ public class IntermediateGameLogic {
     }
 
     public int[] findBestMove(char player) {
-       
+        // Check for a winning move
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
                     board[i][j] = player;
-                    if (checkWinner(player)) {
+                    if (checkWinner(player).size() > 0) {
                         board[i][j] = '-';
                         return new int[]{i, j};
                     }
@@ -83,13 +107,13 @@ public class IntermediateGameLogic {
             }
         }
 
-        
+        // Check to block the opponent's winning move
         char opponent = (player == 'X') ? 'O' : 'X';
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
                     board[i][j] = opponent;
-                    if (checkWinner(opponent)) {
+                    if (checkWinner(opponent).size() > 0) {
                         board[i][j] = '-';
                         return new int[]{i, j};
                     }
@@ -98,8 +122,8 @@ public class IntermediateGameLogic {
             }
         }
 
-        
-        if (random.nextDouble() < 0.2) { 
+        // Random move with a 20% chance
+        if (random.nextDouble() < 0.2) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
@@ -109,7 +133,7 @@ public class IntermediateGameLogic {
             }
         }
 
-       
+        // Default move (first available cell)
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {

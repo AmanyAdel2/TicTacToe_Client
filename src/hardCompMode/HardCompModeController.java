@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -38,10 +39,6 @@ public class HardCompModeController implements Initializable {
     private Text computerLabel;
 
     @FXML
-
-
-
-
     private Button p1, p2, p3, p4, p5, p6, p7, p8, p9;
 
     private HardCompMode logic = new HardCompMode();
@@ -49,24 +46,22 @@ public class HardCompModeController implements Initializable {
     private int computerScore = 0;
     private String player = "Player";
     private String computer = "Computer";
-    private String gameResult = ""; 
-    private boolean gameEnded = false; 
-    private String currentGameFileName; 
+    private String gameResult = "";
+    private boolean gameEnded = false;
+    private String currentGameFileName;
 
-
-
-
-     @Override
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
-       String baseFileName = "game_records/" + player + "_vs_" + computer + " Hard Level" + ".txt";
-       currentGameFileName = getUniqueFileName(baseFileName);  
+        String baseFileName = "game_records/" + player + "_vs_" + computer + " Hard Level" + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);
         ensureGameRecordsFolderExists();
         resetGame();
     }
-     private String getUniqueFileName(String baseFileName) {
+
+    private String getUniqueFileName(String baseFileName) {
         File file = new File(baseFileName);
         if (!file.exists()) {
-            return baseFileName; 
+            return baseFileName;
         }
         int counter = 1;
         String newFileName;
@@ -82,7 +77,7 @@ public class HardCompModeController implements Initializable {
     private void ensureGameRecordsFolderExists() {
         File folder = new File("game_records");
         if (!folder.exists()) {
-            folder.mkdir(); 
+            folder.mkdir();
         }
     }
 
@@ -97,7 +92,7 @@ public class HardCompModeController implements Initializable {
     private void handleButtonPress(Button button) {
         if (gameEnded) return;
 
-        int index = Integer.parseInt(button.getId().substring(1)) - 1; 
+        int index = Integer.parseInt(button.getId().substring(1)) - 1;
         int row = index / 3;
         int col = index % 3;
 
@@ -106,16 +101,18 @@ public class HardCompModeController implements Initializable {
             button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             saveMoveToFile("X " + (index + 1));
 
-            if (logic.checkWinner('X')) {
+            List<int[]> winningCells = logic.checkWinner('X');
+            if (!winningCells.isEmpty()) {
+                highlightWinningCells(winningCells, 'X'); // تظليل الخلايا الفائزة باللون الأحمر
                 gameResult = "Player Wins!";
-                showGameOverVideo("/assets/videos/winner2.mp4", false); 
+                showGameOverVideo("/assets/videos/winner2.mp4", false);
                 playerScore++;
                 updateScores();
                 return;
             }
             if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
-                showGameOverVideo("/assets/videos/draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true);
                 return;
             }
 
@@ -124,9 +121,9 @@ public class HardCompModeController implements Initializable {
     }
 
     private void computerMove() {
-        if (gameEnded) return; 
+        if (gameEnded) return;
 
-        int[] move = logic.findBestMove('O'); 
+        int[] move = logic.findBestMove('O');
         if (move != null) {
             int row = move[0];
             int col = move[1];
@@ -139,37 +136,56 @@ public class HardCompModeController implements Initializable {
                 saveMoveToFile("O " + ((row * 3) + col + 1));
             }
 
-            if (logic.checkWinner('O')) {
+            List<int[]> winningCells = logic.checkWinner('O');
+            if (!winningCells.isEmpty()) {
+                highlightWinningCells(winningCells, 'O'); // تظليل الخلايا الفائزة باللون الأزرق
                 gameResult = "Computer Wins!";
-                showGameOverVideo("/assets/videos/lose1.mp4", false); 
+                showGameOverVideo("/assets/videos/lose1.mp4", false);
                 computerScore++;
                 updateScores();
             } else if (logic.isBoardFull()) {
                 gameResult = "It's a Draw!";
-                showGameOverVideo("/assets/videos/draw.mp4", true); 
+                showGameOverVideo("/assets/videos/draw.mp4", true);
+            }
+        }
+    }
+
+    private void highlightWinningCells(List<int[]> winningCells, char player) {
+        String color = (player == 'X') ? "red" : "blue"; // تحديد اللون بناءً على اللاعب
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+            Button button = getButtonByRowCol(row, col);
+            if (button != null) {
+                button.setStyle(
+                    "-fx-background-color: lightgreen; " + // الخلفية تظل خضراء
+                    "-fx-text-fill: " + color + "; " + // لون النص بناءً على اللاعب
+                    "-fx-font-size: 45; " +
+                    "-fx-font-weight: bold;"
+                );
             }
         }
     }
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
-        gameEnded = true; 
+        gameEnded = true;
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0); 
+        mediaPlayer.setVolume(1.0);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
-        
+
         Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop(); 
-            videoStage.close(); 
-            showGameOverAlert(gameResult); 
+            mediaPlayer.stop();
+            videoStage.close();
+            showGameOverAlert(gameResult);
             event.consume();
         });
 
@@ -186,7 +202,7 @@ public class HardCompModeController implements Initializable {
         ButtonType playAgainButton = new ButtonType("Play Again");
         ButtonType saveGameButton = new ButtonType("Save Game");
         ButtonType backButton = new ButtonType("Back");
-        alert.getButtonTypes().setAll(playAgainButton, saveGameButton,backButton);
+        alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
         alert.setGraphic(null);
         alert.getDialogPane().setStyle(
             "-fx-background-color: beige;" +
@@ -214,13 +230,13 @@ public class HardCompModeController implements Initializable {
                 deleteTemporaryFile();
                 resetGame();
             } else if (response == backButton) {
-                deleteTemporaryFile(); 
+                deleteTemporaryFile();
                 playerScore = 0;
                 computerScore = 0;
                 updateScores();
                 goToBackScene();
             } else if (response == saveGameButton) {
-                moveFileToGameHistory(); 
+                moveFileToGameHistory();
                 Alert savedAlert = new Alert(AlertType.INFORMATION);
                 savedAlert.setTitle("Game Saved");
                 savedAlert.setHeaderText(null);
@@ -257,7 +273,7 @@ public class HardCompModeController implements Initializable {
     private void deleteTemporaryFile() {
         File file = new File(currentGameFileName);
         if (file.exists()) {
-            file.delete(); 
+            file.delete();
         }
     }
 
@@ -269,7 +285,7 @@ public class HardCompModeController implements Initializable {
 
             Stage recordStage = new Stage();
             recordStage.setTitle("Game Moves");
-            recordStage.setScene(new Scene(root, 664, 664)); 
+            recordStage.setScene(new Scene(root, 664, 664));
             recordStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -288,7 +304,7 @@ public class HardCompModeController implements Initializable {
             button.setStyle("-fx-background-color: beige; -fx-font-size: 14; -fx-font-weight: bold;");
             button.setOnAction(e -> handleButtonPress(button));
         }
-        gameEnded = false; 
+        gameEnded = false;
     }
 
     private void updateScores() {
@@ -296,9 +312,8 @@ public class HardCompModeController implements Initializable {
         computerLabel.setText(computer + " (" + computerScore + ")");
     }
 
-   @FXML
+    @FXML
     private void backButton(ActionEvent event) throws IOException {
-
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Back Confirmation");
         alert.setHeaderText("Are you sure you want to go back?");
@@ -326,11 +341,10 @@ public class HardCompModeController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
-
             goToBackScene();
-//        }
+        }
     }
-    }
+
     private void goToBackScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
