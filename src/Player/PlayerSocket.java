@@ -306,6 +306,8 @@ public class PlayerSocket {
 
                 final String winner = jsonMsg.get("winner") != null
                         ? jsonMsg.get("winner").toString() : null;
+                final int score= jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):null;
 
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -352,13 +354,15 @@ public class PlayerSocket {
                     }
                   if("win".equals(result))
                     {
-                         int score=Integer.parseInt(jsonMsg.get("score").toString());
+                      //   int score=Integer.parseInt(jsonMsg.get("score").toString());
+                        System.out.println("Winner Score"+score);
                          setPlayerScore(score);
                     }
                      else if ("lose".equals(result))
                      {
-                         int score=getPlayerScore();
-                         setPlayerScore(score);
+                         int pScore=getPlayerScore();
+                         System.out.println("Loser Score"+pScore);
+                         setPlayerScore(pScore);
                          
                      }
                     gameController = null;

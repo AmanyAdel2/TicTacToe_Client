@@ -66,7 +66,7 @@ public class OnlineController implements Initializable {
         
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
 
-        scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
+        scoretxt.setText(Integer.toString(playerSocket.getPlayerScore()));
 
     
 
