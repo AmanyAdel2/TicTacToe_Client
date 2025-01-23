@@ -3,8 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-
-
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/hardCompMode/HardCompMode.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/LocalModeController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/login/LoginController.java</file>
@@ -40,7 +38,7 @@
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGameLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/online/GameHistoryOnlineController.java</file>
 
-
         </group>
+
     </open-files>
 </project-private>

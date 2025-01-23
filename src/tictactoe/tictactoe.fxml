@@ -18,19 +18,19 @@
             <Image url="@../welcome.gif" />
          </image>
       </ImageView>
-      <Button fx:id="locbtn" layoutX="156.0" layoutY="190.0" mnemonicParsing="false" onMouseClicked="#golocalgame" prefHeight="96.0" prefWidth="340.0" style="-fx-background-color: YELLOW; -fx-border-radius: 50px; -fx-background-radius: 50px;" text="VS Friend">
+      <Button fx:id="locbtn" layoutX="168.0" layoutY="181.0" mnemonicParsing="false" onMouseClicked="#golocalgame" prefHeight="87.0" prefWidth="300.0" style="-fx-background-color: YELLOW; -fx-background-radius: 40;" text="VS Friend">
          <font>
-            <Font name="System Bold Italic" size="45.0" />
+            <Font name="System Bold Italic" size="39.0" />
          </font>
       </Button>
-      <Button fx:id="combtn" layoutX="156.0" layoutY="325.0" mnemonicParsing="false" onMouseClicked="#goLevel" prefHeight="96.0" prefWidth="340.0" style="-fx-background-color: YELLOW; -fx-border-radius: 50px; -fx-background-radius: 50px;" text="VS Computer">
+      <Button fx:id="combtn" layoutX="168.0" layoutY="297.0" mnemonicParsing="false" onMouseClicked="#goLevel" prefHeight="96.0" prefWidth="300.0" style="-fx-background-color: YELLOW; -fx-background-radius: 40;" text="VS Computer">
          <font>
-            <Font name="System Bold Italic" size="45.0" />
+            <Font name="System Bold Italic" size="37.0" />
          </font>
       </Button>
-      <Button fx:id="onbtn" layoutX="156.0" layoutY="463.0" mnemonicParsing="false" onMouseClicked="#gonline" prefHeight="96.0" prefWidth="340.0" style="-fx-background-color: YELLOW; -fx-border-radius: 50px; -fx-background-radius: 50px;" text="Online">
+      <Button fx:id="onbtn" layoutX="168.0" layoutY="415.0" mnemonicParsing="false" onMouseClicked="#gonline" prefHeight="96.0" prefWidth="300.0" style="-fx-background-color: YELLOW; -fx-background-radius: 40;" text="Online">
          <font>
-            <Font name="System Bold Italic" size="46.0" />
+            <Font name="System Bold Italic" size="41.0" />
          </font>
       </Button>
    </children>
