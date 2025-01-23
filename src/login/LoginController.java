@@ -45,6 +45,8 @@ public class LoginController implements Initializable {
     private Button regbtn;
     private Stage stage;
     private PlayerSocket playerSocket;
+    @FXML
+    private Button backhomebtn;
 
     /**
      * Initializes the controller class.
@@ -98,6 +100,17 @@ public class LoginController implements Initializable {
         try {
             Stage stage = (Stage) regbtn.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/register/Register.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate to the registration screen.");
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     @FXML
+    private void goHome(ActionEvent event) {
+        try {
+            Stage stage = (Stage) backhomebtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate to the registration screen.");
