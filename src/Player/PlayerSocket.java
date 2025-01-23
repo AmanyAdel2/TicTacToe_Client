@@ -318,12 +318,18 @@ public class PlayerSocket {
                             alert.setContentText("It's a draw!");
                             break;
                     }
-                    if("win".equals(result)||"lose".equals(result))
+                   
+                     if("win".equals(result))
                     {
-                         String score=jsonMsg.get("score").toString();
-                         onlineControlller.setScore(score);
+                         int score=Integer.parseInt(jsonMsg.get("score").toString());
+                         setPlayerScore(score);
                     }
-                    
+                     else if ("lose".equals(result))
+                     {
+                         int score=getPlayerScore();
+                         setPlayerScore(score);
+                         
+                     }
                     alert.showAndWait();
                     gameController = null;
                     
@@ -335,6 +341,7 @@ public class PlayerSocket {
                         Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
+                
                 break;
             default:
                 break;
