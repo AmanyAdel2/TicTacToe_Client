@@ -307,7 +307,7 @@ public class PlayerSocket {
                 final String winner = jsonMsg.get("winner") != null
                         ? jsonMsg.get("winner").toString() : null;
                 final int score= jsonMsg.get("score") != null
-                        ?Integer.parseInt(jsonMsg.get("score").toString()):null;
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
 
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -317,12 +317,12 @@ public class PlayerSocket {
                         case "win":
 
 
-                            showGameOverVideo("/assets/videos/loser.mp4", false);
+                            showGameOverVideo("/assets/videos/winner2.mp4", false);
                             alert.setHeaderText("Congratulations! You won!");
 
                             break;
                         case "lose":
-                            showGameOverVideo("/assets/videos/winner2.mp4", false);
+                            showGameOverVideo("/assets/videos/loser.mp4", false);
                              alert.setHeaderText("Game Over! " + winner + " won the game!");
                             break;
                         case "draw":
