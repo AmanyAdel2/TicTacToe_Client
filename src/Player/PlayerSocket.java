@@ -61,7 +61,7 @@ public class PlayerSocket {
     
     private PlayerSocket(){
         
-        if (!isServerAvailable("127.0.0.1", 5005)) {
+        if (!isServerAvailable("10.178.240.48", 5005)) {
             Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
@@ -73,7 +73,7 @@ public class PlayerSocket {
             return; 
         }
         try {
-            socket = new Socket("127.0.0.1", 5005);
+            socket = new Socket("10.178.240.48", 5005);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
             startListening(); // Start the listener thread
@@ -395,7 +395,7 @@ public class PlayerSocket {
   score=jscore;
 }
     public void sendJSON(Map<String, String> fields) {
-        if (!isServerAvailable("127.0.0.1", 5005)) {
+        if (!isServerAvailable("10.178.240.48", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
             showConnectionError();
             return; 
