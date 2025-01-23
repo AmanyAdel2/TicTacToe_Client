@@ -65,9 +65,11 @@ public class OnlineController implements Initializable {
 
         
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
+
         scoretxt.setText(Integer.toString(playerSocket.getLoggedInPlayer().getScore()));
 
     
+
         onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
 
        
@@ -270,6 +272,8 @@ public class OnlineController implements Initializable {
     public TextField getNametxt() {
         return nametxt;
     }
+    public void setScore(String score){
+    scoretxt.setText(score);}
 
     public void setNametxt(TextField nametxt) {
         this.nametxt = nametxt;
