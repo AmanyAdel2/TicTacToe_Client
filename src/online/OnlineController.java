@@ -218,6 +218,8 @@ public class OnlineController implements Initializable {
     public TextField getNametxt() {
         return nametxt;
     }
+    public void setScore(String score){
+    scoretxt.setText(score);}
 
     public void setNametxt(TextField nametxt) {
         this.nametxt = nametxt;

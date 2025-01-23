@@ -50,6 +50,7 @@ public class PlayerSocket {
     private Stage stage;
     private boolean running = true; 
     private int score=0;
+    private online.OnlineController onlineControlller;
     
     private PlayerSocket(){
         
@@ -298,6 +299,7 @@ public class PlayerSocket {
                 final String result = jsonMsg.get("result").toString();
                 final String winner = jsonMsg.get("winner") != null ? 
                         jsonMsg.get("winner").toString() : null;
+              
                 Platform.runLater(() -> {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -307,6 +309,7 @@ public class PlayerSocket {
                     switch(result) {
                         case "win":
                             alert.setContentText("Congratulations! You won!");
+                          
                             break;
                         case "lose":
                             alert.setContentText("Game Over! " + winner + " won the game!");
@@ -315,9 +318,15 @@ public class PlayerSocket {
                             alert.setContentText("It's a draw!");
                             break;
                     }
+                    if("win".equals(result)||"lose".equals(result))
+                    {
+                         String score=jsonMsg.get("score").toString();
+                         onlineControlller.setScore(score);
+                    }
                     
                     alert.showAndWait();
                     gameController = null;
+                    
                     // Return to lobby
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
