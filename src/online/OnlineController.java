@@ -259,7 +259,6 @@ public class OnlineController implements Initializable {
             onlinePlayersList.refresh();
         } else {
             PopUps.showErrorAlert(playerSocket.getStage(), "Error", "Select a player");
-            showAlert(Alert.AlertType.ERROR, "Error", "Select a player");
         }
     }
 

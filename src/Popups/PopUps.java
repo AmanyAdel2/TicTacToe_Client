@@ -28,8 +28,13 @@ import javafx.stage.Stage;
  * @author Mohamed Sameh
  */
 public class PopUps {
+    
+    public enum Type {
+        CHALLENGE,
+        RESULT,
 
-    public String showCustomDialog(Stage primaryStage, String challenger) {
+  }
+    public String showCustomDialog(Stage primaryStage, String challenger, String header, String content, Type type) {
         
         String result = "";
         try {
@@ -39,15 +44,20 @@ public class PopUps {
 
             // Get the controller
             CustomDialogController controller = loader.getController();
-            controller.setTitle("Game Challenge");
-            controller.setMessage(challenger + " wants to play against you?");
-
+            controller.setTitle(header);
+            controller.setMessage(challenger +" "+content);
+            controller.configureButtons(type);
+            
             // Create a new stage for the dialog
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage); // Set the owner stage
             dialogStage.setScene(new Scene(dialogPane));
-
+            dialogStage.setOnShown(event -> {
+                Stage owner = (Stage) dialogStage.getOwner();
+                dialogStage.setX(owner.getX() + (owner.getWidth() - dialogStage.getWidth()) / 2);
+                dialogStage.setY(owner.getY() + (owner.getHeight() - dialogStage.getHeight()) / 2);
+            });
             // Set actions for OK and Cancel buttons
             controller.setOnOkAction(() -> {
                 System.out.println("OK clicked!");

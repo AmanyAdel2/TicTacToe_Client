@@ -76,7 +76,20 @@ public class CustomDialogController implements Initializable {
     public String getResult() {
         return result.get();
     }
-
+    
+     public void configureButtons(PopUps.Type type) {
+        if (type == PopUps.Type.RESULT) {
+            // Show only the OK button
+            okButton.setVisible(true);
+            cancelButton.setVisible(false);
+            okButton.setText("OK");
+        } else if (type == PopUps.Type.CHALLENGE) {
+            // Show both buttons
+            okButton.setVisible(true);
+            cancelButton.setVisible(true);
+            okButton.setText("Accept");
+        }
+    }
     public ObjectProperty<String> resultProperty() {
         return result;
     }
