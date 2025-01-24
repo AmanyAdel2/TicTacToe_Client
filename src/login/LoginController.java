@@ -7,6 +7,7 @@ package login;
 
 import Player.DTOPlayer;
 import Player.PlayerSocket;
+import Popups.PopUps;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -70,7 +71,8 @@ public class LoginController implements Initializable {
         String password = passtxt.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Login Error", "Both fields are required.");
+            //showAlert(Alert.AlertType.WARNING, "Login Error", "Both fields are required.");
+            PopUps.showErrorAlert(stage, "Login Error", "Both fields are required.");
             return;
         }
 

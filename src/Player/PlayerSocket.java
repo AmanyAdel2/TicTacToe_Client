@@ -58,26 +58,23 @@ public class PlayerSocket {
     
     private PlayerSocket(){
 
-        if (!isServerAvailable("127.0.0.1", 5005)) {
-
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Unable to connect!");
-                alert.setContentText("Server is not available");
-                alert.showAndWait();
-            });
-            System.out.println("Server is not available. Please start the server first.");
-            return; 
-        }
+//        if (!isServerAvailable("127.0.0.1", 5005)) {
+//
+//            Platform.runLater(() -> {
+//                
+//            });
+//            System.out.println("Server is not available. Please start the server first.");
+//            return; 
+//        }
         try {
             socket = new Socket("127.0.0.1", 5005);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
             startListening(); // Start the listener thread
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            showConnectionError();
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
+            //showConnectionError();
         }
     }
     
@@ -307,15 +304,15 @@ public class PlayerSocket {
                     alert.setTitle("Game Over");
                     switch (result) {
                         case "win":
-                            showGameOverVideo("/assets/videos/winner2.mp4", false);
+                            showGameOverVideo("/assets/videos/winner2.mp4");
                             alert.setHeaderText("Congratulations! You won!");
                             break;
                         case "lose":
-                            showGameOverVideo("/assets/videos/loser.mp4", false);
+                            showGameOverVideo("/assets/videos/loser.mp4");
                             alert.setHeaderText("Game Over! " + winner + " won the game!");
                             break;
                         case "draw":
-                            showGameOverVideo("/assets/videos/draw.mp4", false);
+                            showGameOverVideo("/assets/videos/draw.mp4");
                             alert.setHeaderText("It's a draw!");
                             break;
                     }
@@ -381,7 +378,7 @@ public class PlayerSocket {
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
-            showConnectionError();
+            PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
             return; 
         }
         JSONObject data = new JSONObject();
@@ -437,18 +434,7 @@ public class PlayerSocket {
         }
     }
     
-    private void showConnectionError() {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Connection Error");
-            alert.setHeaderText("Unable to Connect");
-            alert.setContentText("The server is not running or unreachable. Please start the server and try again.");
-            alert.showAndWait();
-        });
-    }
-    
-    private void showGameOverVideo(String videoPath, boolean isDraw) {
-
+    private void showGameOverVideo(String videoPath) {
 
         boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
 
