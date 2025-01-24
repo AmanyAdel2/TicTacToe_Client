@@ -33,7 +33,6 @@ public class TicTacToe extends Application {
             primaryStage.setScene(new Scene(root));
             primaryStage.setOnCloseRequest(event -> {
                 System.out.println("Application is closing...");
-                PlayerSocket.getInstance().closeSocket();
                 mediaPlayer.stop();
                 System.exit(0);
             });

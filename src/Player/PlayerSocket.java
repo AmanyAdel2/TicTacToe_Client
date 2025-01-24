@@ -212,12 +212,7 @@ public class PlayerSocket {
             case "serverDisconnection":
                 System.out.println("Server is not available");
                 Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Unable to connect!");
-                    alert.setContentText("Server is not available");
-                    alert.showAndWait();
-
+                    PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
                         stage.setScene(new Scene(root));

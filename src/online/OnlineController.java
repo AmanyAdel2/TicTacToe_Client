@@ -6,6 +6,7 @@
 package online;
 
 import Player.PlayerSocket;
+import Popups.PopUps;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -65,9 +66,9 @@ public class OnlineController implements Initializable {
 
         
         nametxt.setText(playerSocket.getLoggedInPlayer().getUsername());
-
+        nametxt.setEditable(false); 
         scoretxt.setText(Integer.toString(playerSocket.getPlayerScore()));
-
+        scoretxt.setEditable(false); 
     
 
         onlinePlayersList.setItems(FXCollections.observableArrayList(playerSocket.getOnlinePlayers()));
@@ -257,6 +258,7 @@ public class OnlineController implements Initializable {
             selectedPlayer = "";
             onlinePlayersList.refresh();
         } else {
+            PopUps.showErrorAlert(playerSocket.getStage(), "Error", "Select a player");
             showAlert(Alert.AlertType.ERROR, "Error", "Select a player");
         }
     }
