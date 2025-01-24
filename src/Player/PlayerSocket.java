@@ -40,12 +40,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import tictactoe.TicTacToe;
 
-
-
-/**
- *
- * @author Mohamed Sameh
- */
 public class PlayerSocket {
     public Socket socket;
     public DataInputStream dis;
@@ -61,15 +55,14 @@ public class PlayerSocket {
     private online.OnlineController onlineControlller;
     
     private PlayerSocket(){
-        
         if (!isServerAvailable("127.0.0.1", 5005)) {
             Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Unable to connect!");
-                        alert.setContentText("Server is not available");
-                        alert.showAndWait();
-                    });
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Unable to connect!");
+                alert.setContentText("Server is not available");
+                alert.showAndWait();
+            });
             System.out.println("Server is not available. Please start the server first.");
             return; 
         }
@@ -82,9 +75,8 @@ public class PlayerSocket {
             ex.printStackTrace();
             showConnectionError();
         }
-    
     }
-     // Public method to get the Singleton instance
+    
     public static synchronized PlayerSocket getInstance() {
         if (instance == null) {
             instance = new PlayerSocket();
@@ -124,20 +116,17 @@ public class PlayerSocket {
     
     private void handleJSON(String data) throws ParseException{
         JSONParser parser = new JSONParser();
-            
         jsonMsg = (JSONObject) parser.parse(data);
             
         switch(jsonMsg.get("type").toString()){
             case "register":
                 String res = jsonMsg.get("status").toString();
-
                 if(res.equals("1")){
                     System.out.println("Registered successfully");
                     Platform.runLater(() -> {               
                         try {
                             Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
                             stage.setScene(new Scene(root));
-
                         } catch (IOException ex) {
                             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -152,13 +141,11 @@ public class PlayerSocket {
                     });
                     System.out.println("registration failed");
                 } 
-                
                 break;
             case "login":
                 String sts = jsonMsg.get("status").toString();
                 int jscore = Integer.parseInt(jsonMsg.get("score").toString());;
                 setPlayerScore(jscore);
-
 
                 if(sts.equals("1")){
                     System.out.println("Logged in successfully");
@@ -166,14 +153,11 @@ public class PlayerSocket {
                         try {
                             Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
                             stage.setScene(new Scene(root));
-
                         } catch (IOException ex) {
                             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     });
-                }
-                else
-                {
+                } else {
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
@@ -184,25 +168,14 @@ public class PlayerSocket {
                     System.out.println("Log in failed");
                 } 
                 break;
-                
             case "onlinePlayers":
                 final JSONArray players = (JSONArray) jsonMsg.get("players");
-                
                 Platform.runLater(() -> {
-                    if (onlinePlayers == null) {
-                        System.out.println("Error: onlinePlayers is not initialized");
-                        return;
-                    }
-                    if (players == null) {
-                        System.out.println("Error: players is null");
-                        return;
-                    }
-                    if (loggedInPlayer == null || loggedInPlayer.getUsername() == null) {
-                        System.out.println("Error: loggedInPlayer or username is null");
+                    if (onlinePlayers == null || players == null || loggedInPlayer == null || loggedInPlayer.getUsername() == null) {
+                        System.out.println("Error: onlinePlayers, players, or loggedInPlayer is null");
                         return;
                     }
                     System.out.println("Updating online players list: " + players.toJSONString());
-                    // Create a temporary set to avoid multiple UI updates
                     Set<String> tempSet = new HashSet<>();
                     for (Object player : players) {
                         String username = player.toString();
@@ -210,31 +183,23 @@ public class PlayerSocket {
                             tempSet.add(username);
                         }
                     }
-                    
-                    // Update the observable set
                     onlinePlayers.clear();
                     onlinePlayers.addAll(tempSet);
-               
                 });
-
                 break;
-                
             case "receiveGameReq":
                 String challenger = jsonMsg.get("challenger").toString();
                 requestReceived(challenger);
                 break;
-                  
             case "gameReqResult":
                 final String status = jsonMsg.get("status").toString();
                 final String challenged = jsonMsg.get("challenged").toString();
-                
-                  Platform.runLater(() -> {
+                Platform.runLater(() -> {
                     if (status.equals("accepted")) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Challenge Accepted");
                         alert.setContentText(challenged + " accepted your challenge!");
                         alert.showAndWait();
-                     
                     } else {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Challenge Declined");
@@ -243,30 +208,23 @@ public class PlayerSocket {
                     }
                 });
                 break;
-                
             case "gameStart":
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
-                
                 Platform.runLater(() -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
-                    Parent root = loader.load();
-                    
-                    gameController = loader.getController();
-                    gameController.initializeGame(symbol, opponent);
-                    
-                    stage.setScene(new Scene(root));
-                } catch (IOException ex) {
-                    Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
+                        Parent root = loader.load();
+                        gameController = loader.getController();
+                        gameController.initializeGame(symbol, opponent);
+                        stage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                        Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 });
-                
                 break;
-                
             case "gameMove":
                 System.out.println("Received gameMove message: " + jsonMsg.toJSONString());
-
                 int row, col;
                 String symbolRec;   
                 if (gameController == null) {
@@ -277,124 +235,112 @@ public class PlayerSocket {
                     row = Integer.parseInt(jsonMsg.get("row").toString());
                     col = Integer.parseInt(jsonMsg.get("col").toString());
                     symbolRec = jsonMsg.get("symbol").toString();
-
-                    System.out.println("Parsed values - Row: " + row + ", Col: " + col + ", Symbol: " + symbolRec);
-
                     final int finalRow = row;
                     final int finalCol = col;
                     final String finalSymbol = symbolRec;
-
                     Platform.runLater(() -> {
                         try {
-                                if (gameController != null) {
-                                    gameController.updateBoard(finalRow, finalCol, finalSymbol);
-                                } else {
-                                    System.out.println("Warning: gameController became null before update");
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Error updating board: " + e.getMessage());
-                                e.printStackTrace();
+                            if (gameController != null) {
+                                gameController.updateBoard(finalRow, finalCol, finalSymbol);
+                            } else {
+                                System.out.println("Warning: gameController became null before update");
                             }
+                        } catch (Exception e) {
+                            System.out.println("Error updating board: " + e.getMessage());
+                            e.printStackTrace();
                         }
-                    );
-                    
+                    });
                 }catch(Exception e){
                     System.out.println("Error processing game move: " + e.getMessage());
                 }
                 break;
-            case "gameEnd":
-                final String result = jsonMsg.get("result").toString();
-
-                final String winner = jsonMsg.get("winner") != null
-                        ? jsonMsg.get("winner").toString() : null;
-                final int score= jsonMsg.get("score") != null
-                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
-
+            case "opponentDisconnected":
+                System.out.println("type is " + jsonMsg.get("type").toString());
+                if (gameController != null) {
+                    gameController.deleteTemporaryFile();
+                }
                 Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Game Over");
-
-                    switch (result) {
-                        case "win":
-
-
-                            showGameOverVideo("/assets/videos/winner2.mp4", false);
-                            alert.setHeaderText("Congratulations! You won!");
-
-                            break;
-                        case "lose":
-                            showGameOverVideo("/assets/videos/loser.mp4", false);
-                             alert.setHeaderText("Game Over! " + winner + " won the game!");
-                            break;
-                        case "draw":
-                            showGameOverVideo("/assets/videos/draw.mp4", false);
-                            alert.setHeaderText("It's a draw!");
-                            break;
-                    }
-
-
-                    ButtonType saveButton = new ButtonType("Save Game");
-                    ButtonType discardButton = new ButtonType("Discard");
-                    alert.getButtonTypes().setAll(saveButton, discardButton);
-
-                    Optional<ButtonType> choice = alert.showAndWait();
-                    if (choice.isPresent()) {
-                        if (choice.get() == saveButton) {
-                            
-                            if (gameController != null) {
-                                gameController.moveFileToGameHistory();
-                                System.out.println("Game saved successfully.");
-                            }
-                        } else {
-
-                            if (gameController != null) {
-                                gameController.deleteTemporaryFile();
-                                System.out.println("Game discarded.");
-                            }
-                        }
-                    }
-                  if("win".equals(result))
-                    {
-                      //   int score=Integer.parseInt(jsonMsg.get("score").toString());
-                        System.out.println("Winner Score"+score);
-                         setPlayerScore(score);
-                    }
-                     else if ("lose".equals(result))
-                     {
-                         int pScore=getPlayerScore();
-                         System.out.println("Loser Score"+pScore);
-                         setPlayerScore(pScore);
-                         
-                     }
-                    gameController = null;
-                    
-                    // Return to lobby
-
+                    alert.setContentText("Your opponent has disconnected. Returning to the home screen.");
+                    alert.showAndWait();
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
                         stage.setScene(new Scene(root));
                     } catch (IOException ex) {
                         Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                });
+                break;
+            case "gameEnd":
+                final String result = jsonMsg.get("result").toString();
+                final String winner = jsonMsg.get("winner") != null ? jsonMsg.get("winner").toString() : null;
+                final int score= jsonMsg.get("score") != null ? Integer.parseInt(jsonMsg.get("score").toString()) : 0;
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Game Over");
+                    switch (result) {
+                        case "win":
+                            showGameOverVideo("/assets/videos/winner2.mp4", false);
+                            alert.setHeaderText("Congratulations! You won!");
+                            break;
+                        case "lose":
+                            showGameOverVideo("/assets/videos/loser.mp4", false);
+                            alert.setHeaderText("Game Over! " + winner + " won the game!");
+                            break;
+                        case "draw":
+                            showGameOverVideo("/assets/videos/draw.mp4", false);
+                            alert.setHeaderText("It's a draw!");
+                            break;
+                    }
+                    ButtonType saveButton = new ButtonType("Save Game");
+                    ButtonType discardButton = new ButtonType("Discard");
+                    alert.getButtonTypes().setAll(saveButton, discardButton);
+                    Optional<ButtonType> choice = alert.showAndWait();
+                    if (choice.isPresent()) {
+                        if (choice.get() == saveButton) {
+                            if (gameController != null) {
+                                gameController.moveFileToGameHistory();
+                                System.out.println("Game saved successfully.");
+                            }
+                        } else {
+                            if (gameController != null) {
+                                gameController.deleteTemporaryFile();
+                                System.out.println("Game discarded.");
+                            }
+                        }
+                    }
+                    if("win".equals(result)) {
+                        System.out.println("Winner Score"+score);
+                        setPlayerScore(score);
+                    } else if ("lose".equals(result)) {
+                        int pScore=getPlayerScore();
+                        System.out.println("Loser Score"+pScore);
+                        setPlayerScore(pScore);
+                    }
+                    gameController = null;
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+                        stage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                        Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     gameController = null; 
                 });
-                
                 break;
             default:
                 break;
-                
         }
-       
     }
     
-  public int getPlayerScore() {
-  return score;
-}
-   public void setPlayerScore(int jscore) {
-       
-  score=jscore;
-}
+    public int getPlayerScore() {
+        return score;
+    }
+    
+    public void setPlayerScore(int jscore) {
+        score=jscore;
+    }
+    
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
@@ -406,38 +352,18 @@ public class PlayerSocket {
         this.ps.println(data.toJSONString());
     }
     
-//    public void sendJSON(JSONObject data) {     
-//        this.ps.println(data.toJSONString());
-//    }
     public void requestReceived(String challenger){
         PopUps popup = new PopUps();
-
         Platform.runLater(()-> {
-//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//            alert.setTitle("Game Challenge");
-//            alert.setContentText("do you want to play against " + challenger + " ?");
-//            
-//            ButtonType acceptButton = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
-//            ButtonType declineButton = new ButtonType("Decline", ButtonBar.ButtonData.CANCEL_CLOSE);
-//            alert.getButtonTypes().setAll(acceptButton, declineButton);
-//
-//             // Show the alert and capture the user's choice
-//            Optional<ButtonType> result = alert.showAndWait();
-
             String result = popup.showCustomDialog(stage, challenger);
-
             Map<String, String> response = new HashMap<>();
-            
             response.put("type", "gameReqResponse");
-            response.put("challenger", challenger);  // Add challenger username
-            response.put("challenged", loggedInPlayer.getUsername()); 
+            response.put("challenger", challenger);
+            response.put("challenged", loggedInPlayer.getUsername());
             System.out.println("result is "+ result);
-            
             if (result != null && result.equals("Accepted")) {
-
                 System.out.println("Challenge accepted!");
                 response.put("status", "accepted");
-                
             } else {
                 System.out.println("Challenge declined.");
                 response.put("status", "declined");
@@ -453,6 +379,7 @@ public class PlayerSocket {
     public Stage getStage() {
         return stage;
     }
+    
     public ObservableSet<String> getOnlinePlayers() {
         return onlinePlayers;
     }
@@ -485,6 +412,7 @@ public class PlayerSocket {
     
     private void showGameOverVideo(String videoPath, boolean isDraw) {
 
+
         boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
 
         if (wasMusicPlaying) {
@@ -501,13 +429,12 @@ public class PlayerSocket {
         mediaView.fitWidthProperty().bind(videoStage.widthProperty());
         mediaView.fitHeightProperty().bind(videoStage.heightProperty());
 
+
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
-
-        Scene videoScene = new Scene(videoRoot);
+        Scene videoScene = new Scene(videoRoot, 600, 600);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
-
         videoStage.setOnCloseRequest(event -> {
             videoPlayer.stop();
             videoStage.close();
@@ -518,11 +445,9 @@ public class PlayerSocket {
 
             event.consume();
         });
-
         videoStage.show();
         videoPlayer.play();
     }
-
 
     public void closeSocket() {
         running = false;
@@ -534,5 +459,4 @@ public class PlayerSocket {
             e.printStackTrace();
         }
     }
-
 }

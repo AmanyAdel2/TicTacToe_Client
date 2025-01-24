@@ -188,9 +188,9 @@ public class OnlineController implements Initializable {
         File fileToDelete = new File("saved_games/" + fileName);
         if (fileToDelete.exists()) {
             if (fileToDelete.delete()) {
-            
                 recordsListView.getItems().removeIf(item -> item.startsWith(fileName));
                 System.out.println("File deleted successfully.");
+                loadRecordFiles(); // إعادة تحميل الملفات بعد الحذف
             } else {
                 System.out.println("Failed to delete the file.");
             }
@@ -198,7 +198,6 @@ public class OnlineController implements Initializable {
             System.out.println("File does not exist.");
         }
     }
-
     private void openRecord(String fileName) {
         try {
             Stage recordStage = new Stage();

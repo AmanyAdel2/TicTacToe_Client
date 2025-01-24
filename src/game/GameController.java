@@ -343,9 +343,13 @@ public class GameController implements Initializable {
     }
 
     public void deleteTemporaryFile() {
-        File file = new File(currentGameFileName);
-        if (file.exists()) {
-            file.delete();
+    File file = new File(currentGameFileName);
+    if (file.exists()) {
+        if (file.delete()) {
+            System.out.println("Temporary file deleted: " + currentGameFileName);
+        } else {
+            System.out.println("Failed to delete temporary file: " + currentGameFileName);
         }
     }
+}
 }
