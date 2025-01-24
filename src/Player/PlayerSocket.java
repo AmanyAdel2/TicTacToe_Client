@@ -212,12 +212,30 @@ public class PlayerSocket {
                     }
                 });
                 break;
+            case "serverDisconnection":
+                System.out.println("Server is not available");
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Unable to connect!");
+                    alert.setContentText("Server is not available");
+                    alert.showAndWait();
+
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
+                        stage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                break;
             case "gameStart":
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
-                 final int playerScore= jsonMsg.get("score") != null
+                final int playerScore= jsonMsg.get("score") != null
                         ?Integer.parseInt(jsonMsg.get("score").toString()):getPlayerScore();
-                 setOtherPlayerScore(playerScore);
+                setOtherPlayerScore(playerScore);
+                
                 Platform.runLater(() -> {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
