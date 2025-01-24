@@ -301,6 +301,23 @@ public class PlayerSocket {
                     System.out.println("Error processing game move: " + e.getMessage());
                 }
                 break;
+                
+            case "opponentDisconnected":
+                System.out.println("type is " +jsonMsg.get("type").toString());
+                Platform.runLater(() -> {      
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Game Over");
+                        alert.setContentText("Your opponent has disconnected. Returning to the home screen.");
+                        alert.showAndWait();
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
+                            stage.setScene(new Scene(root));
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                break;
             case "gameEnd":
                 final String result = jsonMsg.get("result").toString();
 
@@ -498,7 +515,7 @@ public class PlayerSocket {
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
 
-        Scene videoScene = new Scene(videoRoot);
+        Scene videoScene = new Scene(videoRoot, 600, 600);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
