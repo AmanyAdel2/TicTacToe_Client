@@ -7,6 +7,7 @@ package Player;
 
 import Popups.CustomDialogController;
 import Popups.PopUps;
+import Popups.PopUps.Type;
 import game.GameController;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -23,16 +24,20 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,39 +50,29 @@ public class PlayerSocket {
     public DataInputStream dis;
     public PrintStream ps;
     private JSONObject jsonMsg;
+    
     private ObservableSet<String> onlinePlayers = FXCollections.observableSet();
     private static PlayerSocket instance; // Singleton instance
+    
     private DTOPlayer loggedInPlayer;
     private GameController gameController;  // Each socket has its own controller
+    
     private Stage stage;
     private boolean running = true; 
-    private int score=0;
-    private int otherScore=0;
+    private int score = 0;
+    private int otherScore = 0;
+    private PopUps popup;
 
-    private online.OnlineController onlineControlller;
     
     private PlayerSocket(){
-
-        if (!isServerAvailable("127.0.0.1", 5005)) {
-
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Unable to connect!");
-                alert.setContentText("Server is not available");
-                alert.showAndWait();
-            });
-            System.out.println("Server is not available. Please start the server first.");
-            return; 
-        }
+        popup = new PopUps();
         try {
             socket = new Socket("127.0.0.1", 5005);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
             startListening(); // Start the listener thread
         } catch (IOException ex) {
-            ex.printStackTrace();
-            showConnectionError();
+            PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
         }
     }
     
@@ -137,18 +132,16 @@ public class PlayerSocket {
                     });
                 }else{
                     Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Unable to Register!");
-                        alert.setContentText("The user name already exists");
-                        alert.showAndWait();
+                        PopUps.showErrorAlert(stage, "Registeration Error", "The user name already exists");
                     });
                     System.out.println("registration failed");
                 } 
                 break;
             case "login":
                 String sts = jsonMsg.get("status").toString();
-                int jscore = Integer.parseInt(jsonMsg.get("score").toString());;
+                int jscore = jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
+                
                 setPlayerScore(jscore);
 
                 if(sts.equals("1")){
@@ -163,11 +156,7 @@ public class PlayerSocket {
                     });
                 } else {
                     Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Unable to Log in!");
-                        alert.setContentText("the username or password is incorrect");
-                        alert.showAndWait();
+                        PopUps.showErrorAlert(stage, "Login Error", "the username or password is incorrect");
                     });
                     System.out.println("Log in failed");
                 } 
@@ -198,26 +187,35 @@ public class PlayerSocket {
             case "gameReqResult":
                 final String status = jsonMsg.get("status").toString();
                 final String challenged = jsonMsg.get("challenged").toString();
+                
                 Platform.runLater(() -> {
                     if (status.equals("accepted")) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Challenge Accepted");
-                        alert.setContentText(challenged + " accepted your challenge!");
-                        alert.showAndWait();
+                        
+                        popup.showCustomDialog(stage, challenged, "Challenge Accepted", "accepted your challenge!", Type.RESULT);
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Challenge Declined");
-                        alert.setContentText(challenged + " declined your challenge.");
-                        alert.showAndWait();
+                        popup.showCustomDialog(stage, challenged, "Challenge Declined", "declined your challenge.", Type.RESULT);
+                    }
+                });
+                break;
+            case "serverDisconnection":
+                System.out.println("Server is not available");
+                Platform.runLater(() -> {
+                    PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
+                        stage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
                 break;
             case "gameStart":
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
-                 final int playerScore= jsonMsg.get("score") != null
+                final int playerScore= jsonMsg.get("score") != null
                         ?Integer.parseInt(jsonMsg.get("score").toString()):getPlayerScore();
-                 setOtherPlayerScore(playerScore);
+                setOtherPlayerScore(playerScore);
+                
                 Platform.runLater(() -> {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
@@ -231,6 +229,7 @@ public class PlayerSocket {
                 });
                 break;
             case "gameMove":
+                
                 System.out.println("Received gameMove message: " + jsonMsg.toJSONString());
                 int row, col;
                 String symbolRec;   
@@ -264,13 +263,16 @@ public class PlayerSocket {
 
             case "opponentDisconnected":
                 System.out.println("type is " + jsonMsg.get("type").toString());
+                
                 if (gameController != null) {
                     gameController.deleteTemporaryFile();
                 }
+                
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Game Over");
                     alert.setContentText("Your opponent has disconnected. Returning to the home screen.");
+                    alert.initOwner(stage);
                     alert.showAndWait();
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -284,26 +286,51 @@ public class PlayerSocket {
                 final String result = jsonMsg.get("result").toString();
                 final String winner = jsonMsg.get("winner") != null ? jsonMsg.get("winner").toString() : null;
                 final int score= jsonMsg.get("score") != null ? Integer.parseInt(jsonMsg.get("score").toString()) : 0;
+                
                 Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    Alert alert = new Alert(Alert.AlertType.NONE);
                     alert.setTitle("Game Over");
                     switch (result) {
                         case "win":
-                            showGameOverVideo("/assets/videos/winner2.mp4", false);
-                            alert.setHeaderText("Congratulations! You won!");
+                            showGameOverVideo("/assets/videos/winner2.mp4", stage);
+                            alert.setHeaderText("🎉 Congratulations! You won!");
+                            alert.getDialogPane().setStyle("-fx-background-color: #d4edda; -fx-border-color: #155724; -fx-border-width: 2px;");
+                            alert.getDialogPane().lookup(".header-panel").setStyle("-fx-font-size: 18px; -fx-text-fill: #155724;");
+                            alert.getDialogPane().lookup(".header-panel").setStyle(
+                                "-fx-background-color: #5bde7e;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 16px;" +
+                                "-fx-background-radius: 10px;" +
+                                "-fx-padding: 10px;"
+                            );
                             break;
                         case "lose":
-                            showGameOverVideo("/assets/videos/loser.mp4", false);
-                            alert.setHeaderText("Game Over! " + winner + " won the game!");
+                            showGameOverVideo("/assets/videos/loser.mp4", stage);
+                            alert.setHeaderText("💔 Game Over! " + winner + " won the game!");
+                            alert.getDialogPane().setStyle("-fx-background-color: #f8d7da; -fx-border-color: #721c24; -fx-border-width: 2px;");
+                            alert.getDialogPane().lookup(".header-panel").setStyle("-fx-font-size: 18px; -fx-text-fill: #721c24;");
+                            alert.getDialogPane().lookup(".header-panel").setStyle(
+                                "-fx-background-color: #FF6B6B;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 16px;" +
+                                "-fx-background-radius: 10px;" +
+                                "-fx-padding: 10px;"
+                            );
                             break;
                         case "draw":
-                            showGameOverVideo("/assets/videos/draw.mp4", false);
-                            alert.setHeaderText("It's a draw!");
+                            showGameOverVideo("/assets/videos/draw.mp4", stage);
+                            alert.setHeaderText("🤝 It's a draw!");
+                            alert.getDialogPane().setStyle("-fx-background-color: #fff3cd; -fx-border-color: #856404; -fx-border-width: 2px;");
+                            alert.getDialogPane().lookup(".header-panel").setStyle("-fx-font-size: 18px; -fx-text-fill: #856404;");
                             break;
                     }
-                    ButtonType saveButton = new ButtonType("Save Game");
-                    ButtonType discardButton = new ButtonType("Discard");
+                    
+                    ButtonType saveButton = new ButtonType("💾 Save Game");
+                    ButtonType discardButton = new ButtonType("🗑️ Discard");
                     alert.getButtonTypes().setAll(saveButton, discardButton);
+                    alert.initOwner(stage);
                     Optional<ButtonType> choice = alert.showAndWait();
                     if (choice.isPresent()) {
                         if (choice.get() == saveButton) {
@@ -319,24 +346,24 @@ public class PlayerSocket {
                         }
                     }
                    if("win".equals(result))
-                    {
-                         
-                         setPlayerScore(score);
+                    {                        
+                        setPlayerScore(score);
                     }
-                     else if ("lose".equals(result))
-                     {
-                         int pscore=getPlayerScore();
-                         setPlayerScore(pscore);
+                    else if ("lose".equals(result))
+                    {
+                        int pscore=getPlayerScore();
+                        setPlayerScore(pscore);
                          
-                     }
+                    }
+                   
                     gameController = null;
+                    
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
                         stage.setScene(new Scene(root));
                     } catch (IOException ex) {
                         Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    gameController = null; 
                 });
                 break;
             default:
@@ -344,26 +371,26 @@ public class PlayerSocket {
         }
     }
     
-  public int getPlayerScore() {
-  return score;
-}
- public int getOtherPlayerScore() {
-  return otherScore;
-}
+    public int getPlayerScore() {
+      return score;
+    }
+    public int getOtherPlayerScore() {
+        return otherScore;
+    }
 
-   public void setPlayerScore(int jscore) {
-       
-  score=jscore;
-}
- public void setOtherPlayerScore(int jscore) {
-       
-  otherScore=jscore;
-}
+    public void setPlayerScore(int jscore) {
+
+        score=jscore;
+    }
+    public void setOtherPlayerScore(int jscore) {
+
+      otherScore=jscore;
+    }
 
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
-            showConnectionError();
+            PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
             return; 
         }
         JSONObject data = new JSONObject();
@@ -372,9 +399,9 @@ public class PlayerSocket {
     }
     
     public void requestReceived(String challenger){
-        PopUps popup = new PopUps();
+        
         Platform.runLater(()-> {
-            String result = popup.showCustomDialog(stage, challenger);
+            String result = popup.showCustomDialog(stage, challenger, "Game Challenge", "wants to play against you",Type.CHALLENGE);
             Map<String, String> response = new HashMap<>();
             response.put("type", "gameReqResponse");
             response.put("challenger", challenger);
@@ -419,18 +446,7 @@ public class PlayerSocket {
         }
     }
     
-    private void showConnectionError() {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Connection Error");
-            alert.setHeaderText("Unable to Connect");
-            alert.setContentText("The server is not running or unreachable. Please start the server and try again.");
-            alert.showAndWait();
-        });
-    }
-    
-    private void showGameOverVideo(String videoPath, boolean isDraw) {
-
+    private void showGameOverVideo(String videoPath, Stage parentStage) {
 
         boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
 
@@ -448,12 +464,24 @@ public class PlayerSocket {
         mediaView.fitWidthProperty().bind(videoStage.widthProperty());
         mediaView.fitHeightProperty().bind(videoStage.heightProperty());
 
-
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
         Scene videoScene = new Scene(videoRoot, 600, 600);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
+
+        // Set modality and owner
+        videoStage.initModality(Modality.WINDOW_MODAL);
+        videoStage.initOwner(parentStage);
+
+        // Center the video stage relative to the parentStage
+        videoStage.setOnShowing(event -> {
+            double centerXPosition = parentStage.getX() + parentStage.getWidth() / 2 - videoStage.getWidth() / 2;
+            double centerYPosition = parentStage.getY() + parentStage.getHeight() / 2 - videoStage.getHeight() / 2;
+            videoStage.setX(centerXPosition);
+            videoStage.setY(centerYPosition);
+        });
+
         videoStage.setOnCloseRequest(event -> {
             videoPlayer.stop();
             videoStage.close();
@@ -464,9 +492,11 @@ public class PlayerSocket {
 
             event.consume();
         });
+
         videoStage.show();
         videoPlayer.play();
     }
+
 
     public void closeSocket() {
         running = false;

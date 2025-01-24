@@ -1,7 +1,80 @@
 /*
  * Empty Stylesheet file.
  */
+/* تخصيص خلفية العناصر داخل ListView */
+/* تخصيص ListView */
+/* تخصيص ListView */
+.list-view {
+    -fx-background-color: #FFFFE0; /* لون خلفية ListView */
+    -fx-background-radius: 10px; /* زوايا دائرية للخلفية */
+    -fx-border-color: black; /* لون الحدود */
+    -fx-border-width: 2px; /* سمك الحدود */
+    -fx-border-radius: 10px; /* زوايا دائرية للحدود */
+    -fx-padding: 5px; /* تباعد داخلي */
+}
 
-.mainFxmlClass {
+/* تخصيص العناصر داخل ListView */
+.list-cell {
+    -fx-background-color: #FFFFE0; /* لون خلفية العناصر */
+    -fx-text-fill: black; /* لون النص */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent; /* إزالة حدود العناصر */
+    -fx-padding: 5px; /* تباعد داخلي للعناصر */
+}
 
+/* خط فاصل بين العناصر */
+.list-cell:filled:selected,
+.list-cell:filled:hover,
+.list-cell:filled {
+    -fx-border-color: #CCCCCC; /* لون الخط الفاصل */
+    -fx-border-width: 0 0 1 0; /* خط أسفل كل عنصر */
+}
+
+.list-cell:empty {
+    -fx-border-width: 0; /* إزالة الخط الفاصل للعناصر الفارغة */
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #FFD700; /* لون خلفية العنصر المحدد */
+    -fx-text-fill: black; /* لون النص للعنصر المحدد */
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #FFD700; /* لون خلفية العنصر عند التمرير فوقه */
+    -fx-text-fill: black; /* لون النص عند التمرير فوقه */
+}
+
+/* تخصيص شريط التمرير */
+.list-view .scroll-bar:vertical,
+.list-view .scroll-bar:horizontal {
+    -fx-background-color: transparent; /* خلفية شريط التمرير */
+}
+
+.list-view .scroll-bar:vertical .track,
+.list-view .scroll-bar:horizontal .track {
+    -fx-background-color: black; /* لون المسار (Track) */
+    -fx-border-color: black; /* لون الحدود */
+}
+
+.list-view .scroll-bar:vertical .thumb,
+.list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: #333333; /* لون الجزء المتحرك (Thumb) */
+    -fx-background-insets: 2; /* تباعد داخلي */
+    -fx-background-radius: 5; /* زوايا دائرية */
+}
+
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button,
+.list-view .scroll-bar:horizontal .increment-button,
+.list-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: black; /* لون أزرار التمرير */
+    -fx-padding: 5; /* تباعد داخلي */
+}
+
+.list-view .scroll-bar:vertical .increment-arrow,
+.list-view .scroll-bar:vertical .decrement-arrow,
+.list-view .scroll-bar:horizontal .increment-arrow,
+.list-view .scroll-bar:horizontal .decrement-arrow {
+    -fx-background-color: white; /* لون الأسهم */
 }

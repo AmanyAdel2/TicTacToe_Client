@@ -7,6 +7,7 @@ package register;
 
 import Player.DTOPlayer;
 import Player.PlayerSocket;
+import Popups.PopUps;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class RegiserController implements Initializable {
     private TextField emailtxt;
     @FXML
     private Button backBtn;
-
+    private Stage stage;
     /**
      * Initializes the controller class.
      */
@@ -63,7 +64,7 @@ public class RegiserController implements Initializable {
         playerSocket = PlayerSocket.getInstance();
         
         Platform.runLater(() -> {
-            Stage stage = (Stage) regBtn.getScene().getWindow();
+            stage = (Stage) regBtn.getScene().getWindow();
             playerSocket.setStage(stage);
         });
         String username = userNametxt.getText().trim();
@@ -81,13 +82,13 @@ public class RegiserController implements Initializable {
         map.put("username", username);
         map.put("email", email);
         map.put("password", password);
-       map.put("status", "online");
+        map.put("status", "online");
 
 
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
+            DTOPlayer player = new DTOPlayer(username, 0, playerSocket.socket);
             playerSocket.setLoggedInPlayer(player);
             System.out.println("Registration request sent for user: " + username);
 
@@ -111,7 +112,7 @@ public class RegiserController implements Initializable {
 
     private boolean validateInputs(String username, String email, String password, String confirmPassword) {
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Input Validation", "All fields are required.");
+            PopUps.showErrorAlert(stage, "Registration Error", "All fields are required.");
             return false;
         }
 

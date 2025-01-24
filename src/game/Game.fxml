@@ -85,26 +85,29 @@
             </Button>
          </children>
       </GridPane>
-      <Label fx:id="playerOLabel" layoutX="487.0" layoutY="469.0" prefHeight="55.0" prefWidth="157.0" text="playerOLabel" textFill="#fbff33">
+    <Label layoutX="58.0" layoutY="474.0" prefHeight="83.0" prefWidth="157.0" style="-fx-background-color: #588ae0; /* MediumSeaGreen for better contrast */                        -fx-opacity: 0.8; -fx-background-radius: 10px; -fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.3, 0, 3);" />
+    
+    <Label layoutX="449.0" layoutY="473.0" prefHeight="83.0" prefWidth="157.0" style="-fx-background-color: #588ae0; /* MediumSeaGreen for better contrast */                        -fx-opacity: 0.8; -fx-background-radius: 10px; -fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.3, 0, 3);" />
+      <Label fx:id="playerOLabel" layoutX="455.0" layoutY="469.0" prefHeight="55.0" prefWidth="157.0" style="-fx-alignment: center;" text="yasmeen" textFill="#fbff33">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font></Label>
-      <Label fx:id="playerXLabel" layoutX="90.0" layoutY="479.0" prefHeight="35.0" prefWidth="157.0" text="playerXLabel" textFill="#fbff33">
+      <Label fx:id="playerXLabel" layoutX="58.0" layoutY="479.0" prefHeight="35.0" prefWidth="157.0" style="-fx-alignment: center;" text="sameh" textFill="#fbff33">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font></Label>
-      <Label fx:id="turnLabel" layoutX="260.0" layoutY="63.0" prefHeight="21.0" prefWidth="127.0" text="Label" textFill="#fbff33">
+      <Label fx:id="turnLabel" layoutX="273.0" layoutY="62.0" prefHeight="43.0" prefWidth="147.0" text="Label" textFill="#fbff33">
          <font>
-            <Font name="Bookman Old Style Bold" size="18.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font></Label>
-      <Label layoutX="121.0" layoutY="521.0" text="xScore" textFill="#fbff33" fx:id="xScore">
+      <Label layoutX="116.0" layoutY="521.0" style="-fx-alignment: center;" text="100" textFill="#fbff33" fx:id="xScore">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="oScore1" layoutX="500.0" layoutY="521.0" text="oScore" textFill="#fbff33">
+      <Label fx:id="oScore1" layoutX="517.0" layoutY="521.0" text="100" textFill="#fbff33">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
    </children>

@@ -72,7 +72,7 @@
             <Font name="System Bold Italic" size="15.0" />
          </font>
       </Button>
-      <ListView fx:id="recordsListView" layoutX="370.0" layoutY="526.0" prefHeight="125.0" prefWidth="284.0" style="-fx-background-color: #FFFFE0; -fx-border-color: #000000; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: black;">
+      <ListView fx:id="recordsListView" layoutX="370.0" layoutY="526.0" prefHeight="125.0" prefWidth="284.0" styleClass="list-cell">
          <padding>
             <Insets bottom="5" left="5" right="5" top="5" />
          </padding>
