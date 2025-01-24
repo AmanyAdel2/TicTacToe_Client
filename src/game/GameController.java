@@ -97,11 +97,11 @@ public class GameController implements Initializable {
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerXScore=symbol.equals("X") ? 
-            PlayerSocket.getInstance().getPlayerScore(): PlayerSocket.getInstance().getLoggedInPlayer().getScore();
+           playerSocket.getPlayerScore(): playerSocket.getOtherPlayerScore();
         playerOName = symbol.equals("O") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
         playerOScore=symbol.equals("O") ? 
-            PlayerSocket.getInstance().getPlayerScore(): PlayerSocket.getInstance().getLoggedInPlayer().getScore();
+              playerSocket.getPlayerScore(): playerSocket.getOtherPlayerScore();
 
         playerXLabel.setText(playerXName);
         playerOLabel.setText(playerOName);

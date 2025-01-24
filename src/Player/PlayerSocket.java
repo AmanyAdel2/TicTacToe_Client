@@ -50,6 +50,8 @@ public class PlayerSocket {
     private Stage stage;
     private boolean running = true; 
     private int score=0;
+    private int otherScore=0;
+
     private online.OnlineController onlineControlller;
     
     private PlayerSocket(){
@@ -240,8 +242,9 @@ public class PlayerSocket {
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
                  final int playerScore= jsonMsg.get("score") != null
-                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
-                setPlayerScore(playerScore); 
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):getPlayerScore();
+                 setOtherPlayerScore(playerScore);
+                
                 
                 Platform.runLater(() -> {
                 try {
@@ -302,6 +305,7 @@ public class PlayerSocket {
                 final String result = jsonMsg.get("result").toString();
                 final String winner = jsonMsg.get("winner") != null ? 
                         jsonMsg.get("winner").toString() : null;
+                int score=jsonMsg.get("score") != null ? Integer.parseInt(jsonMsg.get("score").toString()):0;
               
                 Platform.runLater(() -> {
 
@@ -324,13 +328,13 @@ public class PlayerSocket {
                    
                      if("win".equals(result))
                     {
-                         int score=Integer.parseInt(jsonMsg.get("score").toString());
+                         
                          setPlayerScore(score);
                     }
                      else if ("lose".equals(result))
                      {
-                         int score=getPlayerScore();
-                         setPlayerScore(score);
+                         int pscore=getPlayerScore();
+                         setPlayerScore(pscore);
                          
                      }
                     alert.showAndWait();
@@ -356,10 +360,19 @@ public class PlayerSocket {
   public int getPlayerScore() {
   return score;
 }
+ public int getOtherPlayerScore() {
+  return otherScore;
+}
+
    public void setPlayerScore(int jscore) {
        
   score=jscore;
 }
+ public void setOtherPlayerScore(int jscore) {
+       
+  otherScore=jscore;
+}
+   
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
