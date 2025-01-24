@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.effect.Glow?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane id="AnchorPane" prefHeight="517.0" prefWidth="553.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="online.OnlineController">
     <stylesheets>
@@ -29,7 +29,7 @@
             <Image url="@../login/welcome.gif" />
          </image>
       </ImageView>
-      <Button fx:id="logoutbtn" layoutX="399.0" layoutY="479.0" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="123.0" style="-fx-background-color: YELLOW;" text="Logout">
+      <Button fx:id="logoutbtn" layoutX="399.0" layoutY="479.0" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="123.0" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="Logout">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
@@ -42,35 +42,35 @@
             <Glow level="0.8" /> 
          </effect>
       </Label>
-      <Button fx:id="sendbtn" layoutX="399.0" layoutY="434.0" mnemonicParsing="false" onAction="#sendRequest" prefHeight="30.0" prefWidth="123.0" style="-fx-background-color: YELLOW;" text="Send" textFill="#1b1a1a">
+      <Button fx:id="sendbtn" layoutX="399.0" layoutY="434.0" mnemonicParsing="false" onAction="#sendRequest" prefHeight="30.0" prefWidth="123.0" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="Send" textFill="#1b1a1a">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="nametxt" layoutX="426.0" layoutY="79.0" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: yellow;">
+      <TextField fx:id="nametxt" layoutX="426.0" layoutY="79.0" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: yellow; -fx-background-radius: 50;">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </TextField>
-      <TextField fx:id="scoretxt" layoutX="348.0" layoutY="79.0" prefHeight="25.0" prefWidth="49.0" style="-fx-background-color: yellow;" text="Score">
+      <TextField fx:id="scoretxt" layoutX="348.0" layoutY="79.0" prefHeight="25.0" prefWidth="49.0" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="Score">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </TextField>
       <ListView fx:id="onlinePlayersList" layoutX="30.0" layoutY="197.0" prefHeight="312.0" prefWidth="186.0" style="-fx-background-color: #FFFFE0; -fx-border-color: #808080; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: black;">
          <padding>
-            <Insets top="5" right="5" bottom="5" left="5" />
+            <Insets bottom="5" left="5" right="5" top="5" />
          </padding>
          <effect>
-            <InnerShadow radius="5.0" color="#808080" />
+            <InnerShadow color="#808080" radius="5.0" />
          </effect>
       </ListView>
       <ListView fx:id="recordsListView" layoutX="339.0" layoutY="171.0" prefHeight="140.0" prefWidth="200.0" style="-fx-background-color: #FFFFE0; -fx-border-color: #808080; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: black;">
          <padding>
-            <Insets top="5" right="5" bottom="5" left="5" />
+            <Insets bottom="5" left="5" right="5" top="5" />
          </padding>
          <effect>
-            <InnerShadow radius="5.0" color="#808080" />
+            <InnerShadow color="#808080" radius="5.0" />
          </effect>
       </ListView>
       <Text fill="#f7ff0c" layoutX="378.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game History">
@@ -81,7 +81,7 @@
             <Glow level="0.8" />
          </effect>
       </Text>
-      <ImageView fitHeight="45.0" fitWidth="71.0" layoutX="438.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="45.0" fitWidth="71.0" layoutX="445.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@playerPhoto.png" />
          </image>
