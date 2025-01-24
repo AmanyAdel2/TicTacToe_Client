@@ -171,8 +171,9 @@ public class HardCompModeController implements Initializable {
     private void showGameOverVideo(String videoPath, boolean isDraw) {
         gameEnded = true;
 
-        
-        if (TicTacToe.mediaPlayer != null) {
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+        if (wasMusicPlaying) {
             TicTacToe.mediaPlayer.pause();
         }
 
@@ -185,16 +186,15 @@ public class HardCompModeController implements Initializable {
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
 
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 550);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
             videoPlayer.stop();
-            videoStage.close(); 
+            videoStage.close();
 
-            
-            if (TicTacToe.mediaPlayer != null) {
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
                 TicTacToe.mediaPlayer.play();
             }
 

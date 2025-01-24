@@ -174,40 +174,43 @@ public class EasyGameController implements Initializable {
     }
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
-        gameEnded = true;
-        if (TicTacToe.mediaPlayer != null) {
-            TicTacToe.mediaPlayer.pause();
+    gameEnded = true;
+
+    boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+    if (wasMusicPlaying) {
+        TicTacToe.mediaPlayer.pause();
+    }
+
+    Stage videoStage = new Stage();
+    Media media = new Media(getClass().getResource(videoPath).toString());
+    MediaPlayer videoPlayer = new MediaPlayer(media);
+    videoPlayer.setVolume(1.0);
+    MediaView mediaView = new MediaView(videoPlayer);
+
+    StackPane videoRoot = new StackPane();
+    videoRoot.getChildren().add(mediaView);
+
+    Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
+    videoStage.setScene(videoScene);
+    videoStage.setTitle("Game Over");
+
+    videoStage.setOnCloseRequest(event -> {
+        videoPlayer.stop(); 
+        videoStage.close();
+
+        
+        if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
+            TicTacToe.mediaPlayer.play();
         }
 
-        Stage videoStage = new Stage();
-        Media media = new Media(getClass().getResource(videoPath).toString());
-        MediaPlayer videoPlayer = new MediaPlayer(media);
-        videoPlayer.setVolume(1.0);
-        MediaView mediaView = new MediaView(videoPlayer);
+        showGameOverAlert(gameResult);
+        event.consume();
+    });
 
-        StackPane videoRoot = new StackPane();
-        videoRoot.getChildren().add(mediaView);
-
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
-        videoStage.setScene(videoScene);
-        videoStage.setTitle("Game Over");
-
-        videoStage.setOnCloseRequest(event -> {
-            videoPlayer.stop();
-            videoStage.close();
-
-            
-            if (TicTacToe.mediaPlayer != null) {
-                TicTacToe.mediaPlayer.play();
-            }
-
-            showGameOverAlert(gameResult); 
-            event.consume();
-        });
-
-        videoStage.show();
-        videoPlayer.play(); 
-    }
+    videoStage.show();
+    videoPlayer.play();
+}
 
    private void showGameOverAlert(String message) {
     Alert alert = new Alert(AlertType.CONFIRMATION);

@@ -111,7 +111,10 @@ public class LocalModeController implements Initializable {
     }
 
     private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
-        if (TicTacToe.mediaPlayer != null) {
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+       
+        if (wasMusicPlaying) {
             TicTacToe.mediaPlayer.pause();
         }
 
@@ -119,20 +122,25 @@ public class LocalModeController implements Initializable {
         Media media = new Media(getClass().getResource(videoPath).toString());
         MediaPlayer videoPlayer = new MediaPlayer(media);
         videoPlayer.setVolume(1.0);
+
         MediaView mediaView = new MediaView(videoPlayer);
+        mediaView.setPreserveRatio(true);
+        mediaView.fitWidthProperty().bind(videoStage.widthProperty());
+        mediaView.fitHeightProperty().bind(videoStage.heightProperty());
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
 
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 550 : 300);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            videoPlayer.stop(); 
+            videoPlayer.stop();
             videoStage.close();
 
-            if (TicTacToe.mediaPlayer != null) {
+           
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
                 TicTacToe.mediaPlayer.play();
             }
 
@@ -141,7 +149,7 @@ public class LocalModeController implements Initializable {
         });
 
         videoStage.show();
-        videoPlayer.play();
+        videoPlayer.play(); 
     }
     
     private void showGameOverAlert(String message) {

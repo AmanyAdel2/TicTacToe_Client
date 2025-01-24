@@ -175,8 +175,11 @@ public class IntermediateGameController implements Initializable {
     private void showGameOverVideo(String videoPath, boolean isDraw) {
         gameEnded = true;
 
-        
-        if (TicTacToe.mediaPlayer != null) {
+    
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+       
+        if (wasMusicPlaying) {
             TicTacToe.mediaPlayer.pause();
         }
 
@@ -198,7 +201,7 @@ public class IntermediateGameController implements Initializable {
             videoStage.close(); 
 
             
-            if (TicTacToe.mediaPlayer != null) {
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
                 TicTacToe.mediaPlayer.play();
             }
 
