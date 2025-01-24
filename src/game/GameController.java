@@ -22,6 +22,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import org.json.simple.JSONObject;
 
 public class GameController implements Initializable {
@@ -42,7 +43,15 @@ public class GameController implements Initializable {
 
     private String playerXName;
     private String playerOName;
+    private int playerXScore;
+    private int playerOScore;
     private boolean namesSaved = false; 
+    @FXML
+    private GridPane gameBoard;
+    @FXML
+    private Label xScore;
+    @FXML
+    private Label oScore1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,11 +93,18 @@ public class GameController implements Initializable {
 
         playerXName = symbol.equals("X") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
+        playerXScore=symbol.equals("X") ? 
+           playerSocket.getPlayerScore(): playerSocket.getOtherPlayerScore();
         playerOName = symbol.equals("O") ? 
             PlayerSocket.getInstance().getLoggedInPlayer().getUsername() : opponent;
+        playerOScore=symbol.equals("O") ? 
+              playerSocket.getPlayerScore(): playerSocket.getOtherPlayerScore();
 
         playerXLabel.setText(playerXName);
         playerOLabel.setText(playerOName);
+        xScore.setText(String.valueOf(playerXScore));
+        oScore1.setText(String.valueOf(playerOScore));
+
 
         updateTurnLabel();
 
@@ -343,9 +359,13 @@ public class GameController implements Initializable {
     }
 
     public void deleteTemporaryFile() {
-        File file = new File(currentGameFileName);
-        if (file.exists()) {
-            file.delete();
+    File file = new File(currentGameFileName);
+    if (file.exists()) {
+        if (file.delete()) {
+            System.out.println("Temporary file deleted: " + currentGameFileName);
+        } else {
+            System.out.println("Failed to delete temporary file: " + currentGameFileName);
         }
     }
+}
 }
