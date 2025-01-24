@@ -88,7 +88,7 @@ public class RegiserController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
+            DTOPlayer player = new DTOPlayer(username, 0, playerSocket.socket);
             playerSocket.setLoggedInPlayer(player);
             System.out.println("Registration request sent for user: " + username);
 

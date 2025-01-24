@@ -50,36 +50,29 @@ public class PlayerSocket {
     public DataInputStream dis;
     public PrintStream ps;
     private JSONObject jsonMsg;
+    
     private ObservableSet<String> onlinePlayers = FXCollections.observableSet();
     private static PlayerSocket instance; // Singleton instance
+    
     private DTOPlayer loggedInPlayer;
     private GameController gameController;  // Each socket has its own controller
+    
     private Stage stage;
     private boolean running = true; 
-    private int score=0;
-    private int otherScore=0;
+    private int score = 0;
+    private int otherScore = 0;
     private PopUps popup;
-    private online.OnlineController onlineControlller;
+
     
     private PlayerSocket(){
         popup = new PopUps();
-//        if (!isServerAvailable("127.0.0.1", 5005)) {
-//
-//            Platform.runLater(() -> {
-//                
-//            });
-//            System.out.println("Server is not available. Please start the server first.");
-//            return; 
-//        }
         try {
             socket = new Socket("127.0.0.1", 5005);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
             startListening(); // Start the listener thread
-        } catch (Exception ex) {
-            //ex.printStackTrace();
+        } catch (IOException ex) {
             PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
-            //showConnectionError();
         }
     }
     
@@ -242,6 +235,7 @@ public class PlayerSocket {
                 });
                 break;
             case "gameMove":
+                
                 System.out.println("Received gameMove message: " + jsonMsg.toJSONString());
                 int row, col;
                 String symbolRec;   
@@ -275,9 +269,11 @@ public class PlayerSocket {
 
             case "opponentDisconnected":
                 System.out.println("type is " + jsonMsg.get("type").toString());
+                
                 if (gameController != null) {
                     gameController.deleteTemporaryFile();
                 }
+                
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Game Over");
@@ -381,21 +377,21 @@ public class PlayerSocket {
         }
     }
     
-  public int getPlayerScore() {
-  return score;
-}
- public int getOtherPlayerScore() {
-  return otherScore;
-}
+    public int getPlayerScore() {
+      return score;
+    }
+    public int getOtherPlayerScore() {
+        return otherScore;
+    }
 
-   public void setPlayerScore(int jscore) {
-       
-  score=jscore;
-}
- public void setOtherPlayerScore(int jscore) {
-       
-  otherScore=jscore;
-}
+    public void setPlayerScore(int jscore) {
+
+        score=jscore;
+    }
+    public void setOtherPlayerScore(int jscore) {
+
+      otherScore=jscore;
+    }
 
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
