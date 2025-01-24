@@ -85,7 +85,7 @@ public class LevelController implements Initializable {
         alert.setContentText("What would you like to do with this file?");
 
         
-        alert.getDialogPane().setPrefSize(450, 200);
+        alert.getDialogPane().setPrefSize(450, 230);
 
         
         ButtonType openButton = new ButtonType("Open");
