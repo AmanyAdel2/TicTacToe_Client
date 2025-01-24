@@ -9,13 +9,16 @@
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/Level.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/PlayersName.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/LocalMode.fxml</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/login/Login.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/Player/PlayerSocket.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/assets/Images/backicon.png</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/localMode/GameLocalLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/GameController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/assets/Images/background.jpg</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/assets/Images/soundOnIcon.png</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/game/Game.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/playersName/PlayersNameController.java</file>
+            <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/tictactoe/tictactoe.fxml</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/online/OnlineController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/easyGame/EasyGameLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/GameHistory.fxml</file>
@@ -37,8 +40,6 @@
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/level/LevelController.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/intermediateGame/IntermediateGameLogic.java</file>
             <file>file:/D:/ITI/Developing%20Applications%20Using%20Java%20Course/Tic%20Tac%20Toe%20Project/TicTacToe%20Client/TicTacToe_Client/src/online/GameHistoryOnlineController.java</file>
-
         </group>
-
     </open-files>
 </project-private>

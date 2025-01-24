@@ -26,6 +26,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.layout.StackPane;
+import tictactoe.TicTacToe;
 
 public class LocalModeController implements Initializable {
 
@@ -110,30 +111,47 @@ public class LocalModeController implements Initializable {
     }
 
     private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+       
+        if (wasMusicPlaying) {
+            TicTacToe.mediaPlayer.pause();
+        }
+
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        MediaPlayer videoPlayer = new MediaPlayer(media);
+        videoPlayer.setVolume(1.0);
+
+        MediaView mediaView = new MediaView(videoPlayer);
+        mediaView.setPreserveRatio(true);
+        mediaView.fitWidthProperty().bind(videoStage.widthProperty());
+        mediaView.fitHeightProperty().bind(videoStage.heightProperty());
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
 
-        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 600, isDraw ? 800 : 400);
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 550 : 300);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop();
+            videoPlayer.stop();
             videoStage.close();
+
+           
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
+                TicTacToe.mediaPlayer.play();
+            }
+
             showGameOverAlert(message);
             event.consume();
         });
 
         videoStage.show();
-        mediaPlayer.play();
+        videoPlayer.play(); 
     }
-
+    
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Game Over");

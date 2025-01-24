@@ -38,6 +38,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import tictactoe.TicTacToe;
 
 public class PlayerSocket {
     public Socket socket;
@@ -410,26 +411,42 @@ public class PlayerSocket {
     }
     
     private void showGameOverVideo(String videoPath, boolean isDraw) {
+
+
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+
+        if (wasMusicPlaying) {
+            TicTacToe.mediaPlayer.pause();
+        }
+
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1); 
-        MediaView mediaView = new MediaView(mediaPlayer);
+        MediaPlayer videoPlayer = new MediaPlayer(media);
+        videoPlayer.setVolume(1.0);
+
+        MediaView mediaView = new MediaView(videoPlayer);
         mediaView.setPreserveRatio(true);
         mediaView.fitWidthProperty().bind(videoStage.widthProperty());
         mediaView.fitHeightProperty().bind(videoStage.heightProperty());
+
+
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
         Scene videoScene = new Scene(videoRoot, 600, 600);
         videoStage.setScene(videoScene);
         videoStage.setTitle("Game Over");
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop(); 
-            videoStage.close(); 
+            videoPlayer.stop();
+            videoStage.close();
+
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
+                TicTacToe.mediaPlayer.play();
+            }
+
             event.consume();
         });
         videoStage.show();
-        mediaPlayer.play();
+        videoPlayer.play();
     }
 
     public void closeSocket() {
