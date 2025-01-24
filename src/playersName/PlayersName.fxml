@@ -21,7 +21,7 @@
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="66.0" fitWidth="164.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="55.0" fitWidth="178.0" layoutX="63.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@welcome.gif" />
          </image>
@@ -46,11 +46,11 @@
             <Font name="System Bold Italic" size="35.0" />
          </font>
       </Text>
-      <Button fx:id="startGameBtn" layoutX="232.0" layoutY="443.0" mnemonicParsing="false" onAction="#startGame" prefHeight="55.0" prefWidth="164.0" style="-fx-background-color: yellow;" text="Start Game">
+      <Button fx:id="startGameBtn" layoutX="232.0" layoutY="443.0" mnemonicParsing="false" onAction="#startGame" prefHeight="55.0" prefWidth="164.0" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="Start Game">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font></Button>
-      <Button fx:id="backBtn" layoutX="24.0" layoutY="570.0" mnemonicParsing="false" onAction="#bkButton" style="-fx-background-color: YELLOW;" text="Back">
+      <Button fx:id="backBtn" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#bkButton" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="&lt;&lt;">
          <font>
             <Font name="System Bold Italic" size="15.0" />
          </font>

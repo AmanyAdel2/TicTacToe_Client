@@ -314,7 +314,6 @@ public class IntermediateGameController implements Initializable {
         }
     }
 
-    @FXML
     private void openRecord(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/easyGame/GameRecord.fxml"));

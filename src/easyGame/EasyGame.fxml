@@ -58,12 +58,12 @@
                 <Image url="@../assets/Images/easy.png" />
             </image>
         </ImageView>
-        <Button layoutX="79.0" layoutY="606.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
+        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="&lt;&lt;">
             <font>
                 <Font name="System Bold Italic" size="15.0" />
             </font>
         </Button>
-      <ImageView fitHeight="31.0" fitWidth="173.0" layoutX="32.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="51.0" fitWidth="117.0" layoutX="70.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../welcome.gif" />
          </image>

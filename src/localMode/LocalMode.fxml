@@ -40,9 +40,9 @@
 <Button fx:id="p9" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="111.0" prefWidth="158.0" style="-fx-background-color: beige; -fx-font-size: 46; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             </children>
         </GridPane>
-        <Text fx:id="player1Label" fill="WHITE" layoutX="105.0" layoutY="161.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player 1" />
+        <Text fx:id="player1Label" fill="WHITE" layoutX="105.0" layoutY="159.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player 1" />
         <Text fx:id="player2Label" fill="WHITE" layoutX="473.0" layoutY="160.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Player 2" />
-      <ImageView fitHeight="51.0" fitWidth="95.0" layoutX="113.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="51.0" fitWidth="68.0" layoutX="118.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@playerPhoto.png" />
          </image>
@@ -52,13 +52,13 @@
             <Image url="@playerPhoto.png" />
          </image>
       </ImageView>
-      <Button layoutX="35.0" layoutY="607.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
+      <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="&lt;&lt;">
           
          <font>
             <Font name="System Bold Italic" size="15.0" />
          </font>
       </Button>
-      <ImageView fitHeight="40.0" fitWidth="125.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="51.0" fitWidth="138.0" layoutX="70.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../welcome.gif" />
          </image>

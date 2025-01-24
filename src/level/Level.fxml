@@ -26,7 +26,7 @@
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="84.0" fitWidth="213.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="84.0" fitWidth="213.0" layoutX="87.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@welcome.gif" />
          </image>
@@ -50,24 +50,24 @@
                   <Font name="System Bold Italic" size="32.0" />
                </font>
             </Label>
-            <Button fx:id="easybtn" mnemonicParsing="false" onAction="#easyGame" prefHeight="71.0" prefWidth="334.0" style="-fx-background-color: YELLOW;" text="EASY" GridPane.rowIndex="1">
+            <Button fx:id="easybtn" mnemonicParsing="false" onAction="#easyGame" prefHeight="71.0" prefWidth="334.0" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="EASY" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold Italic" size="32.0" />
                </font>
             </Button>
-            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#intermediateGame" prefHeight="66.0" prefWidth="339.0" style="-fx-background-color: YELLOW;" text="MEDIUM" GridPane.rowIndex="2">
+            <Button fx:id="medbtn" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#intermediateGame" prefHeight="66.0" prefWidth="339.0" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="MEDIUM" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold Italic" size="32.0" />
                </font>
             </Button>
-            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame" prefHeight="58.0" prefWidth="341.0" style="-fx-background-color: YELLOW;" text="HARD" GridPane.rowIndex="3">
+            <Button fx:id="hardBtn" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#goHardGame" prefHeight="58.0" prefWidth="341.0" style="-fx-background-color: YELLOW; -fx-background-radius: 50;" text="HARD" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold Italic" size="32.0" />
                </font>
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="backButton" layoutX="24.0" layoutY="549.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
+      <Button fx:id="backButton" layoutX="29.0" layoutY="39.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="&lt;&lt;">
          <font>
             <Font name="System Bold Italic" size="15.0" />
          </font>

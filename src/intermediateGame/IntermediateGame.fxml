@@ -57,13 +57,13 @@
             </image>
         </ImageView>
 
-        <Button layoutX="65.0" layoutY="606.0" mnemonicParsing="false" onAction="#backButton" style="-fx-background-color: yellow;" text="Back">
+        <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#backButton" prefHeight="31.0" prefWidth="52.0" style="-fx-background-color: yellow; -fx-background-radius: 50;" text="&lt;&lt;">
 
             <font>
                 <Font name="System Bold Italic" size="15.0" />
             </font>
         </Button>
-      <ImageView fitHeight="31.0" fitWidth="124.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="51.0" fitWidth="140.0" layoutX="71.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../welcome.gif" />
          </image>
