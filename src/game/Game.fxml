@@ -85,17 +85,27 @@
             </Button>
          </children>
       </GridPane>
-      <Label fx:id="playerOLabel" layoutX="482.0" layoutY="51.0" prefHeight="55.0" prefWidth="132.0" text="playerOLabel" textFill="#fcfcfc">
+      <Label fx:id="playerOLabel" layoutX="487.0" layoutY="469.0" prefHeight="55.0" prefWidth="157.0" text="playerOLabel" textFill="#fbff33">
          <font>
-            <Font size="18.0" />
+            <Font size="24.0" />
          </font></Label>
-      <Label fx:id="playerXLabel" layoutX="87.0" layoutY="65.0" prefHeight="21.0" prefWidth="132.0" text="playerXLabel" textFill="#fbfcf8">
+      <Label fx:id="playerXLabel" layoutX="90.0" layoutY="479.0" prefHeight="35.0" prefWidth="157.0" text="playerXLabel" textFill="#fbff33">
          <font>
-            <Font size="18.0" />
+            <Font size="24.0" />
          </font></Label>
-      <Label fx:id="turnLabel" layoutX="303.0" layoutY="76.0" text="Label" textFill="#f8f1f1">
+      <Label fx:id="turnLabel" layoutX="260.0" layoutY="63.0" prefHeight="21.0" prefWidth="127.0" text="Label" textFill="#fbff33">
          <font>
-            <Font name="Bookman Old Style" size="18.0" />
+            <Font name="Bookman Old Style Bold" size="18.0" />
          </font></Label>
+      <Label layoutX="121.0" layoutY="521.0" text="xScore" textFill="#fbff33" fx:id="xScore">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="oScore1" layoutX="500.0" layoutY="521.0" text="oScore" textFill="#fbff33">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -52,6 +52,8 @@ public class PlayerSocket {
     private Stage stage;
     private boolean running = true; 
     private int score=0;
+    private int otherScore=0;
+
     private online.OnlineController onlineControlller;
     
     private PlayerSocket(){
@@ -211,6 +213,9 @@ public class PlayerSocket {
             case "gameStart":
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
+                 final int playerScore= jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):getPlayerScore();
+                 setOtherPlayerScore(playerScore);
                 Platform.runLater(() -> {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Game.fxml"));
@@ -254,6 +259,7 @@ public class PlayerSocket {
                     System.out.println("Error processing game move: " + e.getMessage());
                 }
                 break;
+
             case "opponentDisconnected":
                 System.out.println("type is " + jsonMsg.get("type").toString());
                 if (gameController != null) {
@@ -310,14 +316,17 @@ public class PlayerSocket {
                             }
                         }
                     }
-                    if("win".equals(result)) {
-                        System.out.println("Winner Score"+score);
-                        setPlayerScore(score);
-                    } else if ("lose".equals(result)) {
-                        int pScore=getPlayerScore();
-                        System.out.println("Loser Score"+pScore);
-                        setPlayerScore(pScore);
+                   if("win".equals(result))
+                    {
+                         
+                         setPlayerScore(score);
                     }
+                     else if ("lose".equals(result))
+                     {
+                         int pscore=getPlayerScore();
+                         setPlayerScore(pscore);
+                         
+                     }
                     gameController = null;
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -333,14 +342,22 @@ public class PlayerSocket {
         }
     }
     
-    public int getPlayerScore() {
-        return score;
-    }
-    
-    public void setPlayerScore(int jscore) {
-        score=jscore;
-    }
-    
+  public int getPlayerScore() {
+  return score;
+}
+ public int getOtherPlayerScore() {
+  return otherScore;
+}
+
+   public void setPlayerScore(int jscore) {
+       
+  score=jscore;
+}
+ public void setOtherPlayerScore(int jscore) {
+       
+  otherScore=jscore;
+}
+
     public void sendJSON(Map<String, String> fields) {
         if (!isServerAvailable("127.0.0.1", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
