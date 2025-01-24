@@ -132,18 +132,16 @@ public class PlayerSocket {
                     });
                 }else{
                     Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Unable to Register!");
-                        alert.setContentText("The user name already exists");
-                        alert.showAndWait();
+                        PopUps.showErrorAlert(stage, "Registeration Error", "The user name already exists");
                     });
                     System.out.println("registration failed");
                 } 
                 break;
             case "login":
                 String sts = jsonMsg.get("status").toString();
-                int jscore = Integer.parseInt(jsonMsg.get("score").toString());;
+                int jscore = jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
+                
                 setPlayerScore(jscore);
 
                 if(sts.equals("1")){
@@ -158,11 +156,7 @@ public class PlayerSocket {
                     });
                 } else {
                     Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Unable to Log in!");
-                        alert.setContentText("the username or password is incorrect");
-                        alert.showAndWait();
+                        PopUps.showErrorAlert(stage, "Login Error", "the username or password is incorrect");
                     });
                     System.out.println("Log in failed");
                 } 
