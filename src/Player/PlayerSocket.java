@@ -239,6 +239,9 @@ public class PlayerSocket {
             case "gameStart":
                 String symbol = jsonMsg.get("symbol").toString();
                 String opponent = jsonMsg.get("opponent").toString();
+                 final int playerScore= jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
+                setPlayerScore(playerScore); 
                 
                 Platform.runLater(() -> {
                 try {
