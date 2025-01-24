@@ -29,6 +29,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.layout.StackPane;
+import tictactoe.TicTacToe;
 
 public class IntermediateGameController implements Initializable {
 
@@ -173,11 +174,17 @@ public class IntermediateGameController implements Initializable {
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
         gameEnded = true;
+
+        
+        if (TicTacToe.mediaPlayer != null) {
+            TicTacToe.mediaPlayer.pause();
+        }
+
         Stage videoStage = new Stage();
         Media media = new Media(getClass().getResource(videoPath).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(1.0);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        MediaPlayer videoPlayer = new MediaPlayer(media);
+        videoPlayer.setVolume(1.0);
+        MediaView mediaView = new MediaView(videoPlayer);
 
         StackPane videoRoot = new StackPane();
         videoRoot.getChildren().add(mediaView);
@@ -187,14 +194,20 @@ public class IntermediateGameController implements Initializable {
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            mediaPlayer.stop();
-            videoStage.close();
-            showGameOverAlert(gameResult);
+            videoPlayer.stop(); 
+            videoStage.close(); 
+
+            
+            if (TicTacToe.mediaPlayer != null) {
+                TicTacToe.mediaPlayer.play();
+            }
+
+            showGameOverAlert(gameResult); 
             event.consume();
         });
 
         videoStage.show();
-        mediaPlayer.play();
+        videoPlayer.play(); 
     }
 
     private void showGameOverAlert(String message) {

@@ -175,8 +175,6 @@ public class EasyGameController implements Initializable {
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
         gameEnded = true;
-
-        // إيقاف الصوت الرئيسي
         if (TicTacToe.mediaPlayer != null) {
             TicTacToe.mediaPlayer.pause();
         }
@@ -195,20 +193,20 @@ public class EasyGameController implements Initializable {
         videoStage.setTitle("Game Over");
 
         videoStage.setOnCloseRequest(event -> {
-            videoPlayer.stop(); // إيقاف الفيديو
-            videoStage.close(); // إغلاق نافذة الفيديو
+            videoPlayer.stop();
+            videoStage.close();
 
-            // إعادة تشغيل الصوت الرئيسي
+            
             if (TicTacToe.mediaPlayer != null) {
                 TicTacToe.mediaPlayer.play();
             }
 
-            showGameOverAlert(gameResult); // عرض نافذة النتيجة
+            showGameOverAlert(gameResult); 
             event.consume();
         });
 
         videoStage.show();
-        videoPlayer.play(); // تشغيل الفيديو
+        videoPlayer.play(); 
     }
 
    private void showGameOverAlert(String message) {

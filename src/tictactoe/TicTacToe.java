@@ -16,25 +16,25 @@ import javafx.fxml.FXMLLoader;
 
 public class TicTacToe extends Application {
 
-    public static MediaPlayer mediaPlayer; // MediaPlayer كمتغير ثابت
+    public static MediaPlayer mediaPlayer;
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            // تحميل ملف الصوت
+            
             String musicFile = getClass().getResource("/assets/sounds/Music.mp3").toExternalForm();
             Media media = new Media(musicFile);
             mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // تكرار الصوت بشكل مستمر
-            mediaPlayer.play(); // تشغيل الصوت تلقائيًا عند بدء التطبيق
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play(); 
 
-            // تحميل واجهة المستخدم
+         
             Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setOnCloseRequest(event -> {
                 System.out.println("Application is closing...");
                 PlayerSocket.getInstance().closeSocket();
-                mediaPlayer.stop(); // إيقاف الصوت عند إغلاق التطبيق
+                mediaPlayer.stop();
                 System.exit(0);
             });
             primaryStage.show();
