@@ -33,12 +33,12 @@
             <Font name="System Bold Italic" size="41.0" />
          </font>
       </Button>
-      <ImageView fx:id="soundOnIcon" fitHeight="39.0" fitWidth="78.0" layoutX="83.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="soundOnIcon" fitHeight="50.0" fitWidth="50.0" layoutX="90.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(255, 255, 0, 0.7), 5, 0.5, 0, 0);">
           <image>
               <Image url="@../assets/Images/soundOnIcon.png" />
           </image>
       </ImageView>
-      <ImageView fx:id="soundOffIcon" fitHeight="39.0" fitWidth="56.0" layoutX="28.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="soundOffIcon" fitHeight="50.0" fitWidth="50.0" layoutX="31.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(255, 0, 0, 0.7), 5, 0.5, 0, 0);">
           <image>
               <Image url="@../assets/Images/soundOffIcon.png" />
           </image>
