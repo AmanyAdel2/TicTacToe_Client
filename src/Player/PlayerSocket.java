@@ -357,6 +357,9 @@ public class PlayerSocket {
                     }
                    
                     gameController = null;
+                    if (TicTacToe.mediaPlayer != null) {
+                        TicTacToe.mediaPlayer.setVolume(1.0);
+                    }
                     
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
