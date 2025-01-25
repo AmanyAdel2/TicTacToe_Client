@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,12 +6,10 @@
  */
 package hardCompMode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-/**
- *
- * @author Dell
- */
 public class HardCompMode {
     private char[][] board;
     private Random random = new Random();
@@ -40,24 +39,46 @@ public class HardCompMode {
         return board;
     }
 
-    public boolean checkWinner(char player) {
+    public List<int[]> checkWinner(char player) {
+        List<int[]> winningCells = new ArrayList<>();
+
+        
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
-                return true;
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
             }
         }
+
+        
         for (int i = 0; i < 3; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
-                return true;
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
             }
         }
+
+        
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
-            return true;
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
         }
+
+        
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
-            return true;
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
         }
-        return false;
+
+        return winningCells; 
     }
 
     public boolean isBoardFull() {
@@ -78,13 +99,13 @@ public class HardCompMode {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == '-') {
-                    board[i][j] = player; 
-                    int score = minimax(board, false); 
-                    board[i][j] = '-'; 
+                    board[i][j] = player;
+                    int score = minimax(board, false);
+                    board[i][j] = '-';
 
                     if (score > bestScore) {
                         bestScore = score;
-                        bestMove = new int[]{i, j}; 
+                        bestMove = new int[]{i, j};
                     }
                 }
             }
@@ -95,8 +116,8 @@ public class HardCompMode {
     private int minimax(char[][] board, boolean isMaximizing) {
         char currentPlayer = isMaximizing ? 'O' : 'X';
 
-        if (checkWinner('O')) return 1; 
-        if (checkWinner('X')) return -1; 
+        if (checkWinner('O').size() > 0) return 1;
+        if (checkWinner('X').size() > 0) return -1;
         if (isBoardFull()) return 0;
 
         if (isMaximizing) {
@@ -104,9 +125,9 @@ public class HardCompMode {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
-                        board[i][j] = 'O'; 
-                        int score = minimax(board, false); 
-                        board[i][j] = '-'; 
+                        board[i][j] = 'O';
+                        int score = minimax(board, false);
+                        board[i][j] = '-';
                         bestScore = Math.max(score, bestScore);
                     }
                 }
@@ -118,8 +139,8 @@ public class HardCompMode {
                 for (int j = 0; j < 3; j++) {
                     if (board[i][j] == '-') {
                         board[i][j] = 'X';
-                        int score = minimax(board, true); 
-                        board[i][j] = '-'; 
+                        int score = minimax(board, true);
+                        board[i][j] = '-';
                         bestScore = Math.min(score, bestScore);
                     }
                 }

@@ -10,8 +10,11 @@
  */
 package easyGame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EasyGameLogic {
-    
+
     private char[][] board;
 
     public EasyGameLogic() {
@@ -39,24 +42,46 @@ public class EasyGameLogic {
         return board;
     }
 
-    public boolean checkWinner(char player) {
+    public List<int[]> checkWinner(char player) {
+        List<int[]> winningCells = new ArrayList<>();
+
+        
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
-                return true;
+                winningCells.add(new int[]{i, 0});
+                winningCells.add(new int[]{i, 1});
+                winningCells.add(new int[]{i, 2});
+                return winningCells;
             }
         }
+
+        
         for (int i = 0; i < 3; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
-                return true;
+                winningCells.add(new int[]{0, i});
+                winningCells.add(new int[]{1, i});
+                winningCells.add(new int[]{2, i});
+                return winningCells;
             }
         }
+
+        
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
-            return true;
+            winningCells.add(new int[]{0, 0});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 2});
+            return winningCells;
         }
+
+       
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
-            return true;
+            winningCells.add(new int[]{0, 2});
+            winningCells.add(new int[]{1, 1});
+            winningCells.add(new int[]{2, 0});
+            return winningCells;
         }
-        return false;
+
+        return winningCells;
     }
 
     public boolean isBoardFull() {

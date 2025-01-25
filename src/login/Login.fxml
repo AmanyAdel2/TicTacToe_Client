@@ -60,7 +60,7 @@
             <PasswordField fx:id="passtxt" prefHeight="43.0" prefWidth="232.0" style="-fx-border-radius: 50px; -fx-background-radius: 50px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <ImageView fitHeight="37.0" fitWidth="165.0" layoutX="22.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="49.0" fitWidth="138.0" layoutX="93.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@welcome.gif" />
          </image>
@@ -87,5 +87,10 @@
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="backhomebtn" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" onAction="#goHome" prefHeight="30.0" prefWidth="48.0" style="-fx-background-color: yellow; -fx-background-radius: 20;" text="&lt;&lt;">
+         <font>
+            <Font name="System Bold Italic" size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

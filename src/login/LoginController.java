@@ -7,6 +7,7 @@ package login;
 
 import Player.DTOPlayer;
 import Player.PlayerSocket;
+import Popups.PopUps;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ public class LoginController implements Initializable {
     private Button regbtn;
     private Stage stage;
     private PlayerSocket playerSocket;
+    @FXML
+    private Button backhomebtn;
 
     /**
      * Initializes the controller class.
@@ -68,7 +71,8 @@ public class LoginController implements Initializable {
         String password = passtxt.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Login Error", "Both fields are required.");
+            //showAlert(Alert.AlertType.WARNING, "Login Error", "Both fields are required.");
+            PopUps.showErrorAlert(stage, "Login Error", "Both fields are required.");
             return;
         }
 
@@ -83,7 +87,8 @@ public class LoginController implements Initializable {
         // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
-            DTOPlayer player = new DTOPlayer(username, "ONLINE", 0, playerSocket.socket);
+            int score=playerSocket.getPlayerScore();
+            DTOPlayer player = new DTOPlayer(username, score, playerSocket.socket);
             playerSocket.setLoggedInPlayer(player);
             //showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         } catch (Exception e) {
@@ -91,12 +96,23 @@ public class LoginController implements Initializable {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-
+    
     @FXML
     private void goReg(ActionEvent event) {
         try {
             Stage stage = (Stage) regbtn.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/register/Register.fxml"));
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate to the registration screen.");
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     @FXML
+    private void goHome(ActionEvent event) {
+        try {
+            Stage stage = (Stage) backhomebtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate to the registration screen.");

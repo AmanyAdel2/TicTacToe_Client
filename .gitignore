@@ -1,4 +1,7 @@
 /build/
 /dist/
+/game_records/
+/saved_games/
 *.class
 *.log
+

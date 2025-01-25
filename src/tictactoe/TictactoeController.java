@@ -5,29 +5,21 @@
  */
 package tictactoe;
 
-import Player.PlayerSocket;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author HP
- */
 public class TictactoeController implements Initializable {
 
     @FXML
@@ -35,19 +27,23 @@ public class TictactoeController implements Initializable {
     @FXML
     private Button combtn;
     @FXML
-    private Button onbtn; 
+    private Button onbtn;
+    @FXML
+    private ImageView soundOnIcon; // أيقونة تشغيل الصوت
+    @FXML
+    private ImageView soundOffIcon; // أيقونة إيقاف الصوت
 
-   /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // إضافة معالجات الأحداث للأيقونات
+        soundOnIcon.setOnMouseClicked(event -> {
+            TicTacToe.mediaPlayer.play(); // تشغيل الصوت
+        });
 
-    }    
+        soundOffIcon.setOnMouseClicked(event -> {
+            TicTacToe.mediaPlayer.pause(); // إيقاف الصوت
+        });
+    }
 
     @FXML
     void goLevel(MouseEvent event) {
@@ -56,11 +52,8 @@ public class TictactoeController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("/level/Level.fxml"));
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
-            
-            System.out.println("errrrorrr");
             Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     @FXML
@@ -70,10 +63,8 @@ public class TictactoeController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
-            System.out.println("errrrorrr");
             Logger.getLogger(TictactoeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     @FXML
@@ -82,7 +73,4 @@ public class TictactoeController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/playersName/PlayersName.fxml"));
         stage.setScene(new Scene(root));
     }
-    
-    
-    
 }

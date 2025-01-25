@@ -20,8 +20,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 public class LevelController implements Initializable {
@@ -45,21 +47,21 @@ public class LevelController implements Initializable {
     private void loadRecordFiles() {
         File folder = new File("game_records");
         if (!folder.exists() || !folder.isDirectory()) {
-            return; 
+            return;
         }
 
         File[] files = folder.listFiles();
         if (files == null || files.length == 0) {
-            return; 
+            return;
         }
 
- 
+      
         Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
-
+        
         for (File file : files) {
             String fileName = file.getName();
-            String dateTime = extractDateAndTimeFromFile(file); 
+            String dateTime = extractDateAndTimeFromFile(file);
             if (dateTime != null) {
                 String displayName = fileName + " - " + dateTime;
                 recordsListView.getItems().add(displayName);
@@ -71,7 +73,62 @@ public class LevelController implements Initializable {
             String selectedFileName = recordsListView.getSelectionModel().getSelectedItem();
             if (selectedFileName != null) {
                 String actualFileName = selectedFileName.split(" - ")[0]; 
-                openRecord(actualFileName);
+                showFileOptions(actualFileName);
+            }
+        });
+    }
+
+    private void showFileOptions(String fileName) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("File Options");
+        alert.setHeaderText("Choose an action for the file: " + fileName);
+        alert.setContentText("What would you like to do with this file?");
+
+        
+        alert.getDialogPane().setPrefSize(450, 230);
+
+        
+        ButtonType openButton = new ButtonType("Open");
+        ButtonType deleteButton = new ButtonType("Delete");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonType.CANCEL.getButtonData());
+
+        
+        alert.getButtonTypes().setAll(openButton, deleteButton, cancelButton);
+
+        
+        alert.getDialogPane().setStyle(
+                "-fx-background-color: beige;"
+                + "-fx-font-size: 16;"
+                + "-fx-font-weight: bold;"
+        );
+
+        
+        alert.getDialogPane().lookupButton(openButton).setStyle(
+                "-fx-background-color: lightgreen;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
+        );
+
+        
+        alert.getDialogPane().lookupButton(deleteButton).setStyle(
+                "-fx-background-color: lightcoral;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
+        );
+
+        
+        alert.getDialogPane().lookupButton(cancelButton).setStyle(
+                "-fx-background-color: lightgray;"
+                + "-fx-font-size: 14;"
+                + "-fx-font-weight: bold;"
+        );
+
+        
+        alert.showAndWait().ifPresent(response -> {
+            if (response == openButton) {
+                openRecord(fileName);
+            } else if (response == deleteButton) {
+                deleteRecord(fileName);
             }
         });
     }
@@ -86,11 +143,11 @@ public class LevelController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/GameHistory.fxml"));
             Parent root = loader.load();
 
-            
+           
             GameHistoryController historyController = loader.getController();
             historyController.loadGameMovesFromFile("game_records/" + fileName);
 
-           
+          
             recordStage.setScene(new Scene(root));
             recordStage.show();
         } catch (IOException e) {
@@ -98,10 +155,24 @@ public class LevelController implements Initializable {
         }
     }
 
+    private void deleteRecord(String fileName) {
+        File fileToDelete = new File("game_records/" + fileName);
+        if (fileToDelete.exists()) {
+            if (fileToDelete.delete()) {
+             
+                recordsListView.getItems().removeIf(item -> item.startsWith(fileName));
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+        } else {
+            System.out.println("File does not exist.");
+        }
+    }
+
     private String extractDateAndTimeFromFile(File file) {
-       
         long lastModified = file.lastModified();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm"); 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm");
         return sdf.format(new Date(lastModified));
     }
 
@@ -126,18 +197,13 @@ public class LevelController implements Initializable {
     }
 
     @FXML
-    private void goHardGame(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/hardCompMode/hardCompMode.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) hardBtn.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Hard Level");
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void goHardGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/hardCompMode/hardCompMode.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Hard Level");
+        stage.show();
     }
 
     @FXML
