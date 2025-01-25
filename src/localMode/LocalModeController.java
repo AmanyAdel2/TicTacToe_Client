@@ -114,8 +114,16 @@ public class LocalModeController implements Initializable {
 
     private void playSound(MediaPlayer soundPlayer) {
        
-        soundPlayer.stop();
-        soundPlayer.play();
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.2);
+        }
+        soundPlayer.stop(); 
+        soundPlayer.play();     
+        soundPlayer.setOnEndOfMedia(() -> {
+            if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                TicTacToe.mediaPlayer.setVolume(0.3); 
+            }
+        });
     }
 
     private void highlightWinningCells(List<int[]> winningCells, char player) {
