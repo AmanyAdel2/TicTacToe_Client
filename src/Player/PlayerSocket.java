@@ -501,19 +501,7 @@ public class PlayerSocket {
         videoPlayer.play();
     }
 
-    private void showErrorAlert(String title, String message) {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-
-    // Apply custom style
-    DialogPane dialogPane = alert.getDialogPane();
-    dialogPane.getStylesheets().add(getClass().getResource("/styles/alert.css").toExternalForm());
-    dialogPane.getStyleClass().add("custom-alert");
-
-    alert.showAndWait();
-}
+ 
 
 
     public void closeSocket() {

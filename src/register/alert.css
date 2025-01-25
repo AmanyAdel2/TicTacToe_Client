@@ -1,0 +1,39 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+/* alert.css */
+.custom-alert {
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: #ff6b6b;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.dialog-pane .content {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #ff6b6b;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px;
+    -fx-font-weight: bold;
+}
+
+.button-bar .button {
+    -fx-background-color: #ff6b6b;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+.button-bar .button:hover {
+    -fx-background-color: #ff3b3b;
+}
