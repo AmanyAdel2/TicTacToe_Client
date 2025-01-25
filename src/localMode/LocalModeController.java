@@ -28,6 +28,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.layout.StackPane;
 import tictactoe.TicTacToe;
 
+
 public class LocalModeController implements Initializable {
 
     @FXML
@@ -45,8 +46,23 @@ public class LocalModeController implements Initializable {
     private String player1 = "Player 1";
     private String player2 = "Player 2";
 
+    private MediaPlayer xSoundPlayer; // مشغل صوت X
+    private MediaPlayer oSoundPlayer; // مشغل صوت O
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // تقليل مستوى الصوت الرئيسي إلى 30% عند دخول المشهد
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.3); // 30% من مستوى الصوت
+        }
+
+        // تحميل ملفات الصوت
+       Media xSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+       Media oSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+
+        xSoundPlayer = new MediaPlayer(xSound);
+        oSoundPlayer = new MediaPlayer(oSound);
+
         resetGame();
     }
 
@@ -66,15 +82,18 @@ public class LocalModeController implements Initializable {
             String currentPlayer = String.valueOf(logic.getCurrentPlayer());
             button.setText(currentPlayer);
 
+            // تشغيل الصوت المناسب
             if (logic.getCurrentPlayer() == 'X') {
+                playSound(xSoundPlayer);
                 button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             } else {
+                playSound(oSoundPlayer);
                 button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
             }
 
             List<int[]> winningCells = logic.checkWinner();
             if (!winningCells.isEmpty()) {
-                highlightWinningCells(winningCells, logic.getCurrentPlayer()); 
+                highlightWinningCells(winningCells, logic.getCurrentPlayer());
                 String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
                 showGameOverVideo("winner1.mp4", winner + " Wins!", false);
                 if (winner.equals(player1)) {
@@ -93,16 +112,22 @@ public class LocalModeController implements Initializable {
         }
     }
 
+    private void playSound(MediaPlayer soundPlayer) {
+        // تشغيل الصوت
+        soundPlayer.stop(); // إيقاف الصوت إذا كان يعمل بالفعل
+        soundPlayer.play();
+    }
+
     private void highlightWinningCells(List<int[]> winningCells, char player) {
-        String color = (player == 'X') ? "red" : "blue"; 
+        String color = (player == 'X') ? "red" : "blue";
         for (int[] cell : winningCells) {
             int row = cell[0];
             int col = cell[1];
             Button button = getButtonByRowCol(row, col);
             if (button != null) {
                 button.setStyle(
-                    "-fx-background-color: lightgreen; " + 
-                    "-fx-text-fill: " + color + "; " + 
+                    "-fx-background-color: lightgreen; " +
+                    "-fx-text-fill: " + color + "; " +
                     "-fx-font-size: 45; " +
                     "-fx-font-weight: bold;"
                 );
@@ -113,7 +138,6 @@ public class LocalModeController implements Initializable {
     private void showGameOverVideo(String videoPath, String message, boolean isDraw) {
         boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
 
-       
         if (wasMusicPlaying) {
             TicTacToe.mediaPlayer.pause();
         }
@@ -139,7 +163,6 @@ public class LocalModeController implements Initializable {
             videoPlayer.stop();
             videoStage.close();
 
-           
             if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
                 TicTacToe.mediaPlayer.play();
             }
@@ -149,9 +172,9 @@ public class LocalModeController implements Initializable {
         });
 
         videoStage.show();
-        videoPlayer.play(); 
+        videoPlayer.play();
     }
-    
+
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
@@ -161,44 +184,16 @@ public class LocalModeController implements Initializable {
         ButtonType playAgainButton = new ButtonType("Play Again");
         ButtonType backButton = new ButtonType("Back");
         alert.getButtonTypes().setAll(playAgainButton, backButton);
-        alert.setGraphic(null);
-        alert.getDialogPane().setStyle(
-            "-fx-background-color: beige;" +
-            "-fx-font-size: 16;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-            "-fx-background-color: lightgreen;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(backButton).setStyle(
-            "-fx-background-color: lightcoral;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
-        if (message.contains("Player 1")) {
-            alert.getDialogPane().setStyle(
-                "-fx-background-color: lightblue;" +
-                "-fx-font-size: 16;" +
-                "-fx-font-weight: bold;"
-            );
-        } else if (message.contains("Player 2")) {
-            alert.getDialogPane().setStyle(
-                "-fx-background-color: lightpink;" +
-                "-fx-font-size: 16;" +
-                "-fx-font-weight: bold;"
-            );
-        }
-        Node content = alert.getDialogPane().lookup(".content");
-        if (content != null) {
-            content.setStyle("-fx-background-color: beige;");
-        }
 
         alert.showAndWait().ifPresent(response -> {
             if (response == playAgainButton) {
                 resetGame();
             } else {
+                // إعادة مستوى الصوت الرئيسي إلى 100% عند الخروج
+                if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                    TicTacToe.mediaPlayer.setVolume(1.0); // 100% من مستوى الصوت
+                }
+
                 player1Score = 0;
                 player2Score = 0;
                 updateScores();
@@ -217,6 +212,11 @@ public class LocalModeController implements Initializable {
     }
 
     private void goToBackScene() {
+        // إعادة مستوى الصوت الرئيسي إلى 100% عند الخروج من المشهد
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(1.0); // 100% من مستوى الصوت
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/playersName/PlayersName.fxml"));
             Stage stage = (Stage) p1.getScene().getWindow();
@@ -242,22 +242,6 @@ public class LocalModeController implements Initializable {
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
         alert.getButtonTypes().setAll(yesButton, noButton);
-        alert.setGraphic(null);
-        alert.getDialogPane().setStyle(
-            "-fx-background-color: beige;" +
-            "-fx-font-size: 16;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(yesButton).setStyle(
-            "-fx-background-color: lightgreen;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
-        alert.getDialogPane().lookupButton(noButton).setStyle(
-            "-fx-background-color: lightcoral;" +
-            "-fx-font-size: 14;" +
-            "-fx-font-weight: bold;"
-        );
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
