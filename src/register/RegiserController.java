@@ -155,7 +155,7 @@ public class RegiserController implements Initializable {
         alert.setTitle(title);
         alert.setContentText(message);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/styles/alert.css").toExternalForm());
+        dialogPane.getStylesheets().add(getClass().getResource("/register/alert.css").toExternalForm());
         dialogPane.getStyleClass().add("custom-alert");
         alert.showAndWait();
     }

@@ -8,9 +8,11 @@
 }
 
 .dialog-pane .content {
+    -fx-background-color: #ffffff; /* Set the content background to white */
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #000000; /* Set text color to black for better contrast */
+    -fx-padding: 10px; /* Add padding for spacing */
 }
 
 .dialog-pane .header-panel {
@@ -18,6 +20,11 @@
     -fx-text-fill: #ffffff;
     -fx-padding: 10px;
     -fx-font-weight: bold;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: #ffffff; /* Set the button bar background to white */
+    -fx-padding: 10px; /* Add padding for spacing around the buttons */
 }
 
 .button-bar .button {
