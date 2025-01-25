@@ -1,12 +1,5 @@
-/*
- * Empty Stylesheet file.
- */
-
-.mainFxmlClass {
-
-}
 /* alert.css */
-.custom-alert {
+.dialog-pane {
     -fx-background-color: #2b2b2b;
     -fx-border-color: #ff6b6b;
     -fx-border-width: 2px;
