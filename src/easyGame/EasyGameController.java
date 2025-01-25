@@ -53,8 +53,28 @@ public class EasyGameController implements Initializable {
     private boolean gameEnded = false;
     private String currentGameFileName;
 
+    private MediaPlayer xSoundPlayer; 
+    private MediaPlayer oSoundPlayer; 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+       
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.3);
+        }
+
+ 
+        try {
+            Media xSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+            Media oSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+
+            xSoundPlayer = new MediaPlayer(xSound);
+            oSoundPlayer = new MediaPlayer(oSound);
+        } catch (NullPointerException e) {
+            System.err.println("Error: Sound files not found. Please check the paths.");
+            e.printStackTrace();
+        }
+
         String baseFileName = "game_records/" + player + "_vs_" + computer + " Easy Level" + ".txt";
         currentGameFileName = getUniqueFileName(baseFileName);
         ensureGameRecordsFolderExists();
@@ -104,6 +124,9 @@ public class EasyGameController implements Initializable {
             button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             saveMoveToFile("X " + (index + 1));
 
+         
+            playSound(xSoundPlayer);
+
             List<int[]> winningCells = logic.checkWinner('X');
             if (!winningCells.isEmpty()) {
                 highlightWinningCells(winningCells, 'X');
@@ -136,6 +159,9 @@ public class EasyGameController implements Initializable {
                         button.setText('O' + "");
                         button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
                         saveMoveToFile("O " + ((i * 3) + j + 1));
+
+                        
+                        playSound(oSoundPlayer);
                     }
 
                     List<int[]> winningCells = logic.checkWinner('O');
@@ -156,6 +182,23 @@ public class EasyGameController implements Initializable {
         }
     }
 
+    private void playSound(MediaPlayer soundPlayer) {
+        
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.2); 
+        }
+
+        soundPlayer.stop();
+        soundPlayer.play();
+
+
+        soundPlayer.setOnEndOfMedia(() -> {
+            if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                TicTacToe.mediaPlayer.setVolume(0.3); 
+            }
+        });
+    }
+
     private void highlightWinningCells(List<int[]> winningCells, char player) {
         String color = (player == 'X') ? "red" : "blue"; 
         for (int[] cell : winningCells) {
@@ -174,126 +217,125 @@ public class EasyGameController implements Initializable {
     }
 
     private void showGameOverVideo(String videoPath, boolean isDraw) {
-    gameEnded = true;
+        gameEnded = true;
 
-    boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+        boolean wasMusicPlaying = TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
 
-    if (wasMusicPlaying) {
-        TicTacToe.mediaPlayer.pause();
+        if (wasMusicPlaying) {
+            TicTacToe.mediaPlayer.pause();
+        }
+
+        Stage videoStage = new Stage();
+        Media media = new Media(getClass().getResource(videoPath).toString());
+        MediaPlayer videoPlayer = new MediaPlayer(media);
+        videoPlayer.setVolume(1.0);
+        MediaView mediaView = new MediaView(videoPlayer);
+
+        StackPane videoRoot = new StackPane();
+        videoRoot.getChildren().add(mediaView);
+
+        Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
+        videoStage.setScene(videoScene);
+        videoStage.setTitle("Game Over");
+
+        videoStage.setOnCloseRequest(event -> {
+            videoPlayer.stop(); 
+            videoStage.close();
+
+            if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
+                TicTacToe.mediaPlayer.play();
+            }
+
+            showGameOverAlert(gameResult);
+            event.consume();
+        });
+
+        videoStage.show();
+        videoPlayer.play();
     }
 
-    Stage videoStage = new Stage();
-    Media media = new Media(getClass().getResource(videoPath).toString());
-    MediaPlayer videoPlayer = new MediaPlayer(media);
-    videoPlayer.setVolume(1.0);
-    MediaView mediaView = new MediaView(videoPlayer);
+    private void showGameOverAlert(String message) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(message);
+        alert.setContentText("Choose your next action:");
 
-    StackPane videoRoot = new StackPane();
-    videoRoot.getChildren().add(mediaView);
+        ButtonType playAgainButton = new ButtonType("Play Again");
+        ButtonType saveGameButton = new ButtonType("Save Game");
+        ButtonType backButton = new ButtonType("Back");
+        alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(backButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(saveGameButton).setStyle(
+            "-fx-background-color: yellow;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
 
-    Scene videoScene = new Scene(videoRoot, isDraw ? 800 : 550, isDraw ? 600 : 400);
-    videoStage.setScene(videoScene);
-    videoStage.setTitle("Game Over");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == playAgainButton) {
+                deleteTemporaryFile();
+                resetGame();
+            } else if (response == backButton) {
+                deleteTemporaryFile();
+                playerScore = 0;
+                computerScore = 0;
+                updateScores();
+                goToBackScene();
+            } else if (response == saveGameButton) {
+                moveFileToGameHistory();
+                Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Game Saved");
+                confirmAlert.setHeaderText("Game has been saved successfully!");
+                confirmAlert.setContentText("What would you like to do next?");
 
-    videoStage.setOnCloseRequest(event -> {
-        videoPlayer.stop(); 
-        videoStage.close();
+                ButtonType playAgainAfterSaveButton = new ButtonType("Play Again");
+                ButtonType backAfterSaveButton = new ButtonType("Back");
+                confirmAlert.getButtonTypes().setAll(playAgainAfterSaveButton, backAfterSaveButton);
+                confirmAlert.setGraphic(null);
+                confirmAlert.getDialogPane().setStyle(
+                    "-fx-background-color: beige;" +
+                    "-fx-font-size: 16;" +
+                    "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(playAgainAfterSaveButton).setStyle(
+                    "-fx-background-color: lightgreen;" +
+                    "-fx-font-size: 14;" +
+                    "-fx-font-weight: bold;"
+                );
+                confirmAlert.getDialogPane().lookupButton(backAfterSaveButton).setStyle(
+                    "-fx-background-color: lightcoral;" +
+                    "-fx-font-size: 14;" +
+                    "-fx-font-weight: bold;"
+                );
 
-        
-        if (wasMusicPlaying && TicTacToe.mediaPlayer != null) {
-            TicTacToe.mediaPlayer.play();
-        }
-
-        showGameOverAlert(gameResult);
-        event.consume();
-    });
-
-    videoStage.show();
-    videoPlayer.play();
-}
-
-   private void showGameOverAlert(String message) {
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Game Over");
-    alert.setHeaderText(message);
-    alert.setContentText("Choose your next action:");
-
-    ButtonType playAgainButton = new ButtonType("Play Again");
-    ButtonType saveGameButton = new ButtonType("Save Game");
-    ButtonType backButton = new ButtonType("Back");
-    alert.getButtonTypes().setAll(playAgainButton, saveGameButton, backButton);
-    alert.setGraphic(null);
-    alert.getDialogPane().setStyle(
-        "-fx-background-color: beige;" +
-        "-fx-font-size: 16;" +
-        "-fx-font-weight: bold;"
-    );
-    alert.getDialogPane().lookupButton(playAgainButton).setStyle(
-        "-fx-background-color: lightgreen;" +
-        "-fx-font-size: 14;" +
-        "-fx-font-weight: bold;"
-    );
-    alert.getDialogPane().lookupButton(backButton).setStyle(
-        "-fx-background-color: lightcoral;" +
-        "-fx-font-size: 14;" +
-        "-fx-font-weight: bold;"
-    );
-    alert.getDialogPane().lookupButton(saveGameButton).setStyle(
-        "-fx-background-color: yellow;" +
-        "-fx-font-size: 14;" +
-        "-fx-font-weight: bold;"
-    );
-
-    alert.showAndWait().ifPresent(response -> {
-        if (response == playAgainButton) {
-            deleteTemporaryFile();
-            resetGame();
-        } else if (response == backButton) {
-            deleteTemporaryFile();
-            playerScore = 0;
-            computerScore = 0;
-            updateScores();
-            goToBackScene();
-        } else if (response == saveGameButton) {
-            moveFileToGameHistory();
-            Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Game Saved");
-            confirmAlert.setHeaderText("Game has been saved successfully!");
-            confirmAlert.setContentText("What would you like to do next?");
-
-            ButtonType playAgainAfterSaveButton = new ButtonType("Play Again");
-            ButtonType backAfterSaveButton = new ButtonType("Back");
-            confirmAlert.getButtonTypes().setAll(playAgainAfterSaveButton, backAfterSaveButton);
-            confirmAlert.setGraphic(null);
-            confirmAlert.getDialogPane().setStyle(
-                "-fx-background-color: beige;" +
-                "-fx-font-size: 16;" +
-                "-fx-font-weight: bold;"
-            );
-            confirmAlert.getDialogPane().lookupButton(playAgainAfterSaveButton).setStyle(
-                "-fx-background-color: lightgreen;" +
-                "-fx-font-size: 14;" +
-                "-fx-font-weight: bold;"
-            );
-            confirmAlert.getDialogPane().lookupButton(backAfterSaveButton).setStyle(
-                "-fx-background-color: lightcoral;" +
-                "-fx-font-size: 14;" +
-                "-fx-font-weight: bold;"
-            );
-
-            confirmAlert.showAndWait().ifPresent(confirmResponse -> {
-                if (confirmResponse == playAgainAfterSaveButton) {
-                    resetGame();
-                } else if (confirmResponse == backAfterSaveButton) {
-                    playerScore = 0;
-                    computerScore = 0;
-                    updateScores();
-                    goToBackScene();
-                }
-            });
-        }
-    });
-}
+                confirmAlert.showAndWait().ifPresent(confirmResponse -> {
+                    if (confirmResponse == playAgainAfterSaveButton) {
+                        resetGame();
+                    } else if (confirmResponse == backAfterSaveButton) {
+                        playerScore = 0;
+                        computerScore = 0;
+                        updateScores();
+                        goToBackScene();
+                    }
+                });
+            }
+        });
+    }
 
     private void moveFileToGameHistory() {
         File file = new File(currentGameFileName);
@@ -313,7 +355,6 @@ public class EasyGameController implements Initializable {
             file.delete();
         }
     }
-
     private void resetGame() {
         logic.resetGame();
         for (Button button : new Button[]{p1, p2, p3, p4, p5, p6, p7, p8, p9}) {
@@ -322,8 +363,9 @@ public class EasyGameController implements Initializable {
             button.setOnAction(e -> handleButtonPress(button));
         }
         gameEnded = false;
+        String baseFileName = "game_records/" + player + "_vs_" + computer + " Easy Level" + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);
     }
-
     private void updateScores() {
         playerLabel.setText(player + " (" + playerScore + ")");
         computerLabel.setText(computer + " (" + computerScore + ")");
@@ -363,6 +405,11 @@ public class EasyGameController implements Initializable {
     }
 
     private void goToBackScene() {
+        
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(1.0); 
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
             Stage stage = (Stage) p1.getScene().getWindow();

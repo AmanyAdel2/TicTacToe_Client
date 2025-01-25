@@ -50,9 +50,26 @@ public class IntermediateGameController implements Initializable {
     private String gameResult = "";
     private boolean gameEnded = false;
     private String currentGameFileName;
+    private MediaPlayer xSoundPlayer; 
+    private MediaPlayer oSoundPlayer; 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+         if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.3);
+        }
+
+ 
+        try {
+            Media xSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+            Media oSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+
+            xSoundPlayer = new MediaPlayer(xSound);
+            oSoundPlayer = new MediaPlayer(oSound);
+        } catch (NullPointerException e) {
+            System.err.println("Error: Sound files not found. Please check the paths.");
+            e.printStackTrace();
+        }
         String baseFileName = "game_records/" + player + "_vs_" + computer + " Intermediate Level" + ".txt";
         currentGameFileName = getUniqueFileName(baseFileName);
         ensureGameRecordsFolderExists();
@@ -101,7 +118,7 @@ public class IntermediateGameController implements Initializable {
             button.setText('X' + "");
             button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
             saveMoveToFile("X " + (index + 1));
-
+            playSound(xSoundPlayer);
             List<int[]> winningCells = logic.checkWinner('X');
             if (!winningCells.isEmpty()) {
                 highlightWinningCells(winningCells, 'X'); 
@@ -137,6 +154,7 @@ public class IntermediateGameController implements Initializable {
                 button.setText('O' + "");
                 button.setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
                 saveMoveToFile("O " + ((row * 3) + col + 1));
+                 playSound(oSoundPlayer);
             }
 
             List<int[]> winningCells = logic.checkWinner('O');
@@ -153,6 +171,22 @@ public class IntermediateGameController implements Initializable {
                 showGameOverVideo("/assets/videos/draw.mp4", true);
             }
         }
+    }
+    private void playSound(MediaPlayer soundPlayer) {
+        
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.2); 
+        }
+
+        soundPlayer.stop();
+        soundPlayer.play();
+
+
+        soundPlayer.setOnEndOfMedia(() -> {
+            if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                TicTacToe.mediaPlayer.setVolume(0.3); 
+            }
+        });
     }
 
     private void highlightWinningCells(List<int[]> winningCells, char player) {
@@ -341,6 +375,8 @@ public class IntermediateGameController implements Initializable {
             button.setOnAction(e -> handleButtonPress(button));
         }
         gameEnded = false;
+        String baseFileName = "game_records/" + player + "_vs_" + computer + " Intermediate Level" + ".txt";
+        currentGameFileName = getUniqueFileName(baseFileName);
     }
 
     private void updateScores() {
@@ -382,6 +418,9 @@ public class IntermediateGameController implements Initializable {
     }
 
     private void goToBackScene() {
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(1.0); 
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/level/Level.fxml"));
             Stage stage = (Stage) p1.getScene().getWindow();
