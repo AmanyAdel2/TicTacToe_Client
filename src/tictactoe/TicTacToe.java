@@ -31,6 +31,7 @@ public class TicTacToe extends Application {
          
             Parent root = FXMLLoader.load(getClass().getResource("/tictactoe/tictactoe.fxml"));
             primaryStage.setScene(new Scene(root));
+            primaryStage.setTitle(" 🎮 TIC TAC TOE ");
             primaryStage.setOnCloseRequest(event -> {
                 System.out.println("Application is closing...");
                 mediaPlayer.stop();
