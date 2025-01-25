@@ -31,6 +31,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -499,6 +500,20 @@ public class PlayerSocket {
         videoStage.show();
         videoPlayer.play();
     }
+
+    private void showErrorAlert(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+
+    // Apply custom style
+    DialogPane dialogPane = alert.getDialogPane();
+    dialogPane.getStylesheets().add(getClass().getResource("/styles/alert.css").toExternalForm());
+    dialogPane.getStyleClass().add("custom-alert");
+
+    alert.showAndWait();
+}
 
 
     public void closeSocket() {
