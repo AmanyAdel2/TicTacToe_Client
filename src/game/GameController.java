@@ -23,7 +23,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import org.json.simple.JSONObject;
+import tictactoe.TicTacToe;
 
 public class GameController implements Initializable {
 
@@ -52,6 +55,8 @@ public class GameController implements Initializable {
     private Label xScore;
     @FXML
     private Label oScore1;
+    private MediaPlayer xSoundPlayer; 
+    private MediaPlayer oSoundPlayer; 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,6 +77,37 @@ public class GameController implements Initializable {
         }
 
         ensureGameRecordsFolderExists();
+        try {
+            Media xSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+            Media oSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
+
+            xSoundPlayer = new MediaPlayer(xSound);
+            oSoundPlayer = new MediaPlayer(oSound);
+        } catch (NullPointerException e) {
+            System.err.println("Error: Sound files not found. Please check the paths.");
+            e.printStackTrace();
+        }
+
+        
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.3);
+        }
+    }
+     private void playSound(MediaPlayer soundPlayer) {
+        if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            TicTacToe.mediaPlayer.setVolume(0.2); 
+        }
+
+        
+        soundPlayer.stop(); 
+        soundPlayer.play();
+
+        
+        soundPlayer.setOnEndOfMedia(() -> {
+            if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                TicTacToe.mediaPlayer.setVolume(0.3);
+            }
+        });
     }
 
     private void ensureGameRecordsFolderExists() {
@@ -161,7 +197,7 @@ public class GameController implements Initializable {
         boardButtons[row][col].setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = false;
         updateTurnLabel();
-
+        playSound(xSoundPlayer);
         int cellNumber = (row * 3) + col + 1;
         saveMoveToFile(playerSymbol + " " + cellNumber);
 
@@ -199,7 +235,7 @@ public class GameController implements Initializable {
         boardButtons[row][col].setStyle("-fx-text-fill: blue; -fx-font-size: 45; -fx-font-weight: bold;");
         isMyTurn = !symbol.equals(playerSymbol);
         updateTurnLabel();
-
+        playSound(oSoundPlayer);
         int cellNumber = (row * 3) + col + 1; 
         saveMoveToFile(symbol + " " + cellNumber);
 
@@ -319,7 +355,7 @@ public class GameController implements Initializable {
         }
     }
 
-    public void askUserToSaveGame() {
+    public void askUserToSaveGame() { 
         Platform.runLater(() -> {
             if (!new File(currentGameFileName).exists()) {
                 System.out.println("No game to save.");

@@ -31,6 +31,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -120,6 +121,9 @@ public class PlayerSocket {
         switch(jsonMsg.get("type").toString()){
             case "register":
                 String res = jsonMsg.get("status").toString();
+                int rScore = jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
+                setPlayerScore(rScore);
                 if(res.equals("1")){
                     System.out.println("Registered successfully");
                     Platform.runLater(() -> {               
@@ -357,6 +361,9 @@ public class PlayerSocket {
                     }
                    
                     gameController = null;
+                    if (TicTacToe.mediaPlayer != null) {
+                        TicTacToe.mediaPlayer.setVolume(1.0);
+                    }
                     
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/online/Online.fxml"));
@@ -496,6 +503,8 @@ public class PlayerSocket {
         videoStage.show();
         videoPlayer.play();
     }
+
+ 
 
 
     public void closeSocket() {
