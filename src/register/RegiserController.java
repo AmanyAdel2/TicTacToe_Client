@@ -51,33 +51,31 @@ public class RegiserController implements Initializable {
     @FXML
     private Button backBtn;
     private Stage stage;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        Platform.runLater(() -> userNametxt.requestFocus());
     }
 
     @FXML
     private void onReg(ActionEvent event) {
-        
+
         playerSocket = PlayerSocket.getInstance();
-        
-        Platform.runLater(() -> {
-            stage = (Stage) regBtn.getScene().getWindow();
-            playerSocket.setStage(stage);
-        });
+        stage = (Stage) regBtn.getScene().getWindow();
+        playerSocket.setStage(stage);
+
         String username = userNametxt.getText().trim();
         String email = emailtxt.getText().trim();
         String password = passtxt.getText().trim();
         String confirmPassword = conftxt.getText().trim();
-        
+
         if (!validateInputs(username, email, password, confirmPassword)) {
             return;
         }
-        
-        // Prepare the JSON message
+
         Map<String, String> map = new HashMap<>();
         map.put("type", "register");
         map.put("username", username);
@@ -85,35 +83,41 @@ public class RegiserController implements Initializable {
         map.put("password", password);
         map.put("status", "online");
 
-
-        // Send JSON to the server
         try {
             playerSocket.sendJSON(map);
             DTOPlayer player = new DTOPlayer(username, 0, playerSocket.socket);
             playerSocket.setLoggedInPlayer(player);
             System.out.println("Registration request sent for user: " + username);
-
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Registration Failed", "An error occurred while sending the registration request.");
-            Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, null, e);
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "An unexpected error occurred.");
+            Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, "Unexpected error during registration", e);
         }
     }
 
     @FXML
     private void onBack(ActionEvent event) {
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        navigateTo("/login/Login.fxml", stage);
+    }
+
+    private void navigateTo(String fxmlPath, Stage stage) {
         try {
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/login/Login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to navigate back to the login screen.");
-            Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, null, ex);
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Unable to load the requested page.");
+            Logger.getLogger(RegiserController.class.getName()).log(Level.SEVERE, "Navigation error", ex);
         }
     }
 
     private boolean validateInputs(String username, String email, String password, String confirmPassword) {
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             PopUps.showErrorAlert(stage, "Registration Error", "All fields are required.");
+            return false;
+        }
+
+        if (username.length() > 20) {
+            showAlert(Alert.AlertType.WARNING, "Invalid Username", "Username must not exceed 20 characters.");
             return false;
         }
 
@@ -127,8 +131,9 @@ public class RegiserController implements Initializable {
             return false;
         }
 
-        if (password.length() < 8) {
-            showAlert(Alert.AlertType.WARNING, "Weak Password", "Password must be at least 8 characters long.");
+        if (password.length() < 8 || !isStrongPassword(password)) {
+            showAlert(Alert.AlertType.WARNING, "Weak Password",
+                    "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.");
             return false;
         }
 
@@ -138,6 +143,11 @@ public class RegiserController implements Initializable {
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return Pattern.matches(emailRegex, email);
+    }
+
+    private boolean isStrongPassword(String password) {
+        String strongPasswordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).+$";
+        return password.matches(strongPasswordRegex);
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
