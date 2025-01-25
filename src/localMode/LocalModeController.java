@@ -192,7 +192,22 @@ public class LocalModeController implements Initializable {
         ButtonType playAgainButton = new ButtonType("Play Again");
         ButtonType backButton = new ButtonType("Back");
         alert.getButtonTypes().setAll(playAgainButton, backButton);
-
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(playAgainButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(backButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
         alert.showAndWait().ifPresent(response -> {
             if (response == playAgainButton) {
                 resetGame();
