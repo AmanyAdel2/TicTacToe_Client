@@ -120,6 +120,9 @@ public class PlayerSocket {
         switch(jsonMsg.get("type").toString()){
             case "register":
                 String res = jsonMsg.get("status").toString();
+                int rScore = jsonMsg.get("score") != null
+                        ?Integer.parseInt(jsonMsg.get("score").toString()):0;
+                setPlayerScore(rScore);
                 if(res.equals("1")){
                     System.out.println("Registered successfully");
                     Platform.runLater(() -> {               
