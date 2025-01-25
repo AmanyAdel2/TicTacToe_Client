@@ -46,17 +46,17 @@ public class LocalModeController implements Initializable {
     private String player1 = "Player 1";
     private String player2 = "Player 2";
 
-    private MediaPlayer xSoundPlayer; // مشغل صوت X
-    private MediaPlayer oSoundPlayer; // مشغل صوت O
+    private MediaPlayer xSoundPlayer; 
+    private MediaPlayer oSoundPlayer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // تقليل مستوى الصوت الرئيسي إلى 30% عند دخول المشهد
+       
         if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            TicTacToe.mediaPlayer.setVolume(0.3); // 30% من مستوى الصوت
+            TicTacToe.mediaPlayer.setVolume(0.3);
         }
 
-        // تحميل ملفات الصوت
+        
        Media xSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
        Media oSound = new Media(getClass().getResource("/assets/sounds/X_Osound.mp3").toString());
 
@@ -82,7 +82,7 @@ public class LocalModeController implements Initializable {
             String currentPlayer = String.valueOf(logic.getCurrentPlayer());
             button.setText(currentPlayer);
 
-            // تشغيل الصوت المناسب
+           
             if (logic.getCurrentPlayer() == 'X') {
                 playSound(xSoundPlayer);
                 button.setStyle("-fx-text-fill: red; -fx-font-size: 45; -fx-font-weight: bold;");
@@ -113,8 +113,8 @@ public class LocalModeController implements Initializable {
     }
 
     private void playSound(MediaPlayer soundPlayer) {
-        // تشغيل الصوت
-        soundPlayer.stop(); // إيقاف الصوت إذا كان يعمل بالفعل
+       
+        soundPlayer.stop();
         soundPlayer.play();
     }
 
@@ -189,9 +189,9 @@ public class LocalModeController implements Initializable {
             if (response == playAgainButton) {
                 resetGame();
             } else {
-                // إعادة مستوى الصوت الرئيسي إلى 100% عند الخروج
+                
                 if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                    TicTacToe.mediaPlayer.setVolume(1.0); // 100% من مستوى الصوت
+                    TicTacToe.mediaPlayer.setVolume(1.0); 
                 }
 
                 player1Score = 0;
@@ -212,9 +212,9 @@ public class LocalModeController implements Initializable {
     }
 
     private void goToBackScene() {
-        // إعادة مستوى الصوت الرئيسي إلى 100% عند الخروج من المشهد
+        
         if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            TicTacToe.mediaPlayer.setVolume(1.0); // 100% من مستوى الصوت
+            TicTacToe.mediaPlayer.setVolume(1.0);
         }
 
         try {
@@ -242,6 +242,22 @@ public class LocalModeController implements Initializable {
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
         alert.getButtonTypes().setAll(yesButton, noButton);
+        alert.setGraphic(null);
+        alert.getDialogPane().setStyle(
+            "-fx-background-color: beige;" +
+            "-fx-font-size: 16;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(yesButton).setStyle(
+            "-fx-background-color: lightgreen;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
+        alert.getDialogPane().lookupButton(noButton).setStyle(
+            "-fx-background-color: lightcoral;" +
+            "-fx-font-size: 14;" +
+            "-fx-font-weight: bold;"
+        );
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
