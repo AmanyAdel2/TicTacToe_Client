@@ -131,11 +131,10 @@ public class RegiserController implements Initializable {
             return false;
         }
 
-        if (password.length() < 8 || !isStrongPassword(password)) {
-            showAlert(Alert.AlertType.WARNING, "Weak Password",
-                    "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.");
-            return false;
-        }
+        if (password.length() < 8) {
+        showAlert(Alert.AlertType.WARNING, "Invalid Password Length", "Password must be exactly 8 characters long.");
+        return false;
+    }
 
         return true;
     }
@@ -143,11 +142,6 @@ public class RegiserController implements Initializable {
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return Pattern.matches(emailRegex, email);
-    }
-
-    private boolean isStrongPassword(String password) {
-        String strongPasswordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).+$";
-        return password.matches(strongPasswordRegex);
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
