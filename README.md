@@ -24,6 +24,29 @@ A **multiplayer Tic Tac Toe game** with various play modes, player statistics, a
 
 ---
 
+## 🖥️ Server Usage
+
+### **🏗️ Server Features**
+- 📡 **Manages online gameplay** – Handles real-time communication between players.
+- 🗂️ **Stores user data** – Maintains player accounts, scores, and match history.
+- 🏆 **Tracks player status** – Identifies online users and ongoing matches.
+- 🔄 **Synchronizes moves** – Ensures seamless turn-based gameplay between remote players.
+- 📊 **Game analytics** – Logs match results and player statistics for analysis.
+
+### **⚙️ Running the Server**
+1. Navigate to the server directory:
+   ```sh
+   cd tictactoe-server
+   ```
+2. Start the server:
+   ```sh
+   java -jar tictactoe-server.jar
+   ```
+3. Ensure the server is running before starting online matches.
+4. Players can connect using the client application once the server is active.
+
+---
+
 ## 📌 Installation & Usage
 
 1. Clone the repository:
@@ -34,32 +57,27 @@ A **multiplayer Tic Tac Toe game** with various play modes, player statistics, a
    ```sh
    cd tictactoe-game
    ```
-
-### **⚙️ Running the Server**
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/MasameEh/TicTacToe_Server
-   ```
-
-2. Navigate to the server directory:
-   ```sh
-   cd tictactoe-server
-   ```
-3. Start the server:
-   ```sh
-   java -jar tictactoe-server.jar
-   ```
-3. Ensure the server is running before starting online matches.
-4. Players can connect using the client application once the server is active.
 3. Run the application (instructions vary based on technology used).
 
 ---
 
+## 📽️ Demo Video
+🎥 Watch the gameplay demo [here](https://drive.google.com/drive/folders/1B10p21ZcbYSJCbKOunbIgMJIv82Dzlrl?usp=sharing/view).
+
+---
+
+## 📷 Screenshots
+(Include game screenshots here to showcase UI and features)
+
+---
 
 ## 🤝 Contributing
 Feel free to submit **issues**, **feature requests**, or **pull requests** to improve the game!
 
+---
+
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
