@@ -12,7 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -57,6 +59,8 @@ public class GameController implements Initializable {
     private Label oScore1;
     private MediaPlayer xSoundPlayer; 
     private MediaPlayer oSoundPlayer; 
+    @FXML
+    private Button forfeitId;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -93,7 +97,18 @@ public class GameController implements Initializable {
             TicTacToe.mediaPlayer.setVolume(0.3);
         }
     }
-     private void playSound(MediaPlayer soundPlayer) {
+    
+    @FXML
+    private void forfeit(){
+        
+        Map<String, String> notification = new HashMap<>();
+        notification.put("type", "forfeitGameReq");
+
+        playerSocket.sendJSON(notification);
+        
+    }
+    
+    private void playSound(MediaPlayer soundPlayer) {
         if (TicTacToe.mediaPlayer != null && TicTacToe.mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
             TicTacToe.mediaPlayer.setVolume(0.2); 
         }

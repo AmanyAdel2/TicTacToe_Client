@@ -110,5 +110,10 @@
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="forfeitId" layoutX="277.0" layoutY="578.0" mnemonicParsing="false" onAction="#forfeit" prefHeight="34.0" prefWidth="111.0" style="-fx-background-color: Yellow;" text="Forfeit">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
