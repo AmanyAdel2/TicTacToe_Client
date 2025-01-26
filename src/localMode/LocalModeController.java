@@ -95,7 +95,7 @@ public class LocalModeController implements Initializable {
             if (!winningCells.isEmpty()) {
                 highlightWinningCells(winningCells, logic.getCurrentPlayer());
                 String winner = logic.getCurrentPlayer() == 'X' ? player1 : player2;
-                showGameOverVideo("winner1.mp4", winner + " Wins!", false);
+                showGameOverVideo("/assets/videos/winner1.mp4", winner + " Wins!", false);
                 if (winner.equals(player1)) {
                     player1Score++;
                 } else {
@@ -105,7 +105,7 @@ public class LocalModeController implements Initializable {
                 return;
             }
             if (logic.isBoardFull()) {
-                showGameOverVideo("draw.mp4", "It's a Draw!", true);
+                showGameOverVideo("/assets/videos/draw.mp4", "It's a Draw!", true);
                 return;
             }
             logic.switchPlayer();

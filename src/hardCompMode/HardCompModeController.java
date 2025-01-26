@@ -123,7 +123,7 @@ public class HardCompModeController implements Initializable {
             if (!winningCells.isEmpty()) {
                 highlightWinningCells(winningCells, 'X'); 
                 gameResult = "Player Wins!";
-                showGameOverVideo("/assets/videos/winner2.mp4", false);
+                showGameOverVideo("/assets/videos/winner3.mp4", false);
                 playerScore++;
                 updateScores();
                 return;
