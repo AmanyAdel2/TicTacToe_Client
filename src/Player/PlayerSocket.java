@@ -68,7 +68,7 @@ public class PlayerSocket {
     private PlayerSocket(){
         popup = new PopUps();
         try {
-            socket = new Socket("127.0.0.1", 5005);
+            socket = new Socket("10.178.240.153", 5005);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
             startListening(); // Start the listener thread
@@ -203,6 +203,9 @@ public class PlayerSocket {
                 break;
             case "serverDisconnection":
                 System.out.println("Server is not available");
+                   if(gameController != null){
+                        gameController.deleteTemporaryFile();
+                   }
                 Platform.runLater(() -> {
                     PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
                     try {
@@ -395,7 +398,7 @@ public class PlayerSocket {
     }
 
     public void sendJSON(Map<String, String> fields) {
-        if (!isServerAvailable("127.0.0.1", 5005)) {
+        if (!isServerAvailable("10.178.240.153", 5005)) {
             System.out.println("Server is not available. Please start the server first.");
             PopUps.showErrorAlert(stage, "Connection Error", "Server is not available");
             return; 
