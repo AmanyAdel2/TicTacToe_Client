@@ -1,3 +1,5 @@
+
+```markdown
 # Tic Tac Toe Game
 
 A **multiplayer Tic Tac Toe game** with various play modes, player statistics, and exciting in-game features.
@@ -33,57 +35,71 @@ A **multiplayer Tic Tac Toe game** with various play modes, player statistics, a
 - 🔄 **Synchronizes moves** – Ensures seamless turn-based gameplay between remote players.
 - 📊 **Game analytics** – Logs match results and player statistics for analysis.
 
-### **⚙️ Running the Server**
-1. Navigate to the server directory:
-   ```sh
-   cd tictactoe-server
+### ⚙️ Running the Server
+
+1. **Clone the server repository:**
+   ```bash
+   git clone https://github.com/MasameEh/TicTacToe_Server
    ```
-2. Start the server:
-   ```sh
+
+2. **Navigate to the server directory:**
+   ```bash
+   cd TicTacToe_Server
+   ```
+
+3. **Start the server:**
+   ```bash
    java -jar tictactoe-server.jar
    ```
-3. Ensure the server is running before starting online matches.
-4. Players can connect using the client application once the server is active.
+
+4. **Ensure the server is running:**
+   Before starting online matches, confirm the server is active and ready to accept connections.
+
+5. **Connect players:**
+   Players can connect using the client application once the server is running.
 
 ---
 
 ## 📌 Installation & Usage
 
 1. Clone the repository:
-   ```sh
-   git clone https://github.com/your-username/tictactoe-game.git
+   ```bash
+   git clone https://github.com/AmanyAdel2/TicTacToe_Client
    ```
+
 2. Navigate to the project directory:
-   ```sh
+   ```bash
    cd tictactoe-game
    ```
-3. Run the application (instructions vary based on technology used).
+
+3. Run the application:
+   Instructions may vary depending on the platform or technology used.
 
 ---
 
 ## 📽️ Demo Video
-🎥 Watch the gameplay demo [here](https://drive.google.com/drive/folders/1B10p21ZcbYSJCbKOunbIgMJIv82Dzlrl?usp=sharing/view).
+
+🎥 Watch the gameplay demo [here](https://drive.google.com/drive/folders/1B10p21ZcbYSJCbKOunbIgMJIv82Dzlrl?usp=sharing).
 
 ---
 
 ## 📷 Screenshots
-(Include game screenshots here to showcase UI and features)
+
+
 
 ---
 
 ## 🤝 Contributing
+
 Feel free to submit **issues**, **feature requests**, or **pull requests** to improve the game!
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## ✨ Credits
-Developed by **Amany Adel**
-            - **Mohamed Sameh**
-            - **Noha Aly**
-            - **Ahmed Abdeen**
 
+Developed by:
+- **Amany Adel**
+- **Mohamed Sameh**
+- **Noha Aly**
+- **Ahmed Abdeen**
+```
