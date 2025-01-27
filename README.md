@@ -1,5 +1,5 @@
 
-```markdown
+
 # Tic Tac Toe Game
 
 A **multiplayer Tic Tac Toe game** with various play modes, player statistics, and exciting in-game features.
